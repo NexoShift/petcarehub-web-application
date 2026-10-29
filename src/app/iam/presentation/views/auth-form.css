@@ -1,143 +1,125 @@
-/* Estilos de la tarjeta de formulario compartidos por sign-in y sign-up. */
+/*
+ * Formulario compartido por las vistas de acceso: tarjeta blanca con sombra suave.
+ * Tamaños con clamp(mínimo, preferido, máximo): crecen en PC grande y se achican en laptop y celular.
+ */
 .auth-card {
   width: 100%;
-  max-width: 440px;
+  max-width: clamp(360px, 30vw, 560px);
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: var(--space-4);
+  gap: clamp(16px, 1.3vw, 28px);
+  padding: clamp(28px, 2.6vw, 56px);
+  border-radius: clamp(16px, 1.2vw, 24px);
   background: var(--color-bg);
-  border: 1px solid #EAECF0;
-  border-radius: calc(var(--radius) * 2);
-  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+  /* Sombra más profunda porque la tarjeta está sobre el fondo navy */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 32px 64px -24px rgba(0, 0, 0, 0.5);
+  animation: card-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.auth-header h1 { margin: 0 0 6px; color: var(--color-primary); font-size: 26px; font-weight: 700; }
-.auth-header p { margin: 0; color: var(--color-text-muted); font-size: 14px; }
+/* Cada bloque del formulario entra uno detrás de otro */
+.auth-card > * { animation: rise-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.auth-card > :nth-child(1) { animation-delay: 0.08s; }
+.auth-card > :nth-child(2) { animation-delay: 0.14s; }
+.auth-card > :nth-child(3) { animation-delay: 0.2s; }
+.auth-card > :nth-child(4) { animation-delay: 0.26s; }
+.auth-card > :nth-child(5) { animation-delay: 0.32s; }
+.auth-card > :nth-child(6) { animation-delay: 0.38s; }
+.auth-card > :nth-child(7) { animation-delay: 0.44s; }
+.auth-card > :nth-child(n + 8) { animation-delay: 0.5s; }
+@keyframes card-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (max-width: 480px) { .auth-card { padding: 28px 20px; } }
 
-/* Selector Dueño de Mascota / Médico Veterinario */
-.segmented {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 4px;
-  border-radius: var(--radius);
-  background: #F2F4F7;
-}
-.segmented button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--color-text-muted);
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-}
-.segmented button.active {
-  background: var(--color-bg);
-  color: var(--color-primary);
-  font-weight: 600;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08);
-}
-.segmented button.active::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-accent);
-}
+.auth-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+.auth-header h1 { margin: 0; color: var(--color-primary); font-size: clamp(26px, 2vw, 40px); font-weight: 600; letter-spacing: -0.02em; }
+.auth-header p { margin: 0; color: var(--color-text-muted); font-size: clamp(14px, 0.95vw, 18px); }
 
-/* Campo con icono a la izquierda y botón opcional a la derecha */
-.field label { font-size: 13px; font-weight: 600; color: var(--color-text); }
-.input-icon { position: relative; display: flex; align-items: center; }
-.input-icon > svg {
-  position: absolute;
-  left: 14px;
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: var(--color-text-muted);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  pointer-events: none;
-}
-.input-icon input { width: 100%; padding-left: 40px; padding-right: 40px; font-size: 14px; }
+/* Campos: el activo pinta su etiqueta de azul */
+.auth-card .field label { font-size: clamp(14px, 0.85vw, 16px); transition: color 0.2s; }
+.auth-card .field:focus-within label { color: var(--color-secondary); }
+.auth-card .field input,
+.auth-card .field select { height: clamp(46px, 3vw, 58px); font-size: clamp(15px, 0.9vw, 17px); background: #FBFCFD; }
+.auth-card .field input:focus { background: var(--color-bg); }
+
+/* Contraseña con botón de ver/ocultar */
+.input-wrap { position: relative; display: flex; align-items: center; }
+.input-wrap input { width: 100%; padding-right: 48px; }
 .toggle-visibility {
   position: absolute;
-  right: 8px;
+  right: 6px;
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
   border: none;
+  border-radius: 8px;
   background: transparent;
+  color: var(--color-text-muted);
   cursor: pointer;
 }
-.toggle-visibility svg { width: 16px; height: 16px; fill: none; stroke: var(--color-text-muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.toggle-visibility:hover { background: var(--color-surface); }
+.toggle-visibility svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
-.forgot { align-self: flex-end; margin-top: -8px; color: var(--color-secondary); font-size: 12px; font-weight: 600; text-decoration: none; }
-.forgot:hover { text-decoration: underline; }
+.label-row { display: flex; justify-content: space-between; align-items: baseline; }
+.forgot { color: var(--color-secondary); font-size: 13px; font-weight: 500; }
 
+/* Botón principal: degradado navy y un brillo que lo cruza al pasar el mouse */
+.auth-card .btn { height: clamp(46px, 3vw, 58px); font-size: clamp(15px, 0.9vw, 17px); }
 .btn-submit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
+  position: relative;
+  overflow: hidden;
   width: 100%;
-  padding: 14px;
-  color: var(--color-primary);
+  margin-top: 4px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
 }
-.btn-submit svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.btn-submit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.28) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+.btn-submit:hover:not(:disabled)::after { transform: translateX(120%); }
 
 .divider {
   display: flex;
   align-items: center;
   gap: 12px;
   color: var(--color-text-muted);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 13px;
 }
-.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #EAECF0; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--color-border); }
 
 .social { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .social button {
+  height: clamp(42px, 2.7vw, 52px);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-1);
-  padding: 12px;
-  border: 1px solid #EAECF0;
-  border-radius: var(--radius);
+  gap: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
   background: var(--color-bg);
   color: var(--color-text);
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
 }
-.social button:disabled { cursor: not-allowed; }
-.social svg { width: 16px; height: 16px; }
+.social button:disabled { cursor: not-allowed; opacity: 0.7; }
+.social svg { width: 18px; height: 18px; }
 
-.switch { margin: 0; text-align: center; color: var(--color-text-muted); font-size: 13px; }
-.switch a { color: var(--color-primary); font-weight: 700; text-decoration: none; }
+.switch { margin: 8px 0 0; text-align: center; color: var(--color-text-muted); font-size: 14px; }
+.switch a { color: var(--color-primary); font-weight: 600; }
 
-.notice {
-  margin: 0;
-  padding: 10px var(--space-2);
-  border-radius: var(--radius);
-  background: #E6FAF9;
-  color: var(--color-secondary);
-  font-size: 13px;
+/* Enlaces con un subrayado que crece en vez de aparecer de golpe */
+.switch a, .forgot {
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.25s ease;
 }
-.form-error {
-  margin: 0;
-  padding: 10px var(--space-2);
-  border-radius: var(--radius);
-  background: #FEF3F2;
-  color: var(--color-error);
-  font-size: 13px;
-}
+.switch a:hover, .forgot:hover { background-size: 100% 1px; }
+
+.notice, .form-error { margin: 0; padding: 12px 14px; border-radius: 10px; font-size: 14px; line-height: 1.4; }
+.notice { background: #E8F8F7; color: #0B5F5C; }
+.form-error { background: #FEF3F2; color: #B42318; }
