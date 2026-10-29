@@ -1,0 +1,122 @@
+/*
+ * Marco de las pantallas de acceso: foto a la izquierda, formulario a la derecha.
+ * Los tamaños usan clamp(mínimo, preferido, máximo): el "preferido" va en vw
+ * (1vw = 1 % del ancho de la ventana), así crecen en monitores grandes y se achican en laptops.
+ */
+.auth-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* Navy con patitas que se desplazan muy despacio */
+  background: var(--auth-background);
+  animation: paws-move 90s linear infinite;
+}
+
+/* ---------- Foto (izquierda) ---------- */
+.photo-panel {
+  position: relative;
+  margin: clamp(12px, 1vw, 24px);
+  border-radius: clamp(16px, 1.4vw, 28px);
+  overflow: hidden;
+  background: var(--color-secondary);
+  box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.45);
+}
+/* Entra con un zoom suave y luego "respira": un zoom lentísimo que va y vuelve */
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation:
+    photo-in 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+    breathe 24s 1.4s ease-in-out infinite alternate;
+}
+/* Solo se oscurece arriba y abajo, donde va el texto: el centro de la foto queda natural */
+.photo-overlay {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(24px, 2.4vw, 56px);
+  color: var(--color-bg);
+  background: linear-gradient(180deg, rgba(3, 43, 89, 0.35) 0%, rgba(3, 43, 89, 0) 22%, rgba(3, 43, 89, 0) 50%, rgba(3, 43, 89, 0.88) 100%);
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; font-size: clamp(16px, 1vw, 20px); font-weight: 600; }
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--color-bg);
+}
+.brand-mark img { width: 22px; height: 22px; }
+
+.photo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: clamp(360px, 30vw, 640px);
+  animation: rise 0.7s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.claim {
+  margin: 0;
+  font-size: clamp(22px, 1.9vw, 40px);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* Ventajas como "pastillas" de vidrio que aparecen una por una */
+.features {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  font-size: clamp(13px, 0.85vw, 16px);
+}
+.features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.features li:nth-child(1) { animation-delay: 0.55s; }
+.features li:nth-child(2) { animation-delay: 0.7s; }
+.features li:nth-child(3) { animation-delay: 0.85s; }
+.features li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+/* ---------- Formulario (derecha) ---------- */
+.form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 3vw, 64px);
+}
+@keyframes photo-in { from { transform: scale(1.06); } to { transform: scale(1); } }
+@keyframes breathe { from { transform: scale(1); } to { transform: scale(1.05); } }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+/* Las patitas avanzan una baldosa (180 px) en diagonal y vuelven a empezar sin que se note */
+@keyframes paws-move { from { background-position: 0 0, 0 0; } to { background-position: 180px 180px, 0 0; } }
+
+/* En pantallas angostas solo queda el formulario */
+@media (max-width: 960px) {
+  .auth-layout { grid-template-columns: 1fr; }
+  .photo-panel { display: none; }
+}
