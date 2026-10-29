@@ -1,0 +1,1 @@
+export type Role = 'ROLE_PET_OWNER' | 'ROLE_VETERINARIAN' | 'ROLE_CLINIC_ADMIN';
