@@ -1,0 +1,93 @@
+/* Detalles propios de MW-02. La tarjeta y los campos vienen de auth-form.css. */
+.register-card { max-width: 480px; border: none; box-shadow: none; padding: var(--space-3) 0; gap: 18px; }
+
+.step-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #EEF4FF;
+  color: var(--color-secondary);
+  font-size: 11px;
+  font-weight: 600;
+}
+.step-pill i { width: 6px; height: 6px; border-radius: 50%; background: var(--color-secondary); }
+
+.profile-picker { margin: 0; padding: 0; border: none; }
+.profile-picker legend { margin-bottom: var(--space-1); font-size: 13px; font-weight: 600; }
+.profile-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.profile-option {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid #EAECF0;
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.profile-option.selected { border-color: transparent; background: #EEF8FB; box-shadow: inset 0 0 0 1px rgba(11, 195, 189, 0.35); }
+.profile-top { display: flex; justify-content: space-between; align-items: center; }
+.profile-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #E6FAF9;
+  color: #08807C;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.profile-option:not(.selected) .profile-tag { background: #EEF4FF; color: var(--color-secondary); }
+.profile-check {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #DCE7F7;
+}
+.profile-check svg { width: 12px; height: 12px; fill: none; stroke: transparent; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.profile-option.selected .profile-check { background: var(--color-accent); }
+.profile-option.selected .profile-check svg { stroke: var(--color-bg); }
+.profile-option strong { display: flex; align-items: center; gap: 6px; color: var(--color-primary); font-size: 14px; }
+.profile-option strong svg { width: 16px; height: 16px; fill: none; stroke: var(--color-primary); stroke-width: 2; stroke-linecap: round; }
+.profile-option strong svg.fill { fill: var(--color-primary); stroke: none; }
+.profile-description { color: var(--color-text-muted); font-size: 11px; line-height: 1.4; }
+
+.phone input { padding-left: 76px; }
+.phone-prefix {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 10px;
+  border-right: 1px solid #EAECF0;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+}
+.phone-prefix svg { width: 14px; height: 14px; fill: none; stroke: var(--color-text-muted); stroke-width: 2; }
+
+.strength { display: flex; flex-direction: column; gap: 6px; }
+.strength-bars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.strength-bars i { height: 4px; border-radius: 2px; background: #EAECF0; }
+.strength[data-level='1'] i:nth-child(-n + 1),
+.strength[data-level='2'] i:nth-child(-n + 2),
+.strength[data-level='3'] i:nth-child(-n + 3),
+.strength[data-level='4'] i { background: var(--color-accent); }
+.strength-text { display: flex; justify-content: space-between; color: var(--color-text-muted); font-size: 11px; }
+.strength-text b { color: #08807C; font-weight: 600; }
+
+.terms { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--color-text-muted); line-height: 1.5; cursor: pointer; }
+.terms input { margin-top: 2px; width: 16px; height: 16px; accent-color: var(--color-accent); }
+.terms a { color: var(--color-secondary); font-weight: 600; }
+.terms-error { margin-top: -10px; }
+
+@media (max-width: 480px) {
+  .profile-options { grid-template-columns: 1fr; }
+}
