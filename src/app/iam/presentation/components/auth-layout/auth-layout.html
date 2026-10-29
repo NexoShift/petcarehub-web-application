@@ -1,0 +1,23 @@
+<div class="auth-layout">
+  <aside class="photo-panel">
+    <img class="photo" [src]="content().image" [alt]="content().alt">
+    <div class="photo-overlay">
+      <span class="brand">
+        <span class="brand-mark"><img src="images/isotipo.svg" alt=""></span>
+        PetCare Hub
+      </span>
+      <div class="photo-text">
+        <p class="claim">{{ content().claim }}</p>
+        <ul class="features">
+          @for (feature of features; track feature) {
+            <li>{{ feature }}</li>
+          }
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+  <main class="form-panel">
+    <ng-content />
+  </main>
+</div>

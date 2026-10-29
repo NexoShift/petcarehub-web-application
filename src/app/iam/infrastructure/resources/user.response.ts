@@ -1,4 +1,4 @@
-import { AccountType} from '../../domain/model/account-type';
+import { AccountType } from '../../domain/model/account-type';
 import { Role } from '../../domain/model/role';
 
 export interface UserResponse {

@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiError } from '../../../../shared/domain/api-error';
-import { IamStore } from '../../../application/iam-store';
+import { IamStore } from '../../../application/iam.store';
 import { AccountType } from '../../../domain/model/account-type';
 import { AuthLayout } from '../../components/auth-layout/auth-layout';
 
@@ -22,18 +22,10 @@ export class SignUp {
   protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly accountTypes = [
-    {
-      value: 'PET_OWNER' as AccountType,
-      tag: 'Tutor',
-      label: 'Dueño de Mascota',
-      description: 'Accede al historial de tus mascotas y resúmenes con IA.',
-    },
-    {
-      value: 'CLINIC' as AccountType,
-      tag: 'Clínico',
-      label: 'Médico Veterinario',
-      description: 'Registra consultas, prescribe y utiliza asistencia diagnóstica.',
-    },
+    { value: 'PET_OWNER' as AccountType, tag: 'Tutor', label: 'Dueño de Mascota',
+      description: 'Accede al historial de tus mascotas y resúmenes con IA.' },
+    { value: 'CLINIC' as AccountType, tag: 'Clínico', label: 'Médico Veterinario',
+      description: 'Registra consultas, prescribe y utiliza asistencia diagnóstica.' },
   ];
 
   protected readonly form = inject(NonNullableFormBuilder).group({
@@ -48,29 +40,21 @@ export class SignUp {
   });
 
   /** Fuerza de la contraseña de 0 a 4, para las 4 barras del diseño. */
-  private readonly password = toSignal(this.form.controls.password.valueChanges, {
-    initialValue: '',
-  });
+  private readonly password = toSignal(this.form.controls.password.valueChanges, { initialValue: '' });
   protected readonly strength = computed(() => {
     const p = this.password();
     if (!p) return 0;
-    return [
-      p.length >= 8,
-      /[a-z]/.test(p) && /[A-Z]/.test(p),
-      /\d/.test(p),
-      /[^A-Za-z0-9]/.test(p),
-    ].filter(Boolean).length;
+    return [p.length >= 8, /[a-z]/.test(p) && /[A-Z]/.test(p), /\d/.test(p), /[^A-Za-z0-9]/.test(p)]
+      .filter(Boolean).length;
   });
-  protected readonly strengthLabel = computed(
-    () => ['', 'Débil', 'Media', 'Buena', 'Fuerte'][this.strength()],
-  );
+  protected readonly strengthLabel = computed(() => ['', 'Débil', 'Media', 'Buena', 'Fuerte'][this.strength()]);
 
   protected selectAccountType(type: AccountType): void {
     this.form.controls.accountType.setValue(type);
   }
 
   protected togglePassword(): void {
-    this.showPassword.update((visible) => !visible);
+    this.showPassword.update(visible => !visible);
   }
 
   protected submit(): void {
