@@ -4,11 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { IamStore } from '../../../application/iam-store';
 import { AccountType } from '../../../domain/model/account-type';
+import { AuthLayout } from '../../components/auth-layout/auth-layout';
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AuthLayout],
   selector: 'app-sign-up',
-  styleUrl: '../sign-in/sign-in.css',
+  styleUrl: '../auth-form.css',
   templateUrl: './sign-up.html',
 })
 export class SignUp {
@@ -18,6 +19,14 @@ export class SignUp {
   protected readonly loading = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
 
+  protected readonly showPassword = signal(false);
+
+  protected togglePassword(): void {
+    this.showPassword.update((visible) => !visible);
+  }
+  protected selectAccountType(type: AccountType): void {
+    this.form.controls.accountType.setValue(type);
+  }
   protected readonly accountTypes: { value: AccountType; label: string }[] = [
     { value: 'PET_OWNER', label: 'Dueño de mascota' },
     { value: 'CLINIC', label: 'Clínica o veterinario' },

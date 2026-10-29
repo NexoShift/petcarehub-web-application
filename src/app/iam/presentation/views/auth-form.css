@@ -1,0 +1,143 @@
+/* Estilos de la tarjeta de formulario compartidos por sign-in y sign-up. */
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: var(--space-4);
+  background: var(--color-bg);
+  border: 1px solid #EAECF0;
+  border-radius: calc(var(--radius) * 2);
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+}
+.auth-header h1 { margin: 0 0 6px; color: var(--color-primary); font-size: 26px; font-weight: 700; }
+.auth-header p { margin: 0; color: var(--color-text-muted); font-size: 14px; }
+
+/* Selector Dueño de Mascota / Médico Veterinario */
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border-radius: var(--radius);
+  background: #F2F4F7;
+}
+.segmented button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.segmented button.active {
+  background: var(--color-bg);
+  color: var(--color-primary);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08);
+}
+.segmented button.active::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+/* Campo con icono a la izquierda y botón opcional a la derecha */
+.field label { font-size: 13px; font-weight: 600; color: var(--color-text); }
+.input-icon { position: relative; display: flex; align-items: center; }
+.input-icon > svg {
+  position: absolute;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--color-text-muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.input-icon input { width: 100%; padding-left: 40px; padding-right: 40px; font-size: 14px; }
+.toggle-visibility {
+  position: absolute;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.toggle-visibility svg { width: 16px; height: 16px; fill: none; stroke: var(--color-text-muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.forgot { align-self: flex-end; margin-top: -8px; color: var(--color-secondary); font-size: 12px; font-weight: 600; text-decoration: none; }
+.forgot:hover { text-decoration: underline; }
+
+.btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  width: 100%;
+  padding: 14px;
+  color: var(--color-primary);
+}
+.btn-submit svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #EAECF0; }
+
+.social { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.social button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: 12px;
+  border: 1px solid #EAECF0;
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+}
+.social button:disabled { cursor: not-allowed; }
+.social svg { width: 16px; height: 16px; }
+
+.switch { margin: 0; text-align: center; color: var(--color-text-muted); font-size: 13px; }
+.switch a { color: var(--color-primary); font-weight: 700; text-decoration: none; }
+
+.notice {
+  margin: 0;
+  padding: 10px var(--space-2);
+  border-radius: var(--radius);
+  background: #E6FAF9;
+  color: var(--color-secondary);
+  font-size: 13px;
+}
+.form-error {
+  margin: 0;
+  padding: 10px var(--space-2);
+  border-radius: var(--radius);
+  background: #FEF3F2;
+  color: var(--color-error);
+  font-size: 13px;
+}
