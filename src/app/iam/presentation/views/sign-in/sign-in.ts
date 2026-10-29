@@ -23,7 +23,6 @@ export class SignIn {
     inject(ActivatedRoute).snapshot.queryParamMap.has('registered');
   protected readonly loading = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
-  protected readonly profile = signal<'PET_OWNER' | 'VETERINARIAN'>('PET_OWNER');
   protected readonly form = inject(NonNullableFormBuilder).group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],

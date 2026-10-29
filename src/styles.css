@@ -1,4 +1,4 @@
-/* Paleta y medidas del Style Guide. Grilla de 8 px. */
+/* Paleta y medidas del Style Guide (TP1, 6.1). Grilla de 8 px. */
 :root {
   --color-primary: #032B59;
   --color-secondary: #023A65;
@@ -30,25 +30,64 @@ body {
 }
 
 /* Piezas de formulario reutilizables por todos los contextos */
-.field { display: flex; flex-direction: column; gap: var(--space-1); }
-.field label { font-size: 14px; font-weight: 500; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 14px; font-weight: 500; color: var(--color-text); }
 .field input, .field select {
-  padding: 12px var(--space-2);
+  height: 48px;
+  padding: 0 14px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  border-radius: 10px;
+  background: var(--color-bg);
+  color: var(--color-text);
   font: inherit;
+  font-size: 15px;
+  transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
 }
-.field input:focus, .field select:focus { outline: 2px solid var(--color-accent); border-color: transparent; }
+.field input::placeholder { color: #98A2B3; }
+.field input:hover, .field select:hover { border-color: #B8C0CC; }
+.field input:focus, .field select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(11, 195, 189, 0.18);
+}
 .field-error { color: var(--color-error); font-size: 13px; }
 
 .btn {
-  padding: 12px var(--space-3);
+  height: 48px;
+  padding: 0 var(--space-3);
   border: none;
-  border-radius: var(--radius);
+  border-radius: 10px;
   font: inherit;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
-.btn-primary { background: var(--color-accent); color: var(--color-primary); }
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  box-shadow: 0 1px 2px rgba(3, 43, 89, 0.2), 0 4px 12px -2px rgba(3, 43, 89, 0.25);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-secondary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(3, 43, 89, 0.2), 0 10px 20px -4px rgba(3, 43, 89, 0.3);
+}
+.btn-primary:active:not(:disabled) { transform: translateY(0); }
 .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-.btn-ghost { background: transparent; color: inherit; border: 1px solid currentColor; }/* You can add global styles to this file, and also import other style files */
+.btn-ghost { background: transparent; color: inherit; border: 1px solid currentColor; }
+.btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/*
+ * Fondo de las pantallas de acceso: navy de la paleta con patitas suaves.
+ * Las patitas son un SVG dentro del CSS (data URI), así no hace falta otra imagen.
+ */
+:root {
+  --paw-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cg transform='translate(36 40) rotate(-22)'%3E%3Cellipse cx='0' cy='8' rx='11' ry='9'/%3E%3Cellipse cx='-12' cy='-6' rx='4.5' ry='6'/%3E%3Cellipse cx='-4' cy='-13' rx='4.5' ry='6.5'/%3E%3Cellipse cx='5' cy='-13' rx='4.5' ry='6.5'/%3E%3Cellipse cx='13' cy='-6' rx='4.5' ry='6'/%3E%3C/g%3E%3Cg transform='translate(128 118) rotate(18) scale(1.25)'%3E%3Cellipse cx='0' cy='8' rx='11' ry='9'/%3E%3Cellipse cx='-12' cy='-6' rx='4.5' ry='6'/%3E%3Cellipse cx='-4' cy='-13' rx='4.5' ry='6.5'/%3E%3Cellipse cx='5' cy='-13' rx='4.5' ry='6.5'/%3E%3Cellipse cx='13' cy='-6' rx='4.5' ry='6'/%3E%3C/g%3E%3Cg transform='translate(140 30) rotate(35) scale(0.8)'%3E%3Cellipse cx='0' cy='8' rx='11' ry='9'/%3E%3Cellipse cx='-12' cy='-6' rx='4.5' ry='6'/%3E%3Cellipse cx='-4' cy='-13' rx='4.5' ry='6.5'/%3E%3Cellipse cx='5' cy='-13' rx='4.5' ry='6.5'/%3E%3Cellipse cx='13' cy='-6' rx='4.5' ry='6'/%3E%3C/g%3E%3Cg transform='translate(48 140) rotate(-40) scale(0.9)'%3E%3Cellipse cx='0' cy='8' rx='11' ry='9'/%3E%3Cellipse cx='-12' cy='-6' rx='4.5' ry='6'/%3E%3Cellipse cx='-4' cy='-13' rx='4.5' ry='6.5'/%3E%3Cellipse cx='5' cy='-13' rx='4.5' ry='6.5'/%3E%3Cellipse cx='13' cy='-6' rx='4.5' ry='6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  --auth-background: var(--paw-pattern) 0 0 / 180px 180px, linear-gradient(160deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+
+/* Quien prefiere menos movimiento (ajuste del sistema operativo) no ve animaciones */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
