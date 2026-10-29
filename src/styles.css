@@ -1,1 +1,54 @@
-/* You can add global styles to this file, and also import other style files */
+/* Paleta y medidas del Style Guide. Grilla de 8 px. */
+:root {
+  --color-primary: #032B59;
+  --color-secondary: #023A65;
+  --color-accent: #0BC3BD;
+  --color-bg: #FFFFFF;
+  --color-surface: #F5F7FA;
+  --color-text: #1C2430;
+  --color-text-muted: #667085;
+  --color-border: #D0D5DD;
+  --color-error: #D92D20;
+
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+
+  --radius: 8px;
+  --font: 'Inter', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+/* Piezas de formulario reutilizables por todos los contextos */
+.field { display: flex; flex-direction: column; gap: var(--space-1); }
+.field label { font-size: 14px; font-weight: 500; }
+.field input, .field select {
+  padding: 12px var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font: inherit;
+}
+.field input:focus, .field select:focus { outline: 2px solid var(--color-accent); border-color: transparent; }
+.field-error { color: var(--color-error); font-size: 13px; }
+
+.btn {
+  padding: 12px var(--space-3);
+  border: none;
+  border-radius: var(--radius);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-primary { background: var(--color-accent); color: var(--color-primary); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-ghost { background: transparent; color: inherit; border: 1px solid currentColor; }/* You can add global styles to this file, and also import other style files */
