@@ -5,11 +5,11 @@ export const IAM_ROUTES: Routes = [
   {
     path: 'sign-in',
     canActivate: [guestGuard],
-    loadComponent: ()=> import('./presentation/views/sign-in/sign-in').then(m => m.SignIn),
+    loadComponent: () => import('./presentation/views/sign-in/sign-in').then((m) => m.SignIn),
   },
   {
     path: 'sign-up',
     canActivate: [guestGuard],
-    loadComponent: () => import('./presentation/views/sign-up/sign-up').then(m => m.SignUp),
+    loadComponent: () => import('./presentation/views/sign-up/sign-up').then((m) => m.SignUp),
   },
 ];

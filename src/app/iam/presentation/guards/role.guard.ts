@@ -1,8 +1,10 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router, Routes } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { IamStore } from '../../application/iam-store';
 import { Role } from '../../domain/model/role';
 
-export const roleGuard = (role : Role): CanActivateFn => () =>
-  inject(IamStore).currentUser()?.hasRole(role) ? true :
-    inject(Router).createUrlTree(['/home']);
+/** Comodidad visual: la seguridad real la hace Spring Security. */
+export const roleGuard =
+  (role: Role): CanActivateFn =>
+  () =>
+    inject(IamStore).currentUser()?.hasRole(role) ? true : inject(Router).createUrlTree(['/home']);

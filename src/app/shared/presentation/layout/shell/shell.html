@@ -1,0 +1,10 @@
+<header class="header">
+  <a routerLink="/home" class="brand">PetCare Hub</a>
+  <div class="user">
+    <span>{{ iam.currentUser()?.email }}</span>
+    <button class="btn btn-ghost" type="button" (click)="signOut()">Cerrar sesión</button>
+  </div>
+</header>
+<main class="content">
+  <router-outlet />
+</main>
