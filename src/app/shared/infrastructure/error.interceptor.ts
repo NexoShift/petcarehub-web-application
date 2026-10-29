@@ -7,9 +7,7 @@ import { ApiError } from '../domain/api-error';
  * siempre reciben la misma forma, venga del backend o de la red.
  */
 export const errorInterceptor: HttpInterceptorFn = (req, next) =>
-  next(req).pipe(
-    catchError((err: HttpErrorResponse) => throwError(() => toApiError(err, req.url))),
-  );
+  next(req).pipe(catchError((err: HttpErrorResponse) => throwError(() => toApiError(err, req.url))));
 
 function toApiError(err: HttpErrorResponse, url: string): ApiError {
   if (err.error && typeof err.error === 'object' && 'message' in err.error) {
