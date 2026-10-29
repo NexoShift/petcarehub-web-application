@@ -1,0 +1,96 @@
+/*
+ * Piezas comunes de los dos paneles (dueño y veterinario): tarjetas, chips, títulos y botones.
+ * Cada vista lo carga junto a su propio CSS con styleUrls.
+ */
+.page { display: flex; flex-direction: column; gap: clamp(20px, 1.6vw, 32px); }
+
+/* Encabezado de la página: saludo a la izquierda, acciones a la derecha */
+.page-header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.page-header h1 { margin: 0; color: var(--color-primary); font-size: clamp(24px, 1.9vw, 34px); font-weight: 700; letter-spacing: -0.02em; }
+.page-header p { margin: 6px 0 0; color: var(--color-text-muted); font-size: 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* Tarjeta blanca base */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(16px, 1.4vw, 26px);
+  border: 1px solid #E8ECF1;
+  border-radius: 18px;
+  background: var(--color-bg);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+.card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.card-header h2, .section-title h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 600;
+}
+.card-header small, .section-title small { color: var(--color-text-muted); font-size: 12px; font-weight: 400; }
+
+/* Título de sección fuera de tarjeta, con enlace a la derecha */
+.section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.section-title h2 { font-size: clamp(17px, 1.2vw, 20px); }
+
+/* Enlace pequeño "Ver todo ›" */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--color-secondary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+.link app-icon { transition: transform 0.2s; }
+.link:hover app-icon { transform: translateX(3px); }
+
+/* Chips de estado */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #F2F4F7;
+  color: #475467;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chip.success { background: #E6F9F8; color: #067A76; }
+.chip.danger { background: #FEF3F2; color: #B42318; }
+.chip.warning { background: #FFF6E5; color: #B54708; }
+.chip.info { background: #EEF4FA; color: #023A65; }
+.chip.solid { background: var(--color-primary); color: var(--color-bg); }
+
+/* Botones del panel */
+.btn-sm { height: 38px; padding: 0 14px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.btn-accent { background: var(--color-accent); color: var(--color-primary); box-shadow: 0 6px 14px -8px rgba(11, 195, 189, 0.9); }
+.btn-accent:hover { background: #12D3CC; transform: translateY(-1px); }
+.btn-outline { border: 1px solid #D0D5DD; background: var(--color-bg); color: var(--color-text); }
+.btn-outline:hover { border-color: var(--color-secondary); color: var(--color-primary); }
+
+/* Esqueleto de carga: rectángulos grises que brillan mientras llegan los datos */
+.skeleton {
+  border-radius: 18px;
+  background: linear-gradient(90deg, #EEF1F5 25%, #F7F9FB 50%, #EEF1F5 75%) 0 0 / 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* Entrada suave de cada bloque, uno tras otro (usa --i en el HTML para el orden) */
+.reveal { animation: reveal 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
+@keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+.error { padding: 14px 16px; border-radius: 12px; background: #FEF3F2; color: #B42318; font-size: 14px; }
