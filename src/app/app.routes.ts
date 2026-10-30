@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { DASHBOARD_ROUTES } from './shared/presentation/dashboard.routes';
 import { authGuard } from './iam';
 import { IAM_ROUTES } from './iam/iam.routes';
-import { Shell } from './shared/presentation/layout/shell/shell';
 
 export const routes: Routes = [
   // Pantallas públicas: sign-in, sign-up, recuperar y restablecer contraseña
@@ -10,7 +9,7 @@ export const routes: Routes = [
   {
     // Todo lo de aquí abajo necesita sesión y se muestra dentro del Shell (menú + barra)
     path: '',
-    component: Shell,
+    loadComponent: () => import('./shared/presentation/layout/shell/shell').then((m) => m.Shell),
     canActivate: [authGuard],
     children: [
       ...DASHBOARD_ROUTES,
