@@ -1,13 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LanguageSwitcher } from '../../../../shared/presentation/components/language-switcher/language-switcher';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { IamStore } from '../../../application/iam.store';
 
 /** MW-03 · Recuperación de contraseña. */
 @Component({
   selector: 'app-password-recovery',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, LanguageSwitcher],
   templateUrl: './password-recovery.html',
   styleUrls: ['../auth-form.css', './password-recovery.css'],
 })

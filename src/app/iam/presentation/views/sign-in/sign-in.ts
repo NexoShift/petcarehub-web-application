@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { IamStore } from '../../../application/iam.store';
 import { AuthLayout } from '../../components/auth-layout/auth-layout';
@@ -11,7 +12,7 @@ import { AuthLayout } from '../../components/auth-layout/auth-layout';
  */
 @Component({
   selector: 'app-sign-in',
-  imports: [ReactiveFormsModule, RouterLink, AuthLayout],
+  imports: [ReactiveFormsModule, RouterLink, AuthLayout, TranslatePipe],
   templateUrl: './sign-in.html',
   styleUrl: '../auth-form.css',
 })
@@ -25,6 +26,7 @@ export class SignIn {
   protected readonly passwordChanged = this.query.has('passwordChanged');
   protected readonly showPassword = signal(false);
   protected readonly loading = signal(false);
+  /** Clave de traducción (ej. 'auth.signIn.wrongCredentials') o el mensaje que mandó el backend. */
   protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly form = inject(NonNullableFormBuilder).group({
@@ -48,7 +50,7 @@ export class SignIn {
     this.store.signIn(email, password).subscribe({
       next: () => this.router.navigate(['/home']),
       error: (e: ApiError) => {
-        this.errorMessage.set(e.status === 401 ? 'Correo o contraseña incorrectos' : e.message);
+        this.errorMessage.set(e.status === 401 ? 'auth.signIn.wrongCredentials' : e.message);
         this.loading.set(false);
       },
     });
