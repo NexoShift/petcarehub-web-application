@@ -1,16 +1,16 @@
 <div class="auth-layout">
   <aside class="photo-panel">
-    <img class="photo" [src]="content().image" [alt]="content().alt">
+    <img class="photo" [src]="content().image" [alt]="content().alt | translate">
     <div class="photo-overlay">
       <span class="brand">
         <span class="brand-mark"><img src="images/isotipo.svg" alt=""></span>
         PetCare Hub
       </span>
       <div class="photo-text">
-        <p class="claim">{{ content().claim }}</p>
+        <p class="claim">{{ content().claim | translate }}</p>
         <ul class="features">
           @for (feature of features; track feature) {
-            <li>{{ feature }}</li>
+            <li>{{ feature | translate }}</li>
           }
         </ul>
       </div>
@@ -18,6 +18,8 @@
   </aside>
 
   <main class="form-panel">
+    <!-- Selector de idioma arriba a la derecha (sobre el fondo navy) -->
+    <app-language-switcher class="dark lang" />
     <ng-content />
   </main>
 </div>

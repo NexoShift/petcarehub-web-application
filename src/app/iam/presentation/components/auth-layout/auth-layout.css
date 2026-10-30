@@ -104,11 +104,16 @@
 
 /* ---------- Formulario (derecha) ---------- */
 .form-panel {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: clamp(24px, 3vw, 64px);
 }
+/* Selector ES | EN en la esquina superior derecha */
+.lang { position: absolute; top: clamp(16px, 1.6vw, 32px); right: clamp(16px, 1.6vw, 32px); z-index: 1; }
+@media (max-width: 960px) { .form-panel { padding-top: 72px; } }
+
 @keyframes photo-in { from { transform: scale(1.06); } to { transform: scale(1); } }
 @keyframes breathe { from { transform: scale(1); } to { transform: scale(1.05); } }
 @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }

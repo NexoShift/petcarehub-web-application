@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { IamStore } from '../../../application/iam.store';
 import { AccountType } from '../../../domain/model/account-type';
@@ -9,7 +10,7 @@ import { AuthLayout } from '../../components/auth-layout/auth-layout';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [ReactiveFormsModule, RouterLink, AuthLayout],
+  imports: [ReactiveFormsModule, RouterLink, AuthLayout, TranslatePipe],
   templateUrl: './sign-up.html',
   styleUrls: ['../auth-form.css', './sign-up.css'],
 })
@@ -21,11 +22,10 @@ export class SignUp {
   protected readonly loading = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
 
+  // label y description son claves de public/i18n/*.json
   protected readonly accountTypes = [
-    { value: 'PET_OWNER' as AccountType, tag: 'Tutor', label: 'Dueño de Mascota',
-      description: 'Accede al historial de tus mascotas y resúmenes con IA.' },
-    { value: 'CLINIC' as AccountType, tag: 'Clínico', label: 'Médico Veterinario',
-      description: 'Registra consultas, prescribe y utiliza asistencia diagnóstica.' },
+    { value: 'PET_OWNER' as AccountType, label: 'auth.signUp.owner', description: 'auth.signUp.ownerDescription' },
+    { value: 'CLINIC' as AccountType, label: 'auth.signUp.vet', description: 'auth.signUp.vetDescription' },
   ];
 
   protected readonly form = inject(NonNullableFormBuilder).group({
@@ -47,7 +47,6 @@ export class SignUp {
     return [p.length >= 8, /[a-z]/.test(p) && /[A-Z]/.test(p), /\d/.test(p), /[^A-Za-z0-9]/.test(p)]
       .filter(Boolean).length;
   });
-  protected readonly strengthLabel = computed(() => ['', 'Débil', 'Media', 'Buena', 'Fuerte'][this.strength()]);
 
   protected selectAccountType(type: AccountType): void {
     this.form.controls.accountType.setValue(type);

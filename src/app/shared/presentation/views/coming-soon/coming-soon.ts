@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Icon } from '../../components/icon/icon';
 
 /** Página temporal para los enlaces del menú que todavía no tienen pantalla. */
 @Component({
   selector: 'app-coming-soon',
-  imports: [RouterLink, Icon],
+  imports: [RouterLink, Icon, TranslatePipe],
   template: `
     <section class="soon">
       <span class="soon-icon"><app-icon name="paw" [size]="28" /></span>
-      <h1>Esta sección viene en camino</h1>
-      <p>Estamos preparando esta parte de PetCare Hub. Mientras tanto, vuelve a tu panel.</p>
-      <a class="btn btn-primary" routerLink="/home">Ir al inicio</a>
+      <h1>{{ 'comingSoon.title' | translate }}</h1>
+      <p>{{ 'comingSoon.text' | translate }}</p>
+      <a class="btn btn-primary" routerLink="/home">{{ 'comingSoon.goHome' | translate }}</a>
     </section>
   `,
   styles: `

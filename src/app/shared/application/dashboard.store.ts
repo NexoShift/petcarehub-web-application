@@ -14,6 +14,7 @@ export class DashboardStore {
   private readonly _owner = signal<OwnerDashboard | null>(null);
   private readonly _vet = signal<VetDashboard | null>(null);
   private readonly _loading = signal(false);
+  /** Clave de i18n del error (la vista la traduce con | translate). */
   private readonly _error = signal<string | null>(null);
 
   readonly owner = this._owner.asReadonly();
@@ -26,7 +27,7 @@ export class DashboardStore {
     this._error.set(null);
     this.api.getOwnerDashboard().subscribe({
       next: data => { this._owner.set(data); this._loading.set(false); },
-      error: () => { this._error.set('No pudimos cargar tu panel. Intenta de nuevo.'); this._loading.set(false); },
+      error: () => { this._error.set('errors.ownerDashboard'); this._loading.set(false); },
     });
   }
 
@@ -35,7 +36,7 @@ export class DashboardStore {
     this._error.set(null);
     this.api.getVetDashboard().subscribe({
       next: data => { this._vet.set(data); this._loading.set(false); },
-      error: () => { this._error.set('No pudimos cargar el panel clínico. Intenta de nuevo.'); this._loading.set(false); },
+      error: () => { this._error.set('errors.vetDashboard'); this._loading.set(false); },
     });
   }
 }

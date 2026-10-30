@@ -1,13 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LanguageSwitcher } from '../../../../shared/presentation/components/language-switcher/language-switcher';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { IamStore } from '../../../application/iam.store';
 
 /** MW-03 · Cambio de contraseña. Se abre desde el enlace del correo: /reset-password?token=... */
 @Component({
   selector: 'app-reset-password',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, LanguageSwitcher],
   templateUrl: './reset-password.html',
   styleUrls: ['../auth-form.css', '../password-recovery/password-recovery.css'],
 })
@@ -36,7 +38,7 @@ export class ResetPassword {
       return;
     }
     if (newPassword !== confirmPassword) {
-      this.errorMessage.set('Las contraseñas no coinciden');
+      this.errorMessage.set('auth.reset.mismatch');
       return;
     }
     this.loading.set(true);
