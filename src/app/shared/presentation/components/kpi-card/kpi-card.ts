@@ -1,18 +1,22 @@
 import { Component, input } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Icon } from '../icon/icon';
 import { Kpi } from '../../../domain/model/dashboard/vet-dashboard';
 
-/** Tarjeta de indicador del panel del veterinario: título, número grande y una pista. */
+/**
+ * Tarjeta de indicador del panel del veterinario: título, número grande y una pista.
+ * label, unit y hint pueden ser claves de i18n; si no lo son, | translate muestra el texto tal cual.
+ */
 @Component({
   selector: 'app-kpi-card',
-  imports: [Icon],
+  imports: [Icon, TranslatePipe],
   template: `
     <div class="top">
-      <span class="label">{{ kpi().label }}</span>
+      <span class="label">{{ kpi().label | translate }}</span>
       <span class="icon"><app-icon [name]="kpi().icon" [size]="16" /></span>
     </div>
-    <p class="value"><strong>{{ kpi().value }}</strong> {{ kpi().unit }}</p>
-    <span class="hint">{{ kpi().hint }}</span>
+    <p class="value"><strong>{{ kpi().value }}</strong> {{ kpi().unit | translate }}</p>
+    <span class="hint">{{ kpi().hint | translate }}</span>
   `,
   host: { '[class.highlight]': 'kpi().highlight' },
   styles: `

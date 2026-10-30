@@ -1,80 +1,108 @@
-<div class="shell" [class.menu-open]="menuOpen()">
-  <!-- ===== Menú lateral ===== -->
-  <aside class="sidebar">
-    <a class="brand" routerLink="/home" (click)="closeMenu()">
+<div class="shell">
+  <!-- ===== Barra superior (mat-toolbar) ===== -->
+  <mat-toolbar class="toolbar">
+    <button mat-icon-button type="button" class="menu-btn" (click)="drawer.toggle()"
+            [attr.aria-label]="'shell.openMenu' | translate" [attr.aria-expanded]="drawer.opened">
+      <app-icon name="menu" />
+    </button>
+
+    <a class="brand" routerLink="/home">
       <span class="brand-mark"><img src="images/isotipo.svg" alt=""></span>
       <span class="brand-text">
-        <strong>PetCare Hub</strong>
-        <small>{{ portalLabel() }}</small>
+        <strong>{{ 'common.brand' | translate }}</strong>
+        <small>{{ portalLabel() | translate }}</small>
       </span>
     </a>
 
-    <nav class="nav" aria-label="Menú principal">
-      @for (section of menu(); track $index) {
-        @if (section.title) {
-          <p class="nav-title">{{ section.title }}</p>
-        }
-        @for (item of section.items; track item.path) {
-          <!-- routerLinkActive pone la clase "active" cuando la URL coincide -->
-          <a class="nav-link" [routerLink]="item.path" routerLinkActive="active" (click)="closeMenu()">
-            <app-icon [name]="item.icon" [size]="18" />
-            {{ item.label }}
-          </a>
-        }
-      }
-    </nav>
+    <p class="crumbs">PetCare <app-icon name="chevron-right" [size]="14" /> <strong>{{ pageTitle() | translate }}</strong></p>
 
-    <div class="sidebar-footer">
+    <span class="spacer"></span>
+
+    @if (isVet()) {
+      <label class="search">
+        <app-icon name="search" [size]="16" />
+        <input type="search" [placeholder]="'shell.search' | translate" [attr.aria-label]="'shell.search' | translate">
+      </label>
+    }
+
+    <app-language-switcher class="lang" />
+
+    <button mat-icon-button type="button" class="bell" [attr.aria-label]="'shell.notifications' | translate"
+            [matTooltip]="'shell.notifications' | translate">
+      <app-icon name="bell" [size]="19" />
+      <span class="bell-dot"></span>
+    </button>
+
+    <!-- Al hacer clic se abre el mat-menu de abajo (#userMenu) -->
+    <button type="button" class="user" matRipple [matMenuTriggerFor]="userMenu" [attr.aria-label]="'shell.userMenu' | translate">
+      <span class="user-text">
+        <strong>{{ displayName() }}</strong>
+        <small>{{ roleLabel() | translate }}</small>
+      </span>
+      <span class="avatar">{{ initials() }}</span>
+    </button>
+    <mat-menu #userMenu="matMenu" xPosition="before">
       @for (item of footerMenu(); track item.path) {
-        <a class="nav-link" [routerLink]="item.path" routerLinkActive="active" (click)="closeMenu()">
-          <app-icon [name]="item.icon" [size]="18" />
-          {{ item.label }}
+        <a mat-menu-item [routerLink]="item.path">
+          <app-icon [name]="item.icon" [size]="18" /> <span>{{ item.label | translate }}</span>
         </a>
       }
-      <button class="nav-link" type="button" (click)="signOut()">
-        <app-icon name="logout" [size]="18" />
-        Cerrar sesión
+      <mat-divider />
+      <button mat-menu-item type="button" (click)="signOut()">
+        <app-icon name="logout" [size]="18" /> <span>{{ 'shell.signOut' | translate }}</span>
       </button>
-      <p class="status"><span class="dot"></span> En línea <span class="version">v1.0.0</span></p>
-    </div>
-  </aside>
+    </mat-menu>
+  </mat-toolbar>
 
-  <!-- Fondo oscuro detrás del menú en celular; al tocarlo se cierra -->
-  <div class="backdrop" (click)="closeMenu()"></div>
+  <!-- ===== Menú lateral (mat-sidenav) + contenido ===== -->
+  <mat-sidenav-container class="container">
+    <mat-sidenav #drawer class="sidebar" [mode]="isMobile() ? 'over' : 'side'" [opened]="!isMobile()">
+      <nav class="nav" [attr.aria-label]="'shell.mainMenu' | translate">
+        @for (section of menu(); track $index) {
+          @if (section.title) {
+            <p class="nav-title">{{ section.title | translate }}</p>
+          }
+          @for (item of section.items; track item.label) {
+            @if (item.children) {
+              <!-- Submenú desplegable -->
+              <mat-expansion-panel class="nav-group" [expanded]="isGroupActive(item)">
+                <mat-expansion-panel-header class="nav-link" [class.active]="isGroupActive(item)">
+                  <app-icon [name]="item.icon" [size]="18" />
+                  {{ item.label | translate }}
+                </mat-expansion-panel-header>
+                @for (child of item.children; track child.path) {
+                  <a class="nav-link child" matRipple [routerLink]="child.path" routerLinkActive="active" (click)="closeIfMobile(drawer)">
+                    <app-icon [name]="child.icon" [size]="16" />
+                    {{ child.label | translate }}
+                  </a>
+                }
+              </mat-expansion-panel>
+            } @else {
+              <!-- routerLinkActive pone la clase "active" cuando la URL coincide -->
+              <a class="nav-link" matRipple [routerLink]="item.path" routerLinkActive="active" (click)="closeIfMobile(drawer)">
+                <app-icon [name]="item.icon" [size]="18" />
+                {{ item.label | translate }}
+              </a>
+            }
+          }
+        }
+      </nav>
 
-  <!-- ===== Zona derecha: barra superior + página ===== -->
-  <div class="main">
-    <header class="topbar">
-      <button class="icon-btn menu-btn" type="button" (click)="toggleMenu()" aria-label="Abrir menú">
-        <app-icon name="menu" />
-      </button>
-
-      <p class="crumbs">PetCare <app-icon name="chevron-right" [size]="14" /> <strong>{{ pageTitle() }}</strong></p>
-
-      @if (isVet()) {
-        <label class="search">
-          <app-icon name="search" [size]="16" />
-          <input type="search" placeholder="Buscar paciente, historia o tutor..." aria-label="Buscar">
-        </label>
-      }
-
-      <div class="topbar-right">
-        <button class="icon-btn bell" type="button" aria-label="Notificaciones">
-          <app-icon name="bell" [size]="19" />
-          <span class="bell-dot"></span>
-        </button>
-        <div class="user">
-          <span class="user-text">
-            <strong>{{ displayName() }}</strong>
-            <small>{{ roleLabel() }}</small>
-          </span>
-          <span class="avatar">{{ initials() }}</span>
-        </div>
+      <div class="sidebar-footer">
+        @for (item of footerMenu(); track item.path) {
+          <a class="nav-link" matRipple [routerLink]="item.path" routerLinkActive="active" (click)="closeIfMobile(drawer)">
+            <app-icon [name]="item.icon" [size]="18" />
+            {{ item.label | translate }}
+          </a>
+        }
+        <p class="status"><span class="dot"></span> {{ 'shell.online' | translate }} <span class="version">v1.0.0</span></p>
       </div>
-    </header>
+    </mat-sidenav>
 
-    <main class="content">
-      <router-outlet />
-    </main>
-  </div>
+    <mat-sidenav-content>
+      <main class="content">
+        <router-outlet />
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

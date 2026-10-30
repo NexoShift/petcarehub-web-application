@@ -11,10 +11,11 @@ export const VET_DASHBOARD_DEMO: VetDashboard = {
   waitingNow: 1,
   syncedAt: '10:24 AM',
   kpis: [
-    { label: 'Atendidos hoy', value: 4, unit: 'pacientes', hint: '+2 vs ayer', icon: 'users' },
-    { label: 'En sala de espera', value: 1, unit: 'en triaje', hint: 'Atención prioritaria', icon: 'clock', highlight: true },
-    { label: 'Consultas en curso', value: 1, unit: 'Box 2', hint: 'En atención', icon: 'stethoscope' },
-    { label: 'Exámenes pendientes', value: 3, unit: 'órdenes', hint: 'Lab & Imagen', icon: 'flask' },
+    // Los textos de los indicadores son claves de i18n (el backend solo mandará los números)
+    { label: 'dashboard.vet.kpi.attended', value: 4, unit: 'dashboard.vet.kpi.patients', hint: 'dashboard.vet.kpi.vsYesterday', icon: 'users' },
+    { label: 'dashboard.vet.kpi.waiting', value: 1, unit: 'dashboard.vet.kpi.inTriage', hint: 'dashboard.vet.kpi.priority', icon: 'clock', highlight: true },
+    { label: 'dashboard.vet.kpi.ongoing', value: 1, unit: 'Box 2', hint: 'dashboard.vet.kpi.inCare', icon: 'stethoscope' },
+    { label: 'dashboard.vet.kpi.pendingExams', value: 3, unit: 'dashboard.vet.kpi.orders', hint: 'dashboard.vet.kpi.labImaging', icon: 'flask' },
   ],
   patients: [
     {

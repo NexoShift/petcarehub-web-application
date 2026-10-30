@@ -16,7 +16,8 @@ function toApiError(err: HttpErrorResponse, url: string): ApiError {
   return {
     status: err.status,
     error: err.statusText,
-    message: err.status === 0 ? 'No se pudo conectar con el servidor' : err.message,
+    // 'errors.network' es una clave de i18n: las vistas muestran los errores con | translate
+    message: err.status === 0 ? 'errors.network' : err.message,
     path: url,
     timestamp: new Date().toISOString(),
     details: [],

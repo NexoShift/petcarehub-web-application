@@ -1,12 +1,13 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Icon, IconName } from '../../components/icon/icon';
 import { DashboardStore } from '../../../application/dashboard.store';
 import { totalDoses, treatmentProgress, usagePercent } from '../../../domain/services/progress';
 import { PetAvatar } from '../../components/pet-avatar/pet-avatar';
 import { ProgressBar } from '../../components/progress-bar/progress-bar';
 
-/** Un acceso rápido de "Herramientas y acciones rápidas". */
+/** Un acceso rápido de "Herramientas y acciones rápidas". Los textos son claves de i18n. */
 interface QuickAction {
   icon: IconName;
   title: string;
@@ -24,7 +25,7 @@ interface QuickAction {
  */
 @Component({
   selector: 'app-owner-dashboard',
-  imports: [RouterLink, Icon, PetAvatar, ProgressBar],
+  imports: [RouterLink, Icon, PetAvatar, ProgressBar, TranslatePipe],
   templateUrl: './owner-dashboard.html',
   styleUrls: ['../dashboard.css', './owner-dashboard.css'],
 })
@@ -45,10 +46,14 @@ export class OwnerDashboard implements OnInit {
   protected readonly usagePercent = usagePercent;
 
   protected readonly quickActions: QuickAction[] = [
-    { icon: 'history', title: 'Historia clínica', text: 'Consultas previas, diagnósticos y vacunas', link: 'Ver expediente', path: '/medical-history' },
-    { icon: 'pill', title: 'Tratamientos', text: 'Recetas activas y archivo de dispensación', link: '1 activo · Explorar', path: '/treatments' },
-    { icon: 'sparkles', title: 'Explicar con IA', text: 'Aclarar diagnósticos y recetas complejas', link: 'Consultar asistente', path: '/ai-explain', badge: 'IA', ai: true },
-    { icon: 'scan', title: 'Análisis visual', text: 'Triaje preliminar guiado por fotos y video', link: 'Iniciar captura', path: '/visual-analysis', badge: 'Visión' },
+    { icon: 'history', title: 'dashboard.owner.quick.historyTitle', text: 'dashboard.owner.quick.historyText',
+      link: 'dashboard.owner.quick.historyLink', path: '/medical-history' },
+    { icon: 'pill', title: 'dashboard.owner.quick.treatmentsTitle', text: 'dashboard.owner.quick.treatmentsText',
+      link: 'dashboard.owner.quick.treatmentsLink', path: '/treatments' },
+    { icon: 'sparkles', title: 'dashboard.owner.quick.aiTitle', text: 'dashboard.owner.quick.aiText',
+      link: 'dashboard.owner.quick.aiLink', path: '/ai-explain', badge: 'dashboard.owner.quick.aiBadge', ai: true },
+    { icon: 'scan', title: 'dashboard.owner.quick.visualTitle', text: 'dashboard.owner.quick.visualText',
+      link: 'dashboard.owner.quick.visualLink', path: '/visual-analysis', badge: 'dashboard.owner.quick.visualBadge' },
   ];
 
   ngOnInit(): void {

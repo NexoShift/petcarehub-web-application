@@ -1,26 +1,26 @@
 <div class="page">
   @if (store.error()) {
-    <p class="error" role="alert">{{ store.error() }}</p>
+    <p class="error" role="alert">{{ store.error()! | translate }}</p>
   }
 
   @if (data(); as d) {
     <!-- ===== Saludo ===== -->
     <header class="page-header reveal">
       <div>
-        <h1>¡Hola, {{ d.ownerFirstName }}! <span class="wave">👋</span></h1>
-        <p>Resumen clínico y seguimiento en tiempo real para tus pacientes registrados.</p>
+        <h1>{{ 'dashboard.owner.hello' | translate: { name: d.ownerFirstName } }} <span class="wave">👋</span></h1>
+        <p>{{ 'dashboard.owner.subtitle' | translate }}</p>
       </div>
       <span class="verified">
         <app-icon name="check-circle" [size]="16" />
-        Atención verificada: <strong>{{ d.verifiedBy }}</strong>
+        {{ 'dashboard.owner.verified' | translate }} <strong>{{ d.verifiedBy }}</strong>
       </span>
     </header>
 
     <!-- ===== Mis mascotas ===== -->
     <section class="pets-section reveal" style="--i: 1">
       <div class="section-title">
-        <h2>Mis mascotas <small>{{ d.pets.length }} registradas</small></h2>
-        <a class="link" routerLink="/pets">Gestionar perfiles <app-icon name="chevron-right" [size]="14" /></a>
+        <h2>{{ 'dashboard.owner.myPets' | translate }} <small>{{ 'dashboard.owner.registered' | translate: { count: d.pets.length } }}</small></h2>
+        <a class="link" routerLink="/pets">{{ 'dashboard.owner.managePets' | translate }} <app-icon name="chevron-right" [size]="14" /></a>
       </div>
 
       <div class="pets">
@@ -33,10 +33,10 @@
                   {{ pet.name }}
                   @if (pet.verified) { <app-icon class="verified-icon" name="check-circle" [size]="16" /> }
                 </h3>
-                <p>{{ pet.species }} · {{ pet.breed }}</p>
-                <p>{{ pet.ageYears }} años · {{ pet.weightKg }} kg</p>
+                <p>{{ pet.species | translate }} · {{ pet.breed }}</p>
+                <p>{{ 'common.years' | translate: { count: pet.ageYears } }} · {{ pet.weightKg }} kg</p>
               </div>
-              @if (pet.active) { <span class="chip success">Activo</span> }
+              @if (pet.active) { <span class="chip success">{{ 'common.active' | translate }}</span> }
             </div>
             <div class="pet-tags">
               @for (tag of pet.tags; track tag.label) {
@@ -50,8 +50,8 @@
 
         <a class="card new-pet" routerLink="/pets">
           <span class="plus"><app-icon name="plus" /></span>
-          <strong>Nueva mascota</strong>
-          <small>Inscribir historia clínica y vacunas</small>
+          <strong>{{ 'dashboard.owner.newPet' | translate }}</strong>
+          <small>{{ 'dashboard.owner.newPetHint' | translate }}</small>
         </a>
       </div>
     </section>
@@ -61,7 +61,7 @@
       <section class="alert reveal" style="--i: 2" role="alert">
         <span class="alert-icon"><app-icon name="alert" /></span>
         <div>
-          <p class="alert-title"><span>Alerta clínica prioritaria</span> · {{ alert.title }}</p>
+          <p class="alert-title"><span>{{ 'dashboard.owner.priorityAlert' | translate }}</span> · {{ alert.title }}</p>
           <p class="alert-detail">{{ alert.detail }}</p>
         </div>
         <span class="chip danger alert-badge">{{ alert.badge }}</span>
@@ -74,18 +74,18 @@
         @if (d.treatment; as t) {
           <article class="card treatment reveal" style="--i: 3">
             <div class="treatment-meta">
-              <span class="chip success"><span class="live"></span> En curso</span>
-              <span>Receta {{ t.prescriptionCode }}</span>
+              <span class="chip success"><span class="live"></span> {{ 'dashboard.owner.inProgress' | translate }}</span>
+              <span>{{ 'dashboard.owner.prescription' | translate: { code: t.prescriptionCode } }}</span>
               <span class="link-like">{{ t.route }}</span>
-              <span class="started">Iniciado: {{ t.startedAt }}</span>
+              <span class="started">{{ 'dashboard.owner.startedAt' | translate: { date: t.startedAt } }}</span>
             </div>
 
             <div class="treatment-head">
               <div>
-                <h2>Tratamiento: {{ t.title }}</h2>
-                <p>Prescrito por el {{ t.prescribedBy }}</p>
+                <h2>{{ 'dashboard.owner.treatment' | translate: { title: t.title } }}</h2>
+                <p>{{ 'dashboard.owner.prescribedBy' | translate: { vet: t.prescribedBy } }}</p>
               </div>
-              <span class="duration">Duración total: <strong>{{ t.totalDays }} días</strong></span>
+              <span class="duration">{{ 'dashboard.owner.totalDuration' | translate }} <strong>{{ 'dashboard.owner.days' | translate: { count: t.totalDays } }}</strong></span>
             </div>
 
             <div class="medication">
@@ -96,25 +96,25 @@
                 <small>{{ t.medication.note }}</small>
               </div>
               <div class="med-dose">
-                <small>Dosis diaria</small>
-                <strong>{{ t.medication.dosesPerDay }} tomas / día</strong>
+                <small>{{ 'dashboard.owner.dailyDose' | translate }}</small>
+                <strong>{{ 'dashboard.owner.dosesPerDay' | translate: { count: t.medication.dosesPerDay } }}</strong>
               </div>
             </div>
 
             <div class="progress-row">
-              <span><strong>Día {{ t.currentDay }} de {{ t.totalDays }}</strong> · {{ t.dosesTaken }} tomas completadas de {{ totalDoses() }}</span>
-              <span class="percent">{{ progress() }}% completado</span>
+              <span><strong>{{ 'dashboard.owner.dayOf' | translate: { current: t.currentDay, total: t.totalDays } }}</strong> · {{ 'dashboard.owner.dosesDone' | translate: { taken: t.dosesTaken, total: totalDoses() } }}</span>
+              <span class="percent">{{ 'dashboard.owner.percentDone' | translate: { percent: progress() } }}</span>
             </div>
             <app-progress-bar [value]="progress()" />
 
             <div class="treatment-footer">
               <span class="next-dose">
                 <app-icon name="clock" [size]="18" />
-                <span><small>Próxima toma programada</small><strong>{{ t.nextDose }}</strong></span>
+                <span><small>{{ 'dashboard.owner.nextDose' | translate }}</small><strong>{{ t.nextDose }}</strong></span>
               </span>
               <div class="actions">
-                <button class="btn btn-outline btn-sm" type="button"><app-icon name="history" [size]="16" /> Ver bitácora</button>
-                <button class="btn btn-accent btn-sm" type="button"><app-icon name="check-circle" [size]="16" /> Registrar toma</button>
+                <button class="btn btn-outline btn-sm" type="button"><app-icon name="history" [size]="16" /> {{ 'dashboard.owner.viewLog' | translate }}</button>
+                <button class="btn btn-accent btn-sm" type="button"><app-icon name="check-circle" [size]="16" /> {{ 'dashboard.owner.registerDose' | translate }}</button>
               </div>
             </div>
           </article>
@@ -122,17 +122,17 @@
 
         <section class="reveal" style="--i: 4">
           <div class="section-title">
-            <h2>Herramientas y acciones rápidas</h2>
-            <a class="link" routerLink="/medical-history">Acceso clínico directo</a>
+            <h2>{{ 'dashboard.owner.quickTools' | translate }}</h2>
+            <a class="link" routerLink="/medical-history">{{ 'dashboard.owner.clinicalAccess' | translate }}</a>
           </div>
           <div class="quick-grid">
             @for (action of quickActions; track action.title) {
               <a class="card quick" [routerLink]="action.path">
                 <span class="quick-icon" [class.ai]="action.ai"><app-icon [name]="action.icon" /></span>
                 <div>
-                  <h3>{{ action.title }} @if (action.badge) { <span class="chip info">{{ action.badge }}</span> }</h3>
-                  <p>{{ action.text }}</p>
-                  <span class="link">{{ action.link }} <app-icon name="arrow-right" [size]="14" /></span>
+                  <h3>{{ action.title | translate }} @if (action.badge) { <span class="chip info">{{ action.badge | translate }}</span> }</h3>
+                  <p>{{ action.text | translate }}</p>
+                  <span class="link">{{ action.link | translate }} <app-icon name="arrow-right" [size]="14" /></span>
                 </div>
               </a>
             }
@@ -142,12 +142,12 @@
         <section class="emergency reveal" style="--i: 5">
           <span class="emergency-icon"><app-icon name="asterisk" [size]="22" /></span>
           <div>
-            <h2>Guardia veterinaria 24h <span class="live"></span></h2>
-            <p>Línea directa para urgencias de tus mascotas. Conexión de triaje prioritario con el equipo de turno.</p>
+            <h2>{{ 'dashboard.owner.emergencyTitle' | translate }} <span class="live"></span></h2>
+            <p>{{ 'dashboard.owner.emergencyText' | translate }}</p>
           </div>
           <div class="actions">
-            <button class="btn btn-sm btn-glass" type="button"><app-icon name="map-pin" [size]="16" /> Ver ruta de guardia</button>
-            <button class="btn btn-sm btn-accent" type="button"><app-icon name="phone" [size]="16" /> Llamar a urgencias</button>
+            <button class="btn btn-sm btn-glass" type="button"><app-icon name="map-pin" [size]="16" /> {{ 'dashboard.owner.emergencyRoute' | translate }}</button>
+            <button class="btn btn-sm btn-accent" type="button"><app-icon name="phone" [size]="16" /> {{ 'dashboard.owner.emergencyCall' | translate }}</button>
           </div>
         </section>
       </div>
@@ -155,8 +155,8 @@
       <aside class="col-side">
         <article class="card reveal" style="--i: 3">
           <div class="card-header">
-            <h2><app-icon name="calendar" [size]="18" /> Próximos eventos</h2>
-            <a class="link" routerLink="/medical-history">Ver calendario</a>
+            <h2><app-icon name="calendar" [size]="18" /> {{ 'dashboard.owner.upcoming' | translate }}</h2>
+            <a class="link" routerLink="/medical-history">{{ 'dashboard.owner.calendar' | translate }}</a>
           </div>
           <ul class="events">
             @for (event of d.events; track event.title) {
@@ -174,22 +174,22 @@
 
         <article class="card ai-card reveal" style="--i: 4">
           <div class="card-header">
-            <h2><app-icon name="sparkles" [size]="18" /> Cuota de asistencia IA</h2>
+            <h2><app-icon name="sparkles" [size]="18" /> {{ 'dashboard.owner.aiQuota' | translate }}</h2>
             <span class="chip success">{{ d.aiQuota.plan }}</span>
           </div>
-          <small class="muted">Ciclo actual: {{ d.aiQuota.cycle }}</small>
+          <small class="muted">{{ 'dashboard.owner.cycle' | translate: { cycle: d.aiQuota.cycle } }}</small>
           @for (usage of d.aiQuota.usages; track usage.label) {
             <div class="usage">
-              <div class="usage-row"><span>{{ usage.label }}</span><strong>{{ usage.used }} / {{ usage.limit }} usadas</strong></div>
+              <div class="usage-row"><span>{{ usage.label }}</span><strong>{{ 'dashboard.owner.used' | translate: { used: usage.used, limit: usage.limit } }}</strong></div>
               <app-progress-bar [value]="usagePercent(usage)" />
               <small class="muted">{{ usage.hint }}</small>
             </div>
           }
           <div class="usage-row">
-            <a class="link" routerLink="/plan">Adquirir paquete adicional <app-icon name="arrow-right" [size]="14" /></a>
-            <small class="muted">Renueva en {{ d.aiQuota.renewsInDays }} d</small>
+            <a class="link" routerLink="/plan">{{ 'dashboard.owner.buyMore' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
+            <small class="muted">{{ 'dashboard.owner.renewsIn' | translate: { days: d.aiQuota.renewsInDays } }}</small>
           </div>
-          <p class="ai-note">Sugerencia de la IA: siempre requiere validación del veterinario colegiado.</p>
+          <p class="ai-note">{{ 'dashboard.owner.aiNote' | translate }}</p>
         </article>
 
         <article class="card vet-card reveal" style="--i: 5">
@@ -199,7 +199,7 @@
             <small>{{ d.assignedVet.role }}</small>
             <small class="clinic">{{ d.assignedVet.clinic }}</small>
           </div>
-          <button class="icon-round" type="button" aria-label="Escribir al veterinario"><app-icon name="chat" [size]="18" /></button>
+          <button class="icon-round" type="button" [attr.aria-label]="'dashboard.owner.writeVet' | translate"><app-icon name="chat" [size]="18" /></button>
         </article>
       </aside>
     </div>

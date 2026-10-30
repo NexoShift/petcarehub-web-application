@@ -15,7 +15,7 @@ const COLORS = ['#0BC3BD', '#023A65', '#F79009', '#7A5AF8', '#EE46BC', '#12B76A'
       <span class="initial" [style.width.px]="size()" [style.height.px]="size()" [style.background]="color()"
             [style.font-size.px]="size() * 0.42">{{ name().charAt(0) }}</span>
     }
-    @if (online()) { <span class="online" aria-label="Activo"></span> }
+    @if (online()) { <span class="online"></span> }
   `,
   styles: `
     :host { position: relative; display: inline-flex; flex: none; }
