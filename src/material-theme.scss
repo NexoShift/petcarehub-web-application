@@ -1,0 +1,56 @@
+// Tema de Angular Material con la paleta de PetCare Hub.
+// Los colores salen de _theme-colors.scss, que se generó con:
+//   ng generate @angular/material:theme-color  (primario #032B59, secundario #023A65, terciario #0BC3BD)
+// mat.theme() crea variables CSS (--mat-sys-*) que usan todos los componentes de Material.
+@use '@angular/material' as mat;
+@use './theme-colors' as petcare;
+
+html {
+  color-scheme: light;
+  @include mat.theme((
+    color: (
+      primary: petcare.$primary-palette,
+      tertiary: petcare.$tertiary-palette,
+    ),
+    typography: Inter,
+    density: 0,
+  ));
+
+  // Ajustes de componentes puntuales para que respeten el diseño del Figma.
+  // Cada *-overrides cambia solo las variables de ese componente.
+  @include mat.toolbar-overrides((
+    container-background-color: #FFFFFF,
+    container-text-color: var(--color-text),
+    standard-height: 64px,
+    mobile-height: 56px,
+  ));
+  @include mat.sidenav-overrides((
+    container-width: 272px,
+    container-shape: 0,
+    container-background-color: var(--color-primary),
+    container-text-color: #FFFFFF,
+    content-background-color: var(--color-surface),
+    scrim-color: rgba(3, 43, 89, 0.45),
+  ));
+  @include mat.expansion-overrides((
+    container-background-color: transparent,
+    container-text-color: inherit,
+    header-text-color: inherit,
+    header-indicator-color: rgba(255, 255, 255, 0.6),
+    header-hover-state-layer-color: rgba(255, 255, 255, 0.08),
+    header-focus-state-layer-color: rgba(255, 255, 255, 0.08),
+    header-collapsed-state-height: 44px,
+    header-expanded-state-height: 44px,
+    container-shape: 10px,
+  ));
+  @include mat.button-toggle-overrides((
+    shape: 999px,
+    height: 32px,
+    selected-state-background-color: var(--color-primary),
+    selected-state-text-color: #FFFFFF,
+    divider-color: var(--color-border),
+  ));
+  @include mat.menu-overrides((
+    container-shape: 12px,
+  ));
+}
