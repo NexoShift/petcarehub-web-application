@@ -1,0 +1,252 @@
+{
+  "language": {
+    "ariaLabel": "Language"
+  },
+  "common": {
+    "brand": "PetCare Hub",
+    "tagline": "Digital Veterinary Platform",
+    "email": "Email",
+    "password": "Password",
+    "invalidEmail": "Enter a valid email",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "backToSignIn": "Back to sign in",
+    "comingSoon": "Coming soon",
+    "years": "{{count}} years",
+    "active": "Active"
+  },
+  "errors": {
+    "network": "Could not connect to the server",
+    "ownerDashboard": "We couldn't load your dashboard. Please try again.",
+    "vetDashboard": "We couldn't load the clinical dashboard. Please try again."
+  },
+  "auth": {
+    "layout": {
+      "signInAlt": "Vet examining a dog during a consultation",
+      "signInClaim": "Your pet's complete medical record, at any veterinary clinic.",
+      "signUpAlt": "Vet with a dog at the clinic",
+      "signUpClaim": "Interoperable medical records and smart assistance for animal wellbeing.",
+      "features": {
+        "history": "Centralized medical record",
+        "ai": "AI validated by vets",
+        "platforms": "Web and mobile"
+      }
+    },
+    "signIn": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to access your medical records",
+      "registered": "Account created. You can sign in now.",
+      "passwordChanged": "Password updated. Sign in with your new one.",
+      "emailPlaceholder": "your.email@example.com",
+      "forgot": "Forgot it?",
+      "passwordPlaceholder": "Your password",
+      "passwordRequired": "Password is required",
+      "wrongCredentials": "Incorrect email or password",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "or": "or continue with",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "signUp": {
+      "step": "Step 1 of 2 · Credentials",
+      "stepAria": "Step 1 of 2",
+      "title": "Create account",
+      "subtitle": "Join the collaborative veterinary network",
+      "howWillYouUse": "How will you use PetCare Hub?",
+      "owner": "Pet Owner",
+      "ownerDescription": "Access your pets' records and AI summaries.",
+      "vet": "Veterinarian",
+      "vetDescription": "Record consultations, prescribe and use diagnostic assistance.",
+      "fullName": "Full name",
+      "fullNameRequired": "Enter your name",
+      "phone": "Mobile phone",
+      "phoneInvalid": "9 digits, starting with 9",
+      "passwordPlaceholder": "At least 8 characters",
+      "strength": "Strength: {{level}}",
+      "strengthHint": "Use uppercase letters, numbers and symbols",
+      "strengthLevels": {
+        "1": "Weak",
+        "2": "Fair",
+        "3": "Good",
+        "4": "Strong"
+      },
+      "acceptPrefix": "I accept the",
+      "terms": "Terms of Service",
+      "and": "and the",
+      "privacy": "Clinical Data Privacy Policy",
+      "termsRequired": "You must accept the terms to continue",
+      "submit": "Continue",
+      "submitting": "Creating account...",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "recovery": {
+      "title": "Recover your password",
+      "subtitle": "Enter your email and we'll send you a link to reset it",
+      "sent": "If the email is registered, you'll get a link to change your password. Check your spam folder too.",
+      "submit": "Send recovery link",
+      "submitting": "Sending..."
+    },
+    "reset": {
+      "title": "Create a new password",
+      "subtitle": "Use at least 8 characters. Then you can sign in with it.",
+      "invalidLink": "This link is not valid. Request a new one from \"Forgot your password?\".",
+      "newPassword": "New password",
+      "passwordPlaceholder": "At least 8 characters",
+      "lengthError": "Between 8 and 72 characters",
+      "confirm": "Confirm password",
+      "confirmPlaceholder": "Repeat the password",
+      "mismatch": "Passwords don't match",
+      "submit": "Change password",
+      "submitting": "Saving..."
+    }
+  },
+  "shell": {
+    "portalOwner": "Owner portal",
+    "portalVet": "Veterinary portal",
+    "roleOwner": "Pet owner",
+    "roleVet": "Veterinarian",
+    "openMenu": "Open or close the menu",
+    "mainMenu": "Main menu",
+    "notifications": "Notifications",
+    "userMenu": "User menu",
+    "search": "Search patient, record or owner...",
+    "signOut": "Sign out",
+    "online": "Online",
+    "sections": {
+      "clinic": "General clinic"
+    },
+    "menu": {
+      "home": "Home",
+      "pets": "My pets",
+      "patients": "Patients",
+      "consultations": "Consultations",
+      "medicalHistory": "Medical record",
+      "treatments": "Treatments & prescriptions",
+      "exams": "Exams & results",
+      "laboratory": "Laboratory",
+      "imaging": "Imaging",
+      "visualAnalysis": "Visual analysis",
+      "aiExplain": "Explain with AI",
+      "aiAssistant": "Clinical assistant",
+      "admin": "Administration",
+      "clinic": "Clinic",
+      "offices": "Offices",
+      "planSubscription": "Plan & subscription",
+      "myPlan": "My plan",
+      "profile": "Profile"
+    }
+  },
+  "comingSoon": {
+    "title": "This section is on its way",
+    "text": "We're building this part of PetCare Hub. Meanwhile, head back to your dashboard.",
+    "goHome": "Go home"
+  },
+  "dashboard": {
+    "owner": {
+      "hello": "Hi, {{name}}!",
+      "subtitle": "Clinical summary and real-time follow-up for your registered patients.",
+      "verified": "Verified care:",
+      "myPets": "My pets",
+      "registered": "{{count}} registered",
+      "managePets": "Manage profiles",
+      "newPet": "New pet",
+      "newPetHint": "Add medical record and vaccines",
+      "priorityAlert": "Priority clinical alert",
+      "inProgress": "In progress",
+      "prescription": "Prescription {{code}}",
+      "startedAt": "Started: {{date}}",
+      "treatment": "Treatment: {{title}}",
+      "prescribedBy": "Prescribed by {{vet}}",
+      "totalDuration": "Total duration:",
+      "days": "{{count}} days",
+      "dailyDose": "Daily dose",
+      "dosesPerDay": "{{count}} doses / day",
+      "dayOf": "Day {{current}} of {{total}}",
+      "dosesDone": "{{taken}} of {{total}} doses taken",
+      "percentDone": "{{percent}}% complete",
+      "nextDose": "Next scheduled dose",
+      "viewLog": "View log",
+      "registerDose": "Log dose",
+      "quickTools": "Tools and quick actions",
+      "clinicalAccess": "Direct clinical access",
+      "quick": {
+        "historyTitle": "Medical record",
+        "historyText": "Past consultations, diagnoses and vaccines",
+        "historyLink": "View record",
+        "treatmentsTitle": "Treatments",
+        "treatmentsText": "Active prescriptions and dispensing archive",
+        "treatmentsLink": "1 active · Explore",
+        "aiTitle": "Explain with AI",
+        "aiText": "Clarify complex diagnoses and prescriptions",
+        "aiLink": "Ask the assistant",
+        "aiBadge": "AI",
+        "visualTitle": "Visual analysis",
+        "visualText": "Preliminary triage guided by photos and video",
+        "visualLink": "Start capture",
+        "visualBadge": "Vision"
+      },
+      "emergencyTitle": "24h veterinary emergency",
+      "emergencyText": "Direct line for your pets' emergencies. Priority triage with the on-duty team.",
+      "emergencyRoute": "View emergency route",
+      "emergencyCall": "Call emergency",
+      "upcoming": "Upcoming events",
+      "calendar": "View calendar",
+      "aiQuota": "AI assistance quota",
+      "cycle": "Current cycle: {{cycle}}",
+      "used": "{{used}} / {{limit}} used",
+      "buyMore": "Buy an extra pack",
+      "renewsIn": "Renews in {{days}} d",
+      "aiNote": "AI suggestion: always requires validation by a licensed vet.",
+      "writeVet": "Message the vet"
+    },
+    "vet": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening",
+      "greeting": "{{greeting}}, Dr. {{name}}",
+      "summary": "On-duty clinical dashboard · {{scheduled}} patients scheduled and {{waiting}} in the waiting room",
+      "registerPatient": "Register patient",
+      "newConsultation": "New consultation",
+      "kpi": {
+        "attended": "Seen today",
+        "patients": "patients",
+        "vsYesterday": "+2 vs yesterday",
+        "waiting": "In waiting room",
+        "inTriage": "in triage",
+        "priority": "Priority care",
+        "ongoing": "Ongoing consultations",
+        "inCare": "In care",
+        "pendingExams": "Pending exams",
+        "orders": "orders",
+        "labImaging": "Lab & Imaging"
+      },
+      "todayPatients": "Today's patients",
+      "scheduledSynced": "{{count}} patients scheduled · Synced {{time}}",
+      "filters": {
+        "all": "All",
+        "dogs": "Dogs",
+        "cats": "Cats"
+      },
+      "viewRecord": "View medical record",
+      "noPatients": "No patients of this species today.",
+      "examsToReview": "Exams to review",
+      "patient": "Patient: {{name}}",
+      "allExams": "View all clinical exams",
+      "recent": "Recent consultations",
+      "finished": "Completed",
+      "allConsultations": "Go to the full consultation history",
+      "aiAssistant": "AI clinical assistant",
+      "aiNote": "Suggestion: requires vet validation",
+      "review": "Review"
+    }
+  },
+  "enums": {
+    "species": {
+      "DOG": "Dog",
+      "CAT": "Cat",
+      "OTHER": "Other"
+    }
+  }
+}

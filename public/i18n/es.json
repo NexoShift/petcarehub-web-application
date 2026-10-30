@@ -1,0 +1,252 @@
+{
+  "language": {
+    "ariaLabel": "Idioma"
+  },
+  "common": {
+    "brand": "PetCare Hub",
+    "tagline": "Plataforma Veterinaria Digital",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "invalidEmail": "Ingresa un correo válido",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "backToSignIn": "Volver a iniciar sesión",
+    "comingSoon": "Próximamente",
+    "years": "{{count}} años",
+    "active": "Activo"
+  },
+  "errors": {
+    "network": "No se pudo conectar con el servidor",
+    "ownerDashboard": "No pudimos cargar tu panel. Intenta de nuevo.",
+    "vetDashboard": "No pudimos cargar el panel clínico. Intenta de nuevo."
+  },
+  "auth": {
+    "layout": {
+      "signInAlt": "Veterinaria revisando a un perro en consulta",
+      "signInClaim": "La historia clínica de tu mascota, completa y en cualquier veterinaria.",
+      "signUpAlt": "Veterinaria con un perro en la clínica",
+      "signUpClaim": "Historias clínicas interoperables y asistencia inteligente para el bienestar animal.",
+      "features": {
+        "history": "Historia clínica centralizada",
+        "ai": "IA validada por veterinarios",
+        "platforms": "Web y móvil"
+      }
+    },
+    "signIn": {
+      "title": "Bienvenido de nuevo",
+      "subtitle": "Ingresa para acceder a tus historiales clínicos",
+      "registered": "Cuenta creada. Ya puedes iniciar sesión.",
+      "passwordChanged": "Contraseña actualizada. Inicia sesión con la nueva.",
+      "emailPlaceholder": "tu.correo@ejemplo.com",
+      "forgot": "¿La olvidaste?",
+      "passwordPlaceholder": "Tu contraseña",
+      "passwordRequired": "La contraseña es obligatoria",
+      "wrongCredentials": "Correo o contraseña incorrectos",
+      "submit": "Iniciar sesión",
+      "submitting": "Ingresando...",
+      "or": "o continúa con",
+      "noAccount": "¿No tienes una cuenta?",
+      "signUp": "Regístrate"
+    },
+    "signUp": {
+      "step": "Paso 1 de 2 · Credenciales",
+      "stepAria": "Paso 1 de 2",
+      "title": "Crear cuenta",
+      "subtitle": "Únete a la red veterinaria colaborativa",
+      "howWillYouUse": "¿Cómo usarás PetCare Hub?",
+      "owner": "Dueño de Mascota",
+      "ownerDescription": "Accede al historial de tus mascotas y resúmenes con IA.",
+      "vet": "Médico Veterinario",
+      "vetDescription": "Registra consultas, prescribe y utiliza asistencia diagnóstica.",
+      "fullName": "Nombre y apellidos",
+      "fullNameRequired": "Ingresa tu nombre",
+      "phone": "Teléfono móvil",
+      "phoneInvalid": "9 dígitos, empieza con 9",
+      "passwordPlaceholder": "Mínimo 8 caracteres",
+      "strength": "Seguridad: {{level}}",
+      "strengthHint": "Usa mayúsculas, números y símbolos",
+      "strengthLevels": {
+        "1": "Débil",
+        "2": "Media",
+        "3": "Buena",
+        "4": "Fuerte"
+      },
+      "acceptPrefix": "Acepto los",
+      "terms": "Términos de Servicio",
+      "and": "y la",
+      "privacy": "Política de Privacidad de Datos Clínicos",
+      "termsRequired": "Debes aceptar los términos para continuar",
+      "submit": "Continuar",
+      "submitting": "Creando cuenta...",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "signIn": "Inicia sesión"
+    },
+    "recovery": {
+      "title": "Recupera tu contraseña",
+      "subtitle": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecerla",
+      "sent": "Si el correo está registrado, te llegará un enlace para cambiar tu contraseña. Revisa también la carpeta de spam.",
+      "submit": "Enviar enlace de recuperación",
+      "submitting": "Enviando..."
+    },
+    "reset": {
+      "title": "Crea una nueva contraseña",
+      "subtitle": "Usa al menos 8 caracteres. Después podrás iniciar sesión con ella.",
+      "invalidLink": "El enlace no es válido. Pide uno nuevo desde \"¿Olvidaste tu contraseña?\".",
+      "newPassword": "Nueva contraseña",
+      "passwordPlaceholder": "Mínimo 8 caracteres",
+      "lengthError": "Entre 8 y 72 caracteres",
+      "confirm": "Confirmar contraseña",
+      "confirmPlaceholder": "Repite la contraseña",
+      "mismatch": "Las contraseñas no coinciden",
+      "submit": "Cambiar contraseña",
+      "submitting": "Guardando..."
+    }
+  },
+  "shell": {
+    "portalOwner": "Portal propietario",
+    "portalVet": "Portal veterinario",
+    "roleOwner": "Dueño de mascota",
+    "roleVet": "Médico veterinario",
+    "openMenu": "Abrir o cerrar el menú",
+    "mainMenu": "Menú principal",
+    "notifications": "Notificaciones",
+    "userMenu": "Menú de usuario",
+    "search": "Buscar paciente, historia o tutor...",
+    "signOut": "Cerrar sesión",
+    "online": "En línea",
+    "sections": {
+      "clinic": "Clínica general"
+    },
+    "menu": {
+      "home": "Inicio",
+      "pets": "Mis mascotas",
+      "patients": "Pacientes",
+      "consultations": "Consultas",
+      "medicalHistory": "Historia clínica",
+      "treatments": "Tratamientos y recetas",
+      "exams": "Exámenes y resultados",
+      "laboratory": "Laboratorio",
+      "imaging": "Imagenología",
+      "visualAnalysis": "Análisis visual",
+      "aiExplain": "Explicar con IA",
+      "aiAssistant": "Asistente clínico",
+      "admin": "Administración",
+      "clinic": "Clínica",
+      "offices": "Consultorios",
+      "planSubscription": "Plan y suscripción",
+      "myPlan": "Mi plan",
+      "profile": "Perfil"
+    }
+  },
+  "comingSoon": {
+    "title": "Esta sección viene en camino",
+    "text": "Estamos preparando esta parte de PetCare Hub. Mientras tanto, vuelve a tu panel.",
+    "goHome": "Ir al inicio"
+  },
+  "dashboard": {
+    "owner": {
+      "hello": "¡Hola, {{name}}!",
+      "subtitle": "Resumen clínico y seguimiento en tiempo real para tus pacientes registrados.",
+      "verified": "Atención verificada:",
+      "myPets": "Mis mascotas",
+      "registered": "{{count}} registradas",
+      "managePets": "Gestionar perfiles",
+      "newPet": "Nueva mascota",
+      "newPetHint": "Inscribir historia clínica y vacunas",
+      "priorityAlert": "Alerta clínica prioritaria",
+      "inProgress": "En curso",
+      "prescription": "Receta {{code}}",
+      "startedAt": "Iniciado: {{date}}",
+      "treatment": "Tratamiento: {{title}}",
+      "prescribedBy": "Prescrito por el {{vet}}",
+      "totalDuration": "Duración total:",
+      "days": "{{count}} días",
+      "dailyDose": "Dosis diaria",
+      "dosesPerDay": "{{count}} tomas / día",
+      "dayOf": "Día {{current}} de {{total}}",
+      "dosesDone": "{{taken}} tomas completadas de {{total}}",
+      "percentDone": "{{percent}}% completado",
+      "nextDose": "Próxima toma programada",
+      "viewLog": "Ver bitácora",
+      "registerDose": "Registrar toma",
+      "quickTools": "Herramientas y acciones rápidas",
+      "clinicalAccess": "Acceso clínico directo",
+      "quick": {
+        "historyTitle": "Historia clínica",
+        "historyText": "Consultas previas, diagnósticos y vacunas",
+        "historyLink": "Ver expediente",
+        "treatmentsTitle": "Tratamientos",
+        "treatmentsText": "Recetas activas y archivo de dispensación",
+        "treatmentsLink": "1 activo · Explorar",
+        "aiTitle": "Explicar con IA",
+        "aiText": "Aclarar diagnósticos y recetas complejas",
+        "aiLink": "Consultar asistente",
+        "aiBadge": "IA",
+        "visualTitle": "Análisis visual",
+        "visualText": "Triaje preliminar guiado por fotos y video",
+        "visualLink": "Iniciar captura",
+        "visualBadge": "Visión"
+      },
+      "emergencyTitle": "Guardia veterinaria 24h",
+      "emergencyText": "Línea directa para urgencias de tus mascotas. Conexión de triaje prioritario con el equipo de turno.",
+      "emergencyRoute": "Ver ruta de guardia",
+      "emergencyCall": "Llamar a urgencias",
+      "upcoming": "Próximos eventos",
+      "calendar": "Ver calendario",
+      "aiQuota": "Cuota de asistencia IA",
+      "cycle": "Ciclo actual: {{cycle}}",
+      "used": "{{used}} / {{limit}} usadas",
+      "buyMore": "Adquirir paquete adicional",
+      "renewsIn": "Renueva en {{days}} d",
+      "aiNote": "Sugerencia de la IA: siempre requiere validación del veterinario colegiado.",
+      "writeVet": "Escribir al veterinario"
+    },
+    "vet": {
+      "morning": "Buenos días",
+      "afternoon": "Buenas tardes",
+      "evening": "Buenas noches",
+      "greeting": "{{greeting}}, Dr. {{name}}",
+      "summary": "Panel clínico de guardia · {{scheduled}} pacientes agendados y {{waiting}} en sala de espera inmediata",
+      "registerPatient": "Registrar paciente",
+      "newConsultation": "Nueva consulta",
+      "kpi": {
+        "attended": "Atendidos hoy",
+        "patients": "pacientes",
+        "vsYesterday": "+2 vs ayer",
+        "waiting": "En sala de espera",
+        "inTriage": "en triaje",
+        "priority": "Atención prioritaria",
+        "ongoing": "Consultas en curso",
+        "inCare": "En atención",
+        "pendingExams": "Exámenes pendientes",
+        "orders": "órdenes",
+        "labImaging": "Lab & Imagen"
+      },
+      "todayPatients": "Pacientes de hoy",
+      "scheduledSynced": "{{count}} pacientes agendados · Sincronizado {{time}}",
+      "filters": {
+        "all": "Todos",
+        "dogs": "Caninos",
+        "cats": "Felinos"
+      },
+      "viewRecord": "Ver ficha médica",
+      "noPatients": "No hay pacientes de esta especie hoy.",
+      "examsToReview": "Exámenes por revisar",
+      "patient": "Paciente: {{name}}",
+      "allExams": "Ver todos los exámenes clínicos",
+      "recent": "Consultas recientes",
+      "finished": "Finalizada",
+      "allConsultations": "Ir al historial general de consultas",
+      "aiAssistant": "Asistente clínico IA",
+      "aiNote": "Sugerencia: requiere validación del veterinario",
+      "review": "Revisar"
+    }
+  },
+  "enums": {
+    "species": {
+      "DOG": "Canino",
+      "CAT": "Felino",
+      "OTHER": "Otro"
+    }
+  }
+}
