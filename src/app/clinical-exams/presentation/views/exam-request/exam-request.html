@@ -1,0 +1,146 @@
+<section class="page">
+  <h1 class="page-title">{{ 'clinicalExams.request.title' | translate }}</h1>
+
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <form id="exam-request-form" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalExams.request.consultationId' | translate }}</mat-label>
+            <input
+              id="consultation-id"
+              matInput
+              type="number"
+              min="1"
+              formControlName="consultationId"
+            />
+            <button
+              id="load-exams-button"
+              matIconSuffix
+              mat-icon-button
+              type="button"
+              [attr.aria-label]="'clinicalExams.request.loadExams' | translate"
+              (click)="loadExams()"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+            @if (form.controls.consultationId.invalid) {
+              <mat-error>{{ 'clinicalExams.request.consultationRequired' | translate }}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalExams.request.type' | translate }}</mat-label>
+            <mat-select id="exam-type" formControlName="type">
+              @for (type of examTypes; track type) {
+                <mat-option [id]="'exam-type-' + type" [value]="type">
+                  {{ 'clinicalExams.types.' + type | translate }}
+                </mat-option>
+              }
+            </mat-select>
+            @if (form.controls.type.hasError('required')) {
+              <mat-error>{{ 'clinicalExams.request.typeRequired' | translate }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'clinicalExams.request.indication' | translate }}</mat-label>
+          <textarea
+            id="exam-indication"
+            matInput
+            rows="3"
+            formControlName="indication"
+            [maxlength]="indicationMaxLength"
+          ></textarea>
+          <mat-hint align="end">
+            {{ form.controls.indication.value.length }} / {{ indicationMaxLength }}
+          </mat-hint>
+        </mat-form-field>
+
+        <div class="actions">
+          @if (store.error(); as error) {
+            <p id="request-error" class="error-message">{{ error | translate }}</p>
+          }
+          <button
+            id="request-exam-button"
+            mat-flat-button
+            type="submit"
+            [disabled]="store.isSaving()"
+          >
+            {{ 'clinicalExams.request.submit' | translate }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  @if (shownConsultationId(); as consultationId) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          {{ 'clinicalExams.request.listTitle' | translate: { id: consultationId } }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (store.isLoading()) {
+          <div class="loading"><mat-spinner diameter="40" /></div>
+        } @else if (store.consultationExams().length === 0) {
+          <p id="no-exams" class="empty">{{ 'clinicalExams.request.empty' | translate }}</p>
+        } @else {
+          <table
+            id="exams-table"
+            mat-table
+            class="exams-table"
+            [dataSource]="store.consultationExams()"
+          >
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'clinicalExams.request.number' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let exam">{{ exam.id }}</td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'clinicalExams.request.type' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let exam">
+                {{ 'clinicalExams.types.' + exam.type | translate }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'clinicalExams.request.statusColumn' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let exam">
+                <app-exam-status-chip [status]="exam.status" />
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="requestedAt">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'clinicalExams.request.requestedAt' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let exam">
+                {{ exam.requestedAt | date: 'dd/MM/yyyy HH:mm' }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let exam">
+                <a
+                  [id]="'open-exam-' + exam.id"
+                  mat-button
+                  [routerLink]="['/clinical-exams', exam.id]"
+                >
+                  {{ 'clinicalExams.request.open' | translate }}
+                </a>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+            <tr mat-row *matRowDef="let row; columns: columns"></tr>
+          </table>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</section>
