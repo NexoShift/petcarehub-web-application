@@ -248,5 +248,106 @@
       "CAT": "Cat",
       "OTHER": "Other"
     }
+  },
+  "clinicalExams": {
+    "close": "Close",
+    "types": {
+      "RADIOGRAPHY": "Radiography",
+      "ULTRASOUND": "Ultrasound",
+      "LABORATORY": "Laboratory",
+      "OTHER": "Other"
+    },
+    "status": {
+      "REQUESTED": "Requested",
+      "IN_PROCESS": "In process",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "errors": {
+      "invalidRequest": "Check the data you entered.",
+      "invalidResult": "The result needs a summary and a date that is not in the future.",
+      "invalidCancellation": "Enter the cancellation reason.",
+      "fileTypeNotAllowed": "Only images, videos or PDF files are allowed.",
+      "fileTooLarge": "The file must be 10 MB or smaller.",
+      "examNotFound": "The exam does not exist.",
+      "consultationNotAvailable": "The consultation does not exist or is not in progress.",
+      "invalidExamState": "The exam status already changed. Reload the page.",
+      "notAllowed": "Only a registered veterinarian can do this.",
+      "sessionExpired": "Your session expired. Sign in again.",
+      "unexpected": "Something went wrong. Try again."
+    },
+    "request": {
+      "title": "Request exam",
+      "consultationId": "Consultation no.",
+      "consultationRequired": "Enter the number of a consultation in progress.",
+      "loadExams": "Show the consultation exams",
+      "type": "Exam type",
+      "typeRequired": "Select the exam type.",
+      "indication": "Clinical indication",
+      "submit": "Request exam",
+      "requested": "Exam requested",
+      "listTitle": "Exams of consultation {{id}}",
+      "empty": "The consultation has no exams yet.",
+      "number": "No.",
+      "statusColumn": "Status",
+      "requestedAt": "Requested",
+      "open": "View details"
+    },
+    "detail": {
+      "title": "Register result",
+      "back": "Back to the consultation",
+      "examTitle": "{{type}} · Exam no. {{id}}",
+      "subtitle": "Consultation {{consultationId}} · Pet {{petId}}",
+      "requestedAt": "Requested",
+      "startedAt": "Started",
+      "completedAt": "Completed",
+      "indication": "Clinical indication",
+      "noIndication": "No indication",
+      "cancellationReason": "Cancellation reason",
+      "start": "Start exam",
+      "cancel": "Cancel exam",
+      "complete": "Complete exam",
+      "resultTitle": "Result",
+      "summary": "Summary",
+      "values": "Values",
+      "interpretation": "Interpretation",
+      "resultDate": "Result date",
+      "validation": "Validation",
+      "validatedOn": "Validated on {{date}}",
+      "pendingValidation": "Pending validation",
+      "resultLater": "The result is registered while the exam is in process.",
+      "validate": "Validate result",
+      "filesTitle": "Clinical files",
+      "started": "Exam started",
+      "cancelled": "Exam cancelled",
+      "resultRegistered": "Result registered",
+      "resultValidated": "Result validated",
+      "completed": "Exam completed",
+      "fileUploaded": "File attached"
+    },
+    "resultForm": {
+      "summary": "Result summary",
+      "summaryRequired": "The summary is required.",
+      "values": "Measured values",
+      "valuesHint": "Example: Hematocrit 42 %, Glucose 95 mg/dL",
+      "interpretation": "Interpretation",
+      "resultDate": "Result date",
+      "dateRequired": "The date is required.",
+      "dateInFuture": "The date cannot be in the future.",
+      "submit": "Register result"
+    },
+    "files": {
+      "empty": "No files attached yet.",
+      "download": "Download file",
+      "upload": "Attach file",
+      "hint": "Images, videos or PDF files up to 10 MB."
+    },
+    "cancelDialog": {
+      "title": "Cancel exam",
+      "reason": "Cancellation reason",
+      "reasonRequired": "The reason is required.",
+      "back": "Back",
+      "confirm": "Cancel exam"
+    }
   }
 }

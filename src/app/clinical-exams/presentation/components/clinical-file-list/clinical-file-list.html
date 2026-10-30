@@ -1,0 +1,47 @@
+@if (files().length === 0) {
+  <p id="no-files" class="empty">{{ 'clinicalExams.files.empty' | translate }}</p>
+} @else {
+  <mat-list id="clinical-files">
+    @for (file of files(); track file.id) {
+      <mat-list-item [id]="'file-' + file.id">
+        <mat-icon matListItemIcon>{{ icons[file.type] }}</mat-icon>
+        <span matListItemTitle>{{ file.fileName }}</span>
+        <span matListItemLine>
+          {{ file.sizeInKilobytes }} KB · {{ file.uploadedAt | date: 'dd/MM/yyyy HH:mm' }}
+        </span>
+        <button
+          matListItemMeta
+          mat-icon-button
+          type="button"
+          [id]="'download-file-' + file.id"
+          [attr.aria-label]="'clinicalExams.files.download' | translate"
+          (click)="downloadRequested.emit(file)"
+        >
+          <mat-icon>download</mat-icon>
+        </button>
+      </mat-list-item>
+    }
+  </mat-list>
+}
+
+@if (canUpload()) {
+  <input
+    #fileInput
+    id="file-input"
+    class="hidden-input"
+    type="file"
+    [accept]="acceptedTypes"
+    (change)="select(fileInput)"
+  />
+  <button
+    id="upload-file-button"
+    mat-stroked-button
+    type="button"
+    [disabled]="saving()"
+    (click)="fileInput.click()"
+  >
+    <mat-icon>upload_file</mat-icon>
+    {{ 'clinicalExams.files.upload' | translate }}
+  </button>
+  <p class="hint">{{ 'clinicalExams.files.hint' | translate }}</p>
+}

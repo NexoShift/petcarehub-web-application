@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>{{ 'clinicalExams.cancelDialog.title' | translate }}</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="reason-field">
+    <mat-label>{{ 'clinicalExams.cancelDialog.reason' | translate }}</mat-label>
+    <textarea
+      id="cancel-reason"
+      matInput
+      rows="3"
+      [formControl]="reason"
+      [maxlength]="maxLength"
+    ></textarea>
+    @if (reason.hasError('required') || reason.hasError('pattern')) {
+      <mat-error>{{ 'clinicalExams.cancelDialog.reasonRequired' | translate }}</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button id="keep-exam-button" mat-button type="button" mat-dialog-close>
+    {{ 'clinicalExams.cancelDialog.back' | translate }}
+  </button>
+  <button id="confirm-cancel-button" mat-flat-button type="button" (click)="confirm()">
+    {{ 'clinicalExams.cancelDialog.confirm' | translate }}
+  </button>
+</mat-dialog-actions>

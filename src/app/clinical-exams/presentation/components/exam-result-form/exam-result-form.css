@@ -1,0 +1,14 @@
+.result-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-field {
+  max-width: 260px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
