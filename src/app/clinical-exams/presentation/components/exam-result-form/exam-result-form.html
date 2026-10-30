@@ -1,0 +1,66 @@
+<form id="exam-result-form" class="result-form" [formGroup]="form" (ngSubmit)="submit()">
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'clinicalExams.resultForm.summary' | translate }}</mat-label>
+    <textarea
+      id="result-summary"
+      matInput
+      formControlName="summary"
+      rows="3"
+      [maxlength]="summaryMaxLength"
+    ></textarea>
+    <mat-hint align="end"
+    >{{ form.controls.summary.value.length }} / {{ summaryMaxLength }}</mat-hint
+    >
+    @if (form.controls.summary.hasError('required')) {
+      <mat-error>{{ 'clinicalExams.resultForm.summaryRequired' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'clinicalExams.resultForm.values' | translate }}</mat-label>
+    <textarea
+      id="result-values"
+      matInput
+      formControlName="values"
+      rows="3"
+      [maxlength]="valuesMaxLength"
+    ></textarea>
+    <mat-hint>{{ 'clinicalExams.resultForm.valuesHint' | translate }}</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'clinicalExams.resultForm.interpretation' | translate }}</mat-label>
+    <textarea
+      id="result-interpretation"
+      matInput
+      formControlName="interpretation"
+      rows="3"
+      [maxlength]="interpretationMaxLength"
+    ></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="date-field">
+    <mat-label>{{ 'clinicalExams.resultForm.resultDate' | translate }}</mat-label>
+    <input
+      id="result-date"
+      matInput
+      formControlName="resultDate"
+      [matDatepicker]="picker"
+      [max]="today"
+    />
+    <mat-datepicker-toggle matIconSuffix [for]="picker" />
+    <mat-datepicker #picker />
+    @if (form.controls.resultDate.hasError('required')) {
+      <mat-error>{{ 'clinicalExams.resultForm.dateRequired' | translate }}</mat-error>
+    }
+    @if (form.controls.resultDate.hasError('matDatepickerMax')) {
+      <mat-error>{{ 'clinicalExams.resultForm.dateInFuture' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="form-actions">
+    <button id="save-result-button" mat-flat-button type="submit" [disabled]="saving()">
+      {{ 'clinicalExams.resultForm.submit' | translate }}
+    </button>
+  </div>
+</form>

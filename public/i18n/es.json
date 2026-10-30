@@ -248,5 +248,106 @@
       "CAT": "Felino",
       "OTHER": "Otro"
     }
+  },
+  "clinicalExams": {
+    "close": "Cerrar",
+    "types": {
+      "RADIOGRAPHY": "Radiografía",
+      "ULTRASOUND": "Ecografía",
+      "LABORATORY": "Laboratorio",
+      "OTHER": "Otro"
+    },
+    "status": {
+      "REQUESTED": "Solicitado",
+      "IN_PROCESS": "En proceso",
+      "COMPLETED": "Completado",
+      "CANCELLED": "Cancelado"
+    },
+    "errors": {
+      "invalidRequest": "Revisa los datos ingresados.",
+      "invalidResult": "El resultado necesita un resumen y una fecha que no sea futura.",
+      "invalidCancellation": "Indica el motivo de la cancelación.",
+      "fileTypeNotAllowed": "Solo se permiten imágenes, videos o PDF.",
+      "fileTooLarge": "El archivo debe pesar como máximo 10 MB.",
+      "examNotFound": "El examen no existe.",
+      "consultationNotAvailable": "La consulta no existe o no está en curso.",
+      "invalidExamState": "El examen ya cambió de estado. Recarga la página.",
+      "notAllowed": "Solo un veterinario registrado puede hacer esto.",
+      "sessionExpired": "Tu sesión expiró. Vuelve a iniciar sesión.",
+      "unexpected": "Ocurrió un error inesperado. Inténtalo otra vez."
+    },
+    "request": {
+      "title": "Solicitar examen",
+      "consultationId": "N.° de consulta",
+      "consultationRequired": "Ingresa el número de una consulta en curso.",
+      "loadExams": "Ver exámenes de la consulta",
+      "type": "Tipo de examen",
+      "typeRequired": "Selecciona el tipo de examen.",
+      "indication": "Indicación clínica",
+      "submit": "Solicitar examen",
+      "requested": "Examen solicitado",
+      "listTitle": "Exámenes de la consulta {{id}}",
+      "empty": "La consulta aún no tiene exámenes.",
+      "number": "N.°",
+      "statusColumn": "Estado",
+      "requestedAt": "Solicitado",
+      "open": "Ver detalle"
+    },
+    "detail": {
+      "title": "Registrar resultado",
+      "back": "Volver a la consulta",
+      "examTitle": "{{type}} · Examen N.° {{id}}",
+      "subtitle": "Consulta {{consultationId}} · Mascota {{petId}}",
+      "requestedAt": "Solicitado",
+      "startedAt": "Iniciado",
+      "completedAt": "Completado",
+      "indication": "Indicación clínica",
+      "noIndication": "Sin indicación",
+      "cancellationReason": "Motivo de cancelación",
+      "start": "Iniciar examen",
+      "cancel": "Cancelar examen",
+      "complete": "Completar examen",
+      "resultTitle": "Resultado",
+      "summary": "Resumen",
+      "values": "Valores",
+      "interpretation": "Interpretación",
+      "resultDate": "Fecha del resultado",
+      "validation": "Validación",
+      "validatedOn": "Validado el {{date}}",
+      "pendingValidation": "Pendiente de validación",
+      "resultLater": "El resultado se registra cuando el examen está en proceso.",
+      "validate": "Validar resultado",
+      "filesTitle": "Archivos clínicos",
+      "started": "Examen iniciado",
+      "cancelled": "Examen cancelado",
+      "resultRegistered": "Resultado registrado",
+      "resultValidated": "Resultado validado",
+      "completed": "Examen completado",
+      "fileUploaded": "Archivo adjuntado"
+    },
+    "resultForm": {
+      "summary": "Resumen del resultado",
+      "summaryRequired": "El resumen es obligatorio.",
+      "values": "Valores obtenidos",
+      "valuesHint": "Ejemplo: Hematocrito 42 %, Glucosa 95 mg/dL",
+      "interpretation": "Interpretación",
+      "resultDate": "Fecha del resultado",
+      "dateRequired": "La fecha es obligatoria.",
+      "dateInFuture": "La fecha no puede ser futura.",
+      "submit": "Registrar resultado"
+    },
+    "files": {
+      "empty": "Aún no hay archivos adjuntos.",
+      "download": "Descargar archivo",
+      "upload": "Adjuntar archivo",
+      "hint": "Imágenes, videos o PDF de hasta 10 MB."
+    },
+    "cancelDialog": {
+      "title": "Cancelar examen",
+      "reason": "Motivo de la cancelación",
+      "reasonRequired": "El motivo es obligatorio.",
+      "back": "Volver",
+      "confirm": "Cancelar examen"
+    }
   }
 }
