@@ -1,0 +1,116 @@
+<form [id]="idPrefix() + '-form'" [formGroup]="form" (ngSubmit)="submit()">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{ 'clinicalAttention.diagnosis.description' | translate }}</mat-label>
+    <input
+      [id]="idPrefix() + '-description'"
+      matInput
+      formControlName="description"
+      [maxlength]="limits.diagnosisDescription"
+    />
+    @if (form.controls.description.invalid) {
+      <mat-error>{{ 'clinicalAttention.diagnosis.descriptionRequired' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'clinicalAttention.diagnosis.type' | translate }}</mat-label>
+      <mat-select [id]="idPrefix() + '-type'" formControlName="type">
+        @for (type of types; track type) {
+          <mat-option [id]="idPrefix() + '-type-' + type" [value]="type">
+            {{ 'clinicalAttention.diagnosisType.' + type | translate }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.controls.type.invalid) {
+        <mat-error>{{ 'clinicalAttention.diagnosis.typeRequired' | translate }}</mat-error>
+      }
+    </mat-form-field>
+    @if (mode() === 'register') {
+      <div class="primary-toggle">
+        <mat-slide-toggle [id]="idPrefix() + '-primary'" formControlName="primary">
+          {{ 'clinicalAttention.diagnosis.primary' | translate }}
+        </mat-slide-toggle>
+        @if (!canBePrimary()) {
+          <small class="meta">{{ 'clinicalAttention.diagnosis.primaryTaken' | translate }}</small>
+        }
+      </div>
+    }
+  </div>
+
+  <p class="section-label">{{ 'clinicalAttention.diagnosis.differentials' | translate }}</p>
+  @if (differentials().length > 0) {
+    <div class="tags differential-list">
+      @for (item of differentials(); track item) {
+        <span class="tag strong chosen">
+          {{ item }}
+          <button
+            type="button"
+            class="remove"
+            [attr.aria-label]="'clinicalAttention.diagnosis.removeDifferential' | translate"
+            (click)="removeDifferential(item)"
+          >
+            ×
+          </button>
+        </span>
+      }
+    </div>
+  }
+  <div class="differential-input">
+    <mat-form-field appearance="outline" class="differential-field">
+      <mat-label>{{ 'clinicalAttention.diagnosis.differentialPlaceholder' | translate }}</mat-label>
+      <input
+        [id]="idPrefix() + '-differential'"
+        matInput
+        [formControl]="differentialDraft"
+        [maxlength]="limits.differentialDiagnosis"
+        (keydown.enter)="$event.preventDefault(); addDifferential()"
+      />
+    </mat-form-field>
+    <button
+      [id]="idPrefix() + '-add-differential'"
+      mat-stroked-button
+      type="button"
+      (click)="addDifferential()"
+    >
+      {{ 'clinicalAttention.diagnosis.addDifferential' | translate }}
+    </button>
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{ 'clinicalAttention.diagnosis.rationale' | translate }}</mat-label>
+    <textarea
+      [id]="idPrefix() + '-rationale'"
+      matInput
+      rows="3"
+      formControlName="rationale"
+      [maxlength]="limits.rationale"
+    ></textarea>
+  </mat-form-field>
+
+  <div class="actions">
+    @if (mode() === 'reevaluate') {
+      <button
+        [id]="idPrefix() + '-cancel-button'"
+        mat-button
+        type="button"
+        (click)="cancelled.emit()"
+      >
+        {{ 'clinicalAttention.diagnosis.cancelForm' | translate }}
+      </button>
+    }
+    <button
+      [id]="idPrefix() + '-submit-button'"
+      mat-flat-button
+      type="submit"
+      [disabled]="saving()"
+    >
+      {{
+        (mode() === 'register'
+          ? 'clinicalAttention.diagnosis.submit'
+          : 'clinicalAttention.diagnosis.submitReevaluation'
+        ) | translate
+      }}
+    </button>
+  </div>
+</form>

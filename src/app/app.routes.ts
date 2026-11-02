@@ -19,6 +19,14 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./clinical-exams/clinical-exams.routes').then((m) => m.CLINICAL_EXAMS_ROUTES),
       },
+      {
+        path: 'consultations',
+        canActivate: [roleGuard('ROLE_VETERINARIAN')],
+        loadChildren: () =>
+          import('./clinical-attention/clinical-attention.routes').then(
+            (m) => m.CLINICAL_ATTENTION_ROUTES,
+          ),
+      },
       { path: '', pathMatch: 'full', redirectTo: 'home' },
       // Enlaces del menú que aún no tienen pantalla
       {

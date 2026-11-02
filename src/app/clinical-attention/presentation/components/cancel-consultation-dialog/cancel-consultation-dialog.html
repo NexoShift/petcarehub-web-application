@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{ 'clinicalAttention.cancelDialog.title' | translate }}</h2>
+<mat-dialog-content>
+  <p class="warning">{{ 'clinicalAttention.cancelDialog.warning' | translate }}</p>
+  <mat-form-field appearance="outline" class="reason-field">
+    <mat-label>{{ 'clinicalAttention.cancelDialog.reason' | translate }}</mat-label>
+    <textarea
+      id="cancel-consultation-reason"
+      matInput
+      rows="3"
+      [formControl]="reason"
+      [maxlength]="maxLength"
+    ></textarea>
+    @if (reason.hasError('required') || reason.hasError('pattern')) {
+      <mat-error>{{ 'clinicalAttention.cancelDialog.reasonRequired' | translate }}</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button id="keep-consultation-button" mat-button type="button" mat-dialog-close>
+    {{ 'clinicalAttention.cancelDialog.back' | translate }}
+  </button>
+  <button id="confirm-cancel-consultation-button" mat-flat-button type="button" (click)="confirm()">
+    {{ 'clinicalAttention.cancelDialog.confirm' | translate }}
+  </button>
+</mat-dialog-actions>

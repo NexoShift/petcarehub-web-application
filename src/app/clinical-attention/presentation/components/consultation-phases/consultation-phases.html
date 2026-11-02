@@ -1,0 +1,31 @@
+<nav class="phases" [attr.aria-label]="'clinicalAttention.phases.nav' | translate">
+  @for (item of items(); track item.id) {
+    <button
+      type="button"
+      class="phase"
+      [id]="'phase-' + item.id"
+      [class.active]="item.id === active()"
+      [class.done]="item.done"
+      [disabled]="!item.available"
+      [attr.aria-current]="item.id === active() ? 'step' : null"
+      (click)="selected.emit(item.id)"
+    >
+      <span class="number">
+        @if (item.done) {
+          <app-icon name="check" [size]="14" />
+        } @else {
+          {{ item.number }}
+        }
+      </span>
+      <span class="text">
+        <strong>{{ 'clinicalAttention.phases.' + item.id + '.title' | translate }}</strong>
+        <small>{{
+          (item.available
+            ? 'clinicalAttention.phases.' + item.id + '.subtitle'
+            : 'clinicalAttention.phases.soon'
+          ) | translate
+        }}</small>
+      </span>
+    </button>
+  }
+</nav>

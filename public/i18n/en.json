@@ -349,5 +349,285 @@
       "back": "Back",
       "confirm": "Cancel exam"
     }
+  },
+  "clinicalAttention": {
+    "close": "Close",
+    "status": {
+      "CREATED": "Registered",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "diagnosisType": {
+      "PRESUMPTIVE": "Presumptive",
+      "DEFINITIVE": "Definitive"
+    },
+    "diagnosisStatus": {
+      "CURRENT": "Current",
+      "SUPERSEDED": "Superseded"
+    },
+    "severity": {
+      "MILD": "Mild",
+      "MODERATE": "Moderate",
+      "SEVERE": "Severe"
+    },
+    "bodySystems": {
+      "INTEGUMENTARY": "Skin and coat",
+      "OCULAR": "Eyes",
+      "OTIC": "Ears",
+      "DIGESTIVE": "Digestive",
+      "RESPIRATORY": "Respiratory",
+      "CARDIOVASCULAR": "Cardiovascular",
+      "MUSCULOSKELETAL": "Musculoskeletal",
+      "NERVOUS": "Nervous",
+      "URINARY": "Urinary",
+      "REPRODUCTIVE": "Reproductive",
+      "OTHER": "Other"
+    },
+    "hydration": {
+      "NORMAL": "Normal",
+      "MILD_DEHYDRATION": "Mild dehydration",
+      "MODERATE_DEHYDRATION": "Moderate dehydration",
+      "SEVERE_DEHYDRATION": "Severe dehydration"
+    },
+    "pending": {
+      "anamnesis": "Register the anamnesis",
+      "physiologicalAssessment": "Register at least one physiological assessment",
+      "primaryDiagnosis": "Register a primary diagnosis"
+    },
+    "errors": {
+      "invalidRequest": "Check the data you entered.",
+      "invalidVitalSigns": "Check the vital signs: weight up to 500 kg, temperature between 30 and 45 °C and rates above 0.",
+      "invalidCancellation": "Enter the reason for the cancellation.",
+      "petNotFound": "The pet does not exist.",
+      "consultationNotFound": "The consultation does not exist.",
+      "invalidConsultationState": "The consultation has already changed state. Reload the page.",
+      "incompleteConsultation": "Some data is still missing to complete the consultation:",
+      "diagnosisConflict": "A current primary diagnosis already exists or this diagnosis was already reevaluated. Reload the consultation.",
+      "notAllowed": "Only the veterinarian in charge of the consultation can do this.",
+      "sessionExpired": "Your session expired. Sign in again.",
+      "unexpected": "An unexpected error occurred. Please try again."
+    },
+    "phases": {
+      "nav": "Consultation phases",
+      "soon": "Coming soon",
+      "anamnesis": {
+        "title": "Anamnesis",
+        "subtitle": "Reason and history"
+      },
+      "assessment": {
+        "title": "Assessment",
+        "subtitle": "Vital signs and findings"
+      },
+      "images": {
+        "title": "Images",
+        "subtitle": "Image capture"
+      },
+      "assistant": {
+        "title": "Assistant",
+        "subtitle": "Clinical suggestions"
+      },
+      "diagnosis": {
+        "title": "Diagnosis",
+        "subtitle": "Diagnosis and exams"
+      },
+      "completion": {
+        "title": "Completion",
+        "subtitle": "Treatment and closing"
+      }
+    },
+    "list": {
+      "title": "Clinical consultations",
+      "subtitle": "Review the consultations of a patient or open a new one.",
+      "newConsultation": "New consultation",
+      "petId": "Pet no.",
+      "petRequired": "Enter the pet number.",
+      "search": "Search consultations",
+      "listTitle": "Consultations of pet {{id}}",
+      "empty": "The pet has no consultations yet.",
+      "number": "No.",
+      "date": "Date",
+      "reason": "Reason",
+      "statusColumn": "Status",
+      "open": "Open"
+    },
+    "new": {
+      "title": "New consultation",
+      "subtitle": "Register the patient's visit. Next you will fill in the anamnesis, assessment and diagnosis.",
+      "back": "Back to consultations",
+      "petId": "Pet no.",
+      "petRequired": "Enter the pet number.",
+      "clinicId": "Clinic no.",
+      "clinicRequired": "Enter the clinic number.",
+      "consultingRoomId": "Consulting room no.",
+      "optional": "Optional",
+      "reason": "Reason for the consultation",
+      "reasonRequired": "Describe the reason for the consultation.",
+      "submit": "Register consultation",
+      "created": "Consultation registered"
+    },
+    "workspace": {
+      "title": "Consultation no. {{id}}",
+      "back": "Back to the list",
+      "pet": "Pet",
+      "veterinarian": "Veterinarian",
+      "clinic": "Clinic",
+      "consultingRoom": "Consulting room",
+      "startedAt": "Started",
+      "notStarted": "Not started yet",
+      "reason": "Reason",
+      "startTitle": "Consultation registered",
+      "startText": "Start the consultation to register the anamnesis, vital signs, findings and diagnosis.",
+      "start": "Start consultation",
+      "started": "Consultation started",
+      "cancelConsultation": "Cancel consultation",
+      "cancelled": "Consultation cancelled",
+      "previous": "Previous",
+      "next": "Next",
+      "closedCompleted": "Consultation completed on {{date}}",
+      "closedCancelled": "Consultation cancelled on {{date}}",
+      "cancellationReason": "Cancellation reason",
+      "readOnly": "This is a closed clinical record: it can be read but not changed.",
+      "notAvailable": "Consultation not available"
+    },
+    "anamnesis": {
+      "title": "Anamnesis",
+      "subtitle": "Interview with the owner about the reason for the visit",
+      "chiefComplaint": "Chief complaint",
+      "chiefComplaintHint": "In the owner's own words",
+      "chiefComplaintRequired": "Describe the chief complaint.",
+      "evolutionTime": "Evolution time",
+      "evolutionTimeRequired": "Say how long ago it started.",
+      "evolutionOptions": {
+        "acute": "Less than 24 hours",
+        "days": "1 to 3 days",
+        "week": "About a week",
+        "month": "More than a month",
+        "chronic": "Chronic"
+      },
+      "symptoms": "Symptoms",
+      "symptomPlaceholder": "Type a symptom and press Enter",
+      "addSymptom": "Add",
+      "removeSymptom": "Remove symptom",
+      "suggestions": {
+        "vomiting": "Vomiting",
+        "diarrhea": "Diarrhea",
+        "fever": "Fever",
+        "cough": "Cough",
+        "lethargy": "Lethargy",
+        "appetiteLoss": "Loss of appetite",
+        "limping": "Limping",
+        "itching": "Itching"
+      },
+      "diet": "Diet",
+      "behavior": "Behavior",
+      "previousTreatments": "Previous treatments",
+      "ownerObservations": "Owner's observations",
+      "saveHint": "The anamnesis is registered once and cannot be changed afterwards.",
+      "submit": "Register anamnesis",
+      "registered": "Anamnesis registered",
+      "none": "Not provided",
+      "locked": "Clinical record: the anamnesis is not modified.",
+      "notRegistered": "No anamnesis was registered."
+    },
+    "assessment": {
+      "title": "Physiological assessment",
+      "subtitle": "The patient's vital signs. Every measurement is added to the record.",
+      "weight": "Weight",
+      "weightInvalid": "Enter a weight above 0 and up to 500 kg.",
+      "temperature": "Temperature",
+      "temperatureInvalid": "Enter a temperature between 30 and 45 °C.",
+      "heartRate": "Heart rate",
+      "heartRateInvalid": "Enter a whole number between 1 and 600.",
+      "respiratoryRate": "Respiratory rate",
+      "respiratoryRateInvalid": "Enter a whole number between 1 and 300.",
+      "hydration": "Hydration",
+      "bodyCondition": "Body condition",
+      "bodyConditionHint": "1 very thin · 9 obese",
+      "bodyConditionShort": "BCS",
+      "notRecorded": "Not recorded",
+      "mucousMembranes": "Mucous membranes",
+      "capillaryRefill": "Capillary refill",
+      "capillaryRefillShort": "CRT",
+      "capillaryRefillInvalid": "Must be greater than 0.",
+      "observations": "Observations",
+      "submit": "Register measurement",
+      "registered": "Measurement registered",
+      "recorded": "Registered measurements",
+      "empty": "There are no measurements yet."
+    },
+    "findings": {
+      "title": "Findings",
+      "subtitle": "What was observed in each body system",
+      "empty": "There are no findings yet.",
+      "add": "Add finding",
+      "bodySystem": "System",
+      "bodySystemRequired": "Select the system.",
+      "severity": "Severity",
+      "noSeverity": "Not specified",
+      "description": "Description",
+      "descriptionRequired": "Describe the finding.",
+      "submit": "Add finding",
+      "added": "Finding added"
+    },
+    "diagnosis": {
+      "title": "Diagnosis",
+      "subtitle": "A diagnosis is never edited: it is reevaluated and the previous one stays in the history.",
+      "empty": "There are no diagnoses yet.",
+      "registerTitle": "Register diagnosis",
+      "description": "Diagnosis",
+      "descriptionRequired": "Describe the diagnosis.",
+      "type": "Type",
+      "typeRequired": "Select the type.",
+      "primary": "Primary diagnosis",
+      "primaryTaken": "A current primary diagnosis already exists.",
+      "primaryTag": "Primary",
+      "differentials": "Differential diagnoses",
+      "differentialPlaceholder": "Type a differential and press Enter",
+      "addDifferential": "Add",
+      "removeDifferential": "Remove differential diagnosis",
+      "rationale": "Clinical rationale",
+      "submit": "Register diagnosis",
+      "registered": "Diagnosis registered",
+      "reevaluate": "Reevaluate",
+      "reevaluateTitle": "Reevaluate diagnosis",
+      "reevaluateHint": "A new diagnosis is created; the current one is kept as superseded and is not lost.",
+      "submitReevaluation": "Register reevaluation",
+      "reevaluated": "Diagnosis reevaluated",
+      "cancelForm": "Cancel",
+      "reevaluationOf": "Reevaluates diagnosis no. {{id}}"
+    },
+    "completion": {
+      "title": "Complete consultation",
+      "subtitle": "Check the clinical record before closing the consultation",
+      "checklist": "Requirements to complete",
+      "pending": "Pending",
+      "done": "Done",
+      "assessments": "Measurements",
+      "findings": "Findings",
+      "diagnoses": "Current diagnoses",
+      "immutable": "Once completed, the consultation becomes a read-only clinical record.",
+      "treatmentsNote": "Treatment and prescription are registered in the treatments module.",
+      "complete": "Complete consultation",
+      "completed": "Consultation completed"
+    },
+    "history": {
+      "title": "Patient history",
+      "subtitle": "Earlier consultations of pet {{id}}",
+      "empty": "The pet has no earlier consultations."
+    },
+    "exams": {
+      "title": "Complementary exams",
+      "subtitle": "Request laboratory or imaging studies for this consultation",
+      "request": "Request exam"
+    },
+    "cancelDialog": {
+      "title": "Cancel consultation",
+      "warning": "The consultation will be cancelled and cannot be reopened. The data already registered is kept.",
+      "reason": "Cancellation reason",
+      "reasonRequired": "The reason is required.",
+      "back": "Go back",
+      "confirm": "Cancel consultation"
+    }
   }
 }

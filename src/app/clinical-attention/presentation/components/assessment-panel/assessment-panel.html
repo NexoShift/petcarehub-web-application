@@ -1,0 +1,206 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ 'clinicalAttention.assessment.title' | translate }}</mat-card-title>
+    <mat-card-subtitle>{{ 'clinicalAttention.assessment.subtitle' | translate }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    @if (consultation().isInProgress) {
+      <form id="assessment-form" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="vitals">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.assessment.weight' | translate }}</mat-label>
+            <input
+              id="weight"
+              matInput
+              type="number"
+              step="0.01"
+              inputmode="decimal"
+              formControlName="weightKg"
+            />
+            <span matTextSuffix>kg</span>
+            @if (form.controls.weightKg.invalid) {
+              <mat-error>{{ 'clinicalAttention.assessment.weightInvalid' | translate }}</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.assessment.temperature' | translate }}</mat-label>
+            <input
+              id="temperature"
+              matInput
+              type="number"
+              step="0.1"
+              inputmode="decimal"
+              formControlName="temperatureCelsius"
+            />
+            <span matTextSuffix>°C</span>
+            @if (form.controls.temperatureCelsius.invalid) {
+              <mat-error>{{
+                'clinicalAttention.assessment.temperatureInvalid' | translate
+              }}</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.assessment.heartRate' | translate }}</mat-label>
+            <input
+              id="heart-rate"
+              matInput
+              type="number"
+              step="1"
+              inputmode="numeric"
+              formControlName="heartRateBpm"
+            />
+            <span matTextSuffix>lpm</span>
+            @if (form.controls.heartRateBpm.invalid) {
+              <mat-error>{{
+                'clinicalAttention.assessment.heartRateInvalid' | translate
+              }}</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.assessment.respiratoryRate' | translate }}</mat-label>
+            <input
+              id="respiratory-rate"
+              matInput
+              type="number"
+              step="1"
+              inputmode="numeric"
+              formControlName="respiratoryRateBpm"
+            />
+            <span matTextSuffix>rpm</span>
+            @if (form.controls.respiratoryRateBpm.invalid) {
+              <mat-error>{{
+                'clinicalAttention.assessment.respiratoryRateInvalid' | translate
+              }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.assessment.hydration' | translate }}</mat-label>
+            <mat-select id="hydration" formControlName="hydrationStatus">
+              <mat-option [value]="null">{{
+                'clinicalAttention.assessment.notRecorded' | translate
+              }}</mat-option>
+              @for (status of hydrationStatuses; track status) {
+                <mat-option [id]="'hydration-' + status" [value]="status">
+                  {{ 'clinicalAttention.hydration.' + status | translate }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.assessment.bodyCondition' | translate }}</mat-label>
+            <mat-select id="body-condition" formControlName="bodyConditionScore">
+              <mat-option [value]="null">{{
+                'clinicalAttention.assessment.notRecorded' | translate
+              }}</mat-option>
+              @for (score of bodyConditionScores; track score) {
+                <mat-option [value]="score">{{ score }}</mat-option>
+              }
+            </mat-select>
+            <mat-hint>{{ 'clinicalAttention.assessment.bodyConditionHint' | translate }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.assessment.mucousMembranes' | translate }}</mat-label>
+            <input
+              id="mucous-membranes"
+              matInput
+              formControlName="mucousMembranes"
+              [maxlength]="limits.mucousMembranes"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.assessment.capillaryRefill' | translate }}</mat-label>
+            <input
+              id="capillary-refill"
+              matInput
+              type="number"
+              step="0.1"
+              inputmode="decimal"
+              formControlName="capillaryRefillTimeSeconds"
+            />
+            <span matTextSuffix>s</span>
+            @if (form.controls.capillaryRefillTimeSeconds.invalid) {
+              <mat-error>{{
+                'clinicalAttention.assessment.capillaryRefillInvalid' | translate
+              }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'clinicalAttention.assessment.observations' | translate }}</mat-label>
+          <textarea
+            id="assessment-observations"
+            matInput
+            rows="3"
+            formControlName="observations"
+            [maxlength]="limits.assessmentObservations"
+          ></textarea>
+        </mat-form-field>
+
+        <div class="actions">
+          <button
+            id="register-assessment-button"
+            mat-flat-button
+            type="submit"
+            [disabled]="saving()"
+          >
+            {{ 'clinicalAttention.assessment.submit' | translate }}
+          </button>
+        </div>
+      </form>
+    }
+
+    <h3 class="section-label">{{ 'clinicalAttention.assessment.recorded' | translate }}</h3>
+    @if (consultation().physiologicalAssessments.length === 0) {
+      <p id="no-assessments" class="empty">
+        {{ 'clinicalAttention.assessment.empty' | translate }}
+      </p>
+    } @else {
+      <ul id="assessment-list" class="records">
+        @for (assessment of recorded(); track assessment.id) {
+          <li class="record" [id]="'assessment-' + assessment.id">
+            <div class="record-header">
+              <strong>
+                {{ assessment.weightKg }} kg · {{ assessment.temperatureCelsius }} °C ·
+                {{ assessment.heartRateBpm }} lpm · {{ assessment.respiratoryRateBpm }} rpm
+              </strong>
+              <span class="meta">{{ assessment.recordedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <div class="tags">
+              @if (assessment.hydrationStatus) {
+                <span class="tag">
+                  {{ 'clinicalAttention.assessment.hydration' | translate }}:
+                  {{ 'clinicalAttention.hydration.' + assessment.hydrationStatus | translate }}
+                </span>
+              }
+              @if (assessment.bodyConditionScore !== null) {
+                <span class="tag">
+                  {{ 'clinicalAttention.assessment.bodyConditionShort' | translate }}
+                  {{ assessment.bodyConditionScore }}/9
+                </span>
+              }
+              @if (assessment.mucousMembranes) {
+                <span class="tag">{{ assessment.mucousMembranes }}</span>
+              }
+              @if (assessment.capillaryRefillTimeSeconds !== null) {
+                <span class="tag">
+                  {{ 'clinicalAttention.assessment.capillaryRefillShort' | translate }}
+                  {{ assessment.capillaryRefillTimeSeconds }} s
+                </span>
+              }
+            </div>
+            @if (assessment.observations) {
+              <p>{{ assessment.observations }}</p>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </mat-card-content>
+</mat-card>

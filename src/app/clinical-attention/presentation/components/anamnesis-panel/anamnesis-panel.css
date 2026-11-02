@@ -1,0 +1,37 @@
+.symptom-input {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.symptom-field {
+  flex: 1 1 auto;
+}
+
+.symptom-input button {
+  margin-top: 8px;
+}
+
+.selected-symptoms {
+  margin-bottom: 16px;
+}
+
+.symptom {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.remove {
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.locked {
+  margin-top: 16px;
+}

@@ -1,0 +1,83 @@
+<section class="page">
+  <header class="page-header">
+    <div class="title-row">
+      <a
+        id="back-to-list"
+        mat-icon-button
+        routerLink="/consultations"
+        [attr.aria-label]="'clinicalAttention.new.back' | translate"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <div>
+        <h1 class="page-title">{{ 'clinicalAttention.new.title' | translate }}</h1>
+        <p class="page-subtitle">{{ 'clinicalAttention.new.subtitle' | translate }}</p>
+      </div>
+    </div>
+  </header>
+
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <form id="new-consultation-form" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.new.petId' | translate }}</mat-label>
+            <input id="pet-id" matInput type="number" min="1" formControlName="petId" />
+            @if (form.controls.petId.invalid) {
+              <mat-error>{{ 'clinicalAttention.new.petRequired' | translate }}</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.new.clinicId' | translate }}</mat-label>
+            <input id="clinic-id" matInput type="number" min="1" formControlName="clinicId" />
+            @if (form.controls.clinicId.invalid) {
+              <mat-error>{{ 'clinicalAttention.new.clinicRequired' | translate }}</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.new.consultingRoomId' | translate }}</mat-label>
+            <input
+              id="consulting-room-id"
+              matInput
+              type="number"
+              min="1"
+              formControlName="consultingRoomId"
+            />
+            <mat-hint>{{ 'clinicalAttention.new.optional' | translate }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'clinicalAttention.new.reason' | translate }}</mat-label>
+          <textarea
+            id="consultation-reason"
+            matInput
+            rows="3"
+            formControlName="reason"
+            [maxlength]="reasonMaxLength"
+          ></textarea>
+          <mat-hint align="end">
+            {{ form.controls.reason.value.length }} / {{ reasonMaxLength }}
+          </mat-hint>
+          @if (form.controls.reason.invalid) {
+            <mat-error>{{ 'clinicalAttention.new.reasonRequired' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="actions">
+          @if (store.error(); as error) {
+            <p id="create-error" class="error-message" role="alert">{{ error | translate }}</p>
+          }
+          <button
+            id="create-consultation-button"
+            mat-flat-button
+            type="submit"
+            [disabled]="store.isSaving()"
+          >
+            {{ 'clinicalAttention.new.submit' | translate }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</section>

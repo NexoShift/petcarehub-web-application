@@ -1,0 +1,101 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ 'clinicalAttention.diagnosis.title' | translate }}</mat-card-title>
+    <mat-card-subtitle>{{ 'clinicalAttention.diagnosis.subtitle' | translate }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    @if (consultation().diagnoses.length === 0) {
+      <p id="no-diagnoses" class="empty">{{ 'clinicalAttention.diagnosis.empty' | translate }}</p>
+    } @else {
+      <ul id="diagnosis-list" class="records">
+        @for (diagnosis of consultation().diagnoses; track diagnosis.id) {
+          <li
+            class="record"
+            [class.superseded]="!diagnosis.isCurrent"
+            [id]="'diagnosis-' + diagnosis.id"
+          >
+            <div class="record-header">
+              <strong>{{ diagnosis.description }}</strong>
+              <span class="meta">{{ diagnosis.diagnosedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <div class="tags">
+              @if (diagnosis.primary) {
+                <span class="tag strong">{{
+                  'clinicalAttention.diagnosis.primaryTag' | translate
+                }}</span>
+              }
+              <span class="tag">{{
+                'clinicalAttention.diagnosisType.' + diagnosis.type | translate
+              }}</span>
+              <span class="tag" [class.muted]="!diagnosis.isCurrent">
+                {{ 'clinicalAttention.diagnosisStatus.' + diagnosis.status | translate }}
+              </span>
+            </div>
+            @if (diagnosis.differentialDiagnoses.length > 0) {
+              <p class="section-label">
+                {{ 'clinicalAttention.diagnosis.differentials' | translate }}
+              </p>
+              <div class="tags">
+                @for (item of diagnosis.differentialDiagnoses; track item) {
+                  <span class="tag muted">{{ item }}</span>
+                }
+              </div>
+            }
+            @if (diagnosis.rationale) {
+              <p class="section-label">{{ 'clinicalAttention.diagnosis.rationale' | translate }}</p>
+              <p class="rationale">{{ diagnosis.rationale }}</p>
+            }
+            @if (diagnosis.previousDiagnosisId) {
+              <p class="meta">
+                {{
+                  'clinicalAttention.diagnosis.reevaluationOf'
+                    | translate: { id: diagnosis.previousDiagnosisId }
+                }}
+              </p>
+            }
+            @if (consultation().isInProgress && diagnosis.isCurrent) {
+              <div class="actions">
+                <button
+                  [id]="'reevaluate-' + diagnosis.id"
+                  mat-stroked-button
+                  type="button"
+                  (click)="toggleReevaluation(diagnosis)"
+                >
+                  {{ 'clinicalAttention.diagnosis.reevaluate' | translate }}
+                </button>
+              </div>
+              @if (reevaluating() === diagnosis.id) {
+                <div class="inline-form">
+                  <h3 class="section-label">
+                    {{ 'clinicalAttention.diagnosis.reevaluateTitle' | translate }}
+                  </h3>
+                  <p class="meta">{{ 'clinicalAttention.diagnosis.reevaluateHint' | translate }}</p>
+                  <app-diagnosis-form
+                    mode="reevaluate"
+                    [initial]="diagnosis"
+                    [saving]="saving()"
+                    (submitted)="reevaluate(diagnosis, $event)"
+                    (cancelled)="reevaluating.set(null)"
+                  />
+                </div>
+              }
+            }
+          </li>
+        }
+      </ul>
+    }
+
+    @if (consultation().isInProgress) {
+      <div class="inline-form">
+        <h3 class="section-label">{{ 'clinicalAttention.diagnosis.registerTitle' | translate }}</h3>
+        <app-diagnosis-form
+          mode="register"
+          [canBePrimary]="consultation().canRegisterPrimaryDiagnosis"
+          [resetKey]="consultation().diagnoses.length"
+          [saving]="saving()"
+          (submitted)="registered.emit($event)"
+        />
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

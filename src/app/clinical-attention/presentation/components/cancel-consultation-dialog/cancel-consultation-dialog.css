@@ -1,0 +1,8 @@
+.reason-field {
+  width: 100%;
+}
+
+.warning {
+  margin: 0 0 12px;
+  color: var(--mat-sys-on-surface-variant);
+}
