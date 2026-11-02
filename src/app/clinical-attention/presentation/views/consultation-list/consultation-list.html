@@ -1,0 +1,113 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'clinicalAttention.list.title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'clinicalAttention.list.subtitle' | translate }}</p>
+    </div>
+    <a id="new-consultation-link" mat-flat-button routerLink="/consultations/new">
+      <mat-icon>add</mat-icon>
+      {{ 'clinicalAttention.list.newConsultation' | translate }}
+    </a>
+  </header>
+
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <form id="consultation-search-form" [formGroup]="form" (ngSubmit)="search()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.list.petId' | translate }}</mat-label>
+            <input id="search-pet-id" matInput type="number" min="1" formControlName="petId" />
+            <button
+              id="search-consultations-button"
+              matIconSuffix
+              mat-icon-button
+              type="submit"
+              [attr.aria-label]="'clinicalAttention.list.search' | translate"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+            @if (form.controls.petId.invalid) {
+              <mat-error>{{ 'clinicalAttention.list.petRequired' | translate }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </form>
+      @if (store.error(); as error) {
+        <p id="list-error" class="error-message" role="alert">{{ error | translate }}</p>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  @if (shownPetId(); as petId) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{
+          'clinicalAttention.list.listTitle' | translate: { id: petId }
+        }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (store.isLoading()) {
+          <div class="loading"><mat-spinner diameter="40" /></div>
+        } @else if (store.petConsultations().length === 0) {
+          <p id="no-consultations" class="empty">
+            {{ 'clinicalAttention.list.empty' | translate }}
+          </p>
+        } @else {
+          <table
+            id="consultations-table"
+            mat-table
+            class="consultations-table"
+            [dataSource]="store.petConsultations()"
+          >
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'clinicalAttention.list.number' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let consultation">{{ consultation.id }}</td>
+            </ng-container>
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'clinicalAttention.list.date' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let consultation">
+                {{ consultation.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="reason">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'clinicalAttention.list.reason' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let consultation">{{ consultation.reason }}</td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ 'clinicalAttention.list.statusColumn' | translate }}
+              </th>
+              <td mat-cell *matCellDef="let consultation">
+                <app-consultation-status-chip [status]="consultation.status" />
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let consultation">
+                <a
+                  [id]="'open-consultation-' + consultation.id"
+                  mat-button
+                  [routerLink]="['/consultations', consultation.id]"
+                >
+                  {{ 'clinicalAttention.list.open' | translate }}
+                </a>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let consultation; columns: columns"
+              [id]="'consultation-row-' + consultation.id"
+            ></tr>
+          </table>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</section>
