@@ -1,0 +1,88 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ 'clinicalAttention.findings.title' | translate }}</mat-card-title>
+    <mat-card-subtitle>{{ 'clinicalAttention.findings.subtitle' | translate }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    @if (consultation().findings.length === 0) {
+      <p id="no-findings" class="empty">{{ 'clinicalAttention.findings.empty' | translate }}</p>
+    } @else {
+      <ul id="finding-list" class="records">
+        @for (finding of consultation().findings; track finding.id) {
+          <li class="record" [id]="'finding-' + finding.id">
+            <div class="record-header">
+              <strong>{{
+                'clinicalAttention.bodySystems.' + finding.bodySystem | translate
+              }}</strong>
+              <span class="meta">{{ finding.recordedAt | date: 'HH:mm' }}</span>
+            </div>
+            <p>{{ finding.description }}</p>
+            @if (finding.severity) {
+              <div class="tags">
+                <span class="tag" [class.warn]="finding.severity === 'SEVERE'">
+                  {{ 'clinicalAttention.severity.' + finding.severity | translate }}
+                </span>
+              </div>
+            }
+          </li>
+        }
+      </ul>
+    }
+
+    @if (consultation().isInProgress) {
+      <form id="finding-form" class="inline-form" [formGroup]="form" (ngSubmit)="submit()">
+        <h3 class="section-label">{{ 'clinicalAttention.findings.add' | translate }}</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.findings.bodySystem' | translate }}</mat-label>
+            <mat-select id="finding-body-system" formControlName="bodySystem">
+              @for (system of bodySystems; track system) {
+                <mat-option [id]="'body-system-' + system" [value]="system">
+                  {{ 'clinicalAttention.bodySystems.' + system | translate }}
+                </mat-option>
+              }
+            </mat-select>
+            @if (form.controls.bodySystem.invalid) {
+              <mat-error>{{
+                'clinicalAttention.findings.bodySystemRequired' | translate
+              }}</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'clinicalAttention.findings.severity' | translate }}</mat-label>
+            <mat-select id="finding-severity" formControlName="severity">
+              <mat-option [value]="null">{{
+                'clinicalAttention.findings.noSeverity' | translate
+              }}</mat-option>
+              @for (severity of severities; track severity) {
+                <mat-option [value]="severity">
+                  {{ 'clinicalAttention.severity.' + severity | translate }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'clinicalAttention.findings.description' | translate }}</mat-label>
+          <textarea
+            id="finding-description"
+            matInput
+            rows="3"
+            formControlName="description"
+            [maxlength]="maxLength"
+          ></textarea>
+          @if (form.controls.description.invalid) {
+            <mat-error>{{
+              'clinicalAttention.findings.descriptionRequired' | translate
+            }}</mat-error>
+          }
+        </mat-form-field>
+        <div class="actions">
+          <button id="add-finding-button" mat-flat-button type="submit" [disabled]="saving()">
+            {{ 'clinicalAttention.findings.submit' | translate }}
+          </button>
+        </div>
+      </form>
+    }
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,55 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ 'clinicalAttention.completion.title' | translate }}</mat-card-title>
+    <mat-card-subtitle>{{ 'clinicalAttention.completion.subtitle' | translate }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <h3 class="section-label">{{ 'clinicalAttention.completion.checklist' | translate }}</h3>
+    <ul id="completion-checklist" class="checklist">
+      @for (item of requirements; track item) {
+        <li [id]="'requirement-' + item" [class.done]="!pending().includes(item)">
+          <app-icon [name]="pending().includes(item) ? 'alert' : 'check-circle'" [size]="18" />
+          <span>{{ 'clinicalAttention.pending.' + item | translate }}</span>
+          <small class="meta">
+            {{
+              (pending().includes(item)
+                ? 'clinicalAttention.completion.pending'
+                : 'clinicalAttention.completion.done'
+              ) | translate
+            }}
+          </small>
+        </li>
+      }
+    </ul>
+
+    <dl class="details">
+      <div>
+        <dt>{{ 'clinicalAttention.completion.assessments' | translate }}</dt>
+        <dd>{{ consultation().physiologicalAssessments.length }}</dd>
+      </div>
+      <div>
+        <dt>{{ 'clinicalAttention.completion.findings' | translate }}</dt>
+        <dd>{{ consultation().findings.length }}</dd>
+      </div>
+      <div>
+        <dt>{{ 'clinicalAttention.completion.diagnoses' | translate }}</dt>
+        <dd>{{ consultation().currentDiagnoses.length }}</dd>
+      </div>
+    </dl>
+
+    <p class="meta note">{{ 'clinicalAttention.completion.immutable' | translate }}</p>
+    <p class="meta note">{{ 'clinicalAttention.completion.treatmentsNote' | translate }}</p>
+
+    <div class="actions">
+      <button
+        id="complete-consultation-button"
+        mat-flat-button
+        type="button"
+        [disabled]="saving() || !consultation().canComplete"
+        (click)="completed.emit()"
+      >
+        {{ 'clinicalAttention.completion.complete' | translate }}
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
