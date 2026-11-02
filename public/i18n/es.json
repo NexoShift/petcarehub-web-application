@@ -349,5 +349,285 @@
       "back": "Volver",
       "confirm": "Cancelar examen"
     }
+  },
+  "clinicalAttention": {
+    "close": "Cerrar",
+    "status": {
+      "CREATED": "Registrada",
+      "IN_PROGRESS": "En curso",
+      "COMPLETED": "Finalizada",
+      "CANCELLED": "Cancelada"
+    },
+    "diagnosisType": {
+      "PRESUMPTIVE": "Presuntivo",
+      "DEFINITIVE": "Definitivo"
+    },
+    "diagnosisStatus": {
+      "CURRENT": "Vigente",
+      "SUPERSEDED": "Reemplazado"
+    },
+    "severity": {
+      "MILD": "Leve",
+      "MODERATE": "Moderada",
+      "SEVERE": "Grave"
+    },
+    "bodySystems": {
+      "INTEGUMENTARY": "Piel y pelaje",
+      "OCULAR": "Ojos",
+      "OTIC": "Oídos",
+      "DIGESTIVE": "Digestivo",
+      "RESPIRATORY": "Respiratorio",
+      "CARDIOVASCULAR": "Cardiovascular",
+      "MUSCULOSKELETAL": "Musculoesquelético",
+      "NERVOUS": "Nervioso",
+      "URINARY": "Urinario",
+      "REPRODUCTIVE": "Reproductivo",
+      "OTHER": "Otro"
+    },
+    "hydration": {
+      "NORMAL": "Normal",
+      "MILD_DEHYDRATION": "Deshidratación leve",
+      "MODERATE_DEHYDRATION": "Deshidratación moderada",
+      "SEVERE_DEHYDRATION": "Deshidratación grave"
+    },
+    "pending": {
+      "anamnesis": "Registrar la anamnesis",
+      "physiologicalAssessment": "Registrar al menos una evaluación fisiológica",
+      "primaryDiagnosis": "Registrar un diagnóstico principal"
+    },
+    "errors": {
+      "invalidRequest": "Revisa los datos ingresados.",
+      "invalidVitalSigns": "Revisa las constantes: peso hasta 500 kg, temperatura entre 30 y 45 °C y frecuencias mayores que 0.",
+      "invalidCancellation": "Indica el motivo de la cancelación.",
+      "petNotFound": "La mascota indicada no existe.",
+      "consultationNotFound": "La consulta no existe.",
+      "invalidConsultationState": "La consulta ya cambió de estado. Recarga la página.",
+      "incompleteConsultation": "Aún faltan datos para finalizar la consulta:",
+      "diagnosisConflict": "Ya existe un diagnóstico principal vigente o este diagnóstico ya fue reevaluado. Recarga la consulta.",
+      "notAllowed": "Solo el veterinario a cargo de la consulta puede hacer esto.",
+      "sessionExpired": "Tu sesión expiró. Vuelve a iniciar sesión.",
+      "unexpected": "Ocurrió un error inesperado. Inténtalo otra vez."
+    },
+    "phases": {
+      "nav": "Fases de la consulta",
+      "soon": "Próximamente",
+      "anamnesis": {
+        "title": "Anamnesis",
+        "subtitle": "Motivo y antecedentes"
+      },
+      "assessment": {
+        "title": "Evaluación",
+        "subtitle": "Constantes y hallazgos"
+      },
+      "images": {
+        "title": "Imágenes",
+        "subtitle": "Captura de imágenes"
+      },
+      "assistant": {
+        "title": "Asistente",
+        "subtitle": "Sugerencias clínicas"
+      },
+      "diagnosis": {
+        "title": "Diagnóstico",
+        "subtitle": "Diagnóstico y exámenes"
+      },
+      "completion": {
+        "title": "Finalización",
+        "subtitle": "Tratamiento y cierre"
+      }
+    },
+    "list": {
+      "title": "Consultas clínicas",
+      "subtitle": "Revisa las consultas de un paciente o abre una nueva.",
+      "newConsultation": "Nueva consulta",
+      "petId": "N.° de mascota",
+      "petRequired": "Ingresa el número de la mascota.",
+      "search": "Buscar consultas",
+      "listTitle": "Consultas de la mascota {{id}}",
+      "empty": "La mascota aún no tiene consultas.",
+      "number": "N.°",
+      "date": "Fecha",
+      "reason": "Motivo",
+      "statusColumn": "Estado",
+      "open": "Abrir"
+    },
+    "new": {
+      "title": "Nueva consulta",
+      "subtitle": "Registra la visita del paciente. Luego completarás la anamnesis, la evaluación y el diagnóstico.",
+      "back": "Volver a las consultas",
+      "petId": "N.° de mascota",
+      "petRequired": "Ingresa el número de la mascota.",
+      "clinicId": "N.° de clínica",
+      "clinicRequired": "Ingresa el número de la clínica.",
+      "consultingRoomId": "N.° de consultorio",
+      "optional": "Opcional",
+      "reason": "Motivo de la consulta",
+      "reasonRequired": "Describe el motivo de la consulta.",
+      "submit": "Registrar consulta",
+      "created": "Consulta registrada"
+    },
+    "workspace": {
+      "title": "Consulta N.° {{id}}",
+      "back": "Volver al listado",
+      "pet": "Mascota",
+      "veterinarian": "Veterinario",
+      "clinic": "Clínica",
+      "consultingRoom": "Consultorio",
+      "startedAt": "Inicio",
+      "notStarted": "Aún no iniciada",
+      "reason": "Motivo",
+      "startTitle": "Consulta registrada",
+      "startText": "Inicia la consulta para registrar la anamnesis, las constantes, los hallazgos y el diagnóstico.",
+      "start": "Iniciar consulta",
+      "started": "Consulta iniciada",
+      "cancelConsultation": "Cancelar consulta",
+      "cancelled": "Consulta cancelada",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "closedCompleted": "Consulta finalizada el {{date}}",
+      "closedCancelled": "Consulta cancelada el {{date}}",
+      "cancellationReason": "Motivo de cancelación",
+      "readOnly": "Es un registro clínico cerrado: solo se puede consultar, no modificar.",
+      "notAvailable": "Consulta no disponible"
+    },
+    "anamnesis": {
+      "title": "Anamnesis",
+      "subtitle": "Entrevista con el tutor sobre el motivo de consulta",
+      "chiefComplaint": "Motivo principal",
+      "chiefComplaintHint": "Con las palabras del tutor",
+      "chiefComplaintRequired": "Describe el motivo principal.",
+      "evolutionTime": "Tiempo de evolución",
+      "evolutionTimeRequired": "Indica hace cuánto empezó.",
+      "evolutionOptions": {
+        "acute": "Menos de 24 horas",
+        "days": "1 a 3 días",
+        "week": "Cerca de una semana",
+        "month": "Más de un mes",
+        "chronic": "Crónico"
+      },
+      "symptoms": "Síntomas",
+      "symptomPlaceholder": "Escribe un síntoma y pulsa Enter",
+      "addSymptom": "Agregar",
+      "removeSymptom": "Quitar síntoma",
+      "suggestions": {
+        "vomiting": "Vómitos",
+        "diarrhea": "Diarrea",
+        "fever": "Fiebre",
+        "cough": "Tos",
+        "lethargy": "Letargo",
+        "appetiteLoss": "Falta de apetito",
+        "limping": "Cojera",
+        "itching": "Picazón"
+      },
+      "diet": "Alimentación",
+      "behavior": "Comportamiento",
+      "previousTreatments": "Tratamientos previos",
+      "ownerObservations": "Observaciones del tutor",
+      "saveHint": "La anamnesis se registra una sola vez y luego no se puede modificar.",
+      "submit": "Registrar anamnesis",
+      "registered": "Anamnesis registrada",
+      "none": "No indicado",
+      "locked": "Registro clínico: la anamnesis no se modifica.",
+      "notRegistered": "No se registró anamnesis."
+    },
+    "assessment": {
+      "title": "Evaluación fisiológica",
+      "subtitle": "Constantes vitales del paciente. Cada medición se agrega al registro.",
+      "weight": "Peso",
+      "weightInvalid": "Ingresa un peso mayor que 0 y hasta 500 kg.",
+      "temperature": "Temperatura",
+      "temperatureInvalid": "Ingresa una temperatura entre 30 y 45 °C.",
+      "heartRate": "Frecuencia cardíaca",
+      "heartRateInvalid": "Ingresa un número entero entre 1 y 600.",
+      "respiratoryRate": "Frecuencia respiratoria",
+      "respiratoryRateInvalid": "Ingresa un número entero entre 1 y 300.",
+      "hydration": "Hidratación",
+      "bodyCondition": "Condición corporal",
+      "bodyConditionHint": "1 muy delgado · 9 obeso",
+      "bodyConditionShort": "CC",
+      "notRecorded": "Sin registrar",
+      "mucousMembranes": "Mucosas",
+      "capillaryRefill": "Llenado capilar",
+      "capillaryRefillShort": "LLC",
+      "capillaryRefillInvalid": "Debe ser mayor que 0.",
+      "observations": "Observaciones",
+      "submit": "Registrar medición",
+      "registered": "Medición registrada",
+      "recorded": "Mediciones registradas",
+      "empty": "Aún no hay mediciones."
+    },
+    "findings": {
+      "title": "Hallazgos",
+      "subtitle": "Lo observado en cada sistema del cuerpo",
+      "empty": "Aún no hay hallazgos.",
+      "add": "Agregar hallazgo",
+      "bodySystem": "Sistema",
+      "bodySystemRequired": "Selecciona el sistema.",
+      "severity": "Severidad",
+      "noSeverity": "Sin indicar",
+      "description": "Descripción",
+      "descriptionRequired": "Describe el hallazgo.",
+      "submit": "Agregar hallazgo",
+      "added": "Hallazgo agregado"
+    },
+    "diagnosis": {
+      "title": "Diagnóstico",
+      "subtitle": "Un diagnóstico no se edita: se reevalúa y el anterior queda en el historial.",
+      "empty": "Aún no hay diagnósticos.",
+      "registerTitle": "Registrar diagnóstico",
+      "description": "Diagnóstico",
+      "descriptionRequired": "Describe el diagnóstico.",
+      "type": "Tipo",
+      "typeRequired": "Selecciona el tipo.",
+      "primary": "Diagnóstico principal",
+      "primaryTaken": "Ya existe un diagnóstico principal vigente.",
+      "primaryTag": "Principal",
+      "differentials": "Diagnósticos diferenciales",
+      "differentialPlaceholder": "Escribe un diferencial y pulsa Enter",
+      "addDifferential": "Agregar",
+      "removeDifferential": "Quitar diagnóstico diferencial",
+      "rationale": "Fundamento clínico",
+      "submit": "Registrar diagnóstico",
+      "registered": "Diagnóstico registrado",
+      "reevaluate": "Reevaluar",
+      "reevaluateTitle": "Reevaluar diagnóstico",
+      "reevaluateHint": "Se crea un diagnóstico nuevo; el actual queda como reemplazado y no se pierde.",
+      "submitReevaluation": "Registrar reevaluación",
+      "reevaluated": "Diagnóstico reevaluado",
+      "cancelForm": "Cancelar",
+      "reevaluationOf": "Reevalúa el diagnóstico N.° {{id}}"
+    },
+    "completion": {
+      "title": "Finalizar consulta",
+      "subtitle": "Verifica el registro clínico antes de cerrar la consulta",
+      "checklist": "Requisitos para finalizar",
+      "pending": "Pendiente",
+      "done": "Listo",
+      "assessments": "Mediciones",
+      "findings": "Hallazgos",
+      "diagnoses": "Diagnósticos vigentes",
+      "immutable": "Al finalizar, la consulta queda como registro clínico de solo lectura.",
+      "treatmentsNote": "El tratamiento y la receta se registran en el módulo de tratamientos.",
+      "complete": "Finalizar consulta",
+      "completed": "Consulta finalizada"
+    },
+    "history": {
+      "title": "Antecedentes del paciente",
+      "subtitle": "Consultas anteriores de la mascota {{id}}",
+      "empty": "La mascota no tiene consultas anteriores."
+    },
+    "exams": {
+      "title": "Exámenes complementarios",
+      "subtitle": "Solicita estudios de laboratorio o imagen para esta consulta",
+      "request": "Solicitar examen"
+    },
+    "cancelDialog": {
+      "title": "Cancelar consulta",
+      "warning": "La consulta quedará cancelada y no se podrá reabrir. Los datos ya registrados se conservan.",
+      "reason": "Motivo de la cancelación",
+      "reasonRequired": "El motivo es obligatorio.",
+      "back": "Volver",
+      "confirm": "Cancelar consulta"
+    }
   }
 }
