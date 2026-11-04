@@ -1,0 +1,368 @@
+
+<mat-drawer-container
+  class="clinic-users-container"
+  [hasBackdrop]="true"
+>
+
+  <!-- Main content -->
+  <mat-drawer-content>
+
+    <section class="clinic-users-page">
+
+      <a
+        routerLink="/profiles/clinic"
+        class="back-link"
+      >
+        <app-icon name="arrow-right" [size]="17" />
+
+        {{ 'profiles.clinicMembers.back' | translate }}
+      </a>
+
+      <!-- Page heading -->
+      <header class="page-header">
+
+        <div class="page-heading">
+          <div class="heading-icon">
+            <app-icon name="users" [size]="28" />
+          </div>
+
+          <div>
+            <h1>
+              {{ 'profiles.clinicUsers.title' | translate }}
+            </h1>
+
+            <p>
+              {{ 'profiles.clinicUsers.subtitle' | translate }}
+            </p>
+          </div>
+        </div>
+
+        @if (clinic(); as currentClinic) {
+          <button
+            mat-flat-button
+            type="button"
+            class="create-button"
+            [disabled]="clinicStore.loading() || creatingProfile() || !!pendingMember()"
+            (click)="openMemberForm(memberDrawer)"
+          >
+            <app-icon name="user-plus" [size]="19" />
+
+            {{ 'profiles.clinicMembers.create' | translate }}
+          </button>
+        }
+
+      </header>
+
+      @if (clinicStore.loading() && !clinic()) {
+
+        <!-- Loading -->
+        <div class="state-container">
+          <mat-spinner diameter="38" />
+
+          <p>
+            {{ 'profiles.clinic.loading' | translate }}
+          </p>
+        </div>
+
+      } @else if (clinicStore.profileNotFound()) {
+
+        <!-- Missing clinic profile -->
+        <mat-card class="state-card">
+
+          <app-icon name="building" [size]="37" />
+
+          <h2>
+            {{ 'profiles.clinic.noProfileTitle' | translate }}
+          </h2>
+
+          <p>
+            {{ 'profiles.clinic.noProfileHint' | translate }}
+          </p>
+
+          <a
+            mat-flat-button
+            routerLink="/profiles/clinic/complete"
+          >
+            {{ 'profiles.clinic.completeProfile' | translate }}
+          </a>
+
+        </mat-card>
+
+      } @else if (clinic(); as currentClinic) {
+
+        <!-- Clinic identification -->
+        <mat-card class="clinic-summary">
+
+          <div class="clinic-avatar">
+            @if (currentClinic.profileImageUrl) {
+              <img
+                [src]="currentClinic.profileImageUrl"
+                [alt]="currentClinic.name"
+              />
+            } @else {
+              <app-icon name="building" [size]="26" />
+            }
+          </div>
+
+          <div class="clinic-summary-content">
+            <span class="eyebrow">
+              {{ 'profiles.clinicUsers.institution' | translate }}
+            </span>
+
+            <h2>{{ currentClinic.name }}</h2>
+
+            <p>
+              {{ 'profiles.clinicUsers.accountManagement' | translate }}
+            </p>
+          </div>
+
+        </mat-card>
+
+        <!-- Users section -->
+        <mat-card class="users-card">
+
+          <div class="card-heading">
+            <div class="card-heading-icon">
+              <app-icon name="users" [size]="23" />
+            </div>
+
+            <div>
+              <h2>
+                {{ 'profiles.clinicUsers.directory' | translate }}
+              </h2>
+
+              <p>
+                {{ 'profiles.clinicUsers.directoryHint' | translate }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Last created member -->
+          @if (lastCreatedMember(); as member) {
+
+            <div class="created-member">
+
+              <div class="member-avatar">
+                <app-icon name="user" [size]="23" />
+              </div>
+
+              <div class="member-information">
+
+                <span class="member-label">
+                  {{ 'profiles.clinicUsers.lastCreated' | translate }}
+                </span>
+
+                <strong>{{ member.email }}</strong>
+
+                <span class="member-role">
+                  {{ 'profiles.clinicUsers.veterinarianMember' | translate }}
+                </span>
+
+              </div>
+
+              <div class="created-status">
+                <app-icon name="check-circle" [size]="18" />
+
+                {{ 'profiles.clinicUsers.created' | translate }}
+              </div>
+
+            </div>
+
+          }
+
+          <!-- Directory awaiting IAM GET -->
+          <div class="directory-empty">
+
+            <div class="empty-icon">
+              <app-icon name="users" [size]="38" />
+            </div>
+
+            <h3>
+              {{ 'profiles.clinicUsers.directoryPending' | translate }}
+            </h3>
+
+            <p>
+              {{ 'profiles.clinicUsers.directoryPendingHint' | translate }}
+            </p>
+
+            <button
+              mat-stroked-button
+              type="button" [disabled]="clinicStore.loading() || creatingProfile() || !!pendingMember()"
+              (click)="openMemberForm(memberDrawer)"
+            >
+              <app-icon name="user-plus" [size]="18" />
+
+              {{ 'profiles.clinicMembers.create' | translate }}
+            </button>
+
+          </div>
+
+        </mat-card>
+
+        <!-- Information about professional profiles -->
+        <mat-card class="information-card">
+
+          <div class="information-icon">
+            <app-icon name="shield" [size]="23" />
+          </div>
+
+          <div>
+            <h3>
+              {{ 'profiles.clinicUsers.profileNoteTitle' | translate }}
+            </h3>
+
+            <p>
+              {{ 'profiles.clinicUsers.profileNote' | translate }}
+            </p>
+          </div>
+
+        </mat-card>
+
+      } @else {
+
+        <!-- Unexpected error -->
+        <mat-card class="state-card">
+
+          <app-icon name="alert" [size]="34" />
+
+          <h2>
+            {{ 'profiles.clinic.loadError' | translate }}
+          </h2>
+
+        </mat-card>
+
+      }
+
+    </section>
+
+  </mat-drawer-content>
+
+
+  <!-- Clinic veterinarian registration -->
+  <mat-drawer
+    #memberDrawer
+    mode="over"
+    position="end"
+    class="member-drawer"
+    [autoFocus]="false"
+    [disableClose]="creatingProfile()"
+  >
+
+    <div class="drawer-body">
+
+      <!-- Drawer header -->
+      <div class="drawer-topbar">
+        <div>
+          <strong>
+            {{ 'profiles.clinicUsers.registerVeterinarian' | translate }}
+          </strong>
+          <p>
+            {{ 'profiles.clinicUsers.registrationHint' | translate }}
+          </p>
+        </div>
+
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="creatingProfile()"
+          (click)="closeMemberForm(memberDrawer)"
+        >
+          {{ 'profiles.clinicMembers.cancel' | translate }}
+        </button>
+      </div>
+
+      <!-- Registration progress -->
+      <div class="registration-progress">
+
+        <div
+          class="progress-step"
+          [class.active]="registrationStep() === 'account'"
+          [class.completed]="registrationStep() === 'profile'"
+        >
+          <div class="step-number">1</div>
+
+          <div>
+            <strong>
+              {{ 'profiles.clinicUsers.accountStep' | translate }}
+            </strong>
+            <span>
+            {{ 'profiles.clinicUsers.accountStepHint' | translate }}
+          </span>
+          </div>
+        </div>
+
+        <div class="step-connector"></div>
+
+        <div
+          class="progress-step"
+          [class.active]="registrationStep() === 'profile'"
+        >
+          <div class="step-number">2</div>
+
+          <div>
+            <strong>
+              {{ 'profiles.clinicUsers.profileStep' | translate }}
+            </strong>
+            <span>
+            {{ 'profiles.clinicUsers.profileStepHint' | translate }}
+          </span>
+          </div>
+        </div>
+
+      </div>
+
+      @if (clinic(); as currentClinic) {
+
+        @if (registrationStep() === 'account') {
+
+          <!-- IAM bounded context -->
+          <app-create-clinic-member
+            [accountId]="currentClinic.accountId"
+            (memberCreated)="onMemberCreated($event)"
+            (cancelled)="closeMemberForm(memberDrawer)"
+          />
+
+        } @else if (pendingMember(); as member) {
+
+          <!-- IAM account confirmation -->
+          <div class="account-created-notice">
+            <app-icon name="check-circle" [size]="22" />
+
+            <div>
+              <strong>
+                {{ 'profiles.clinicUsers.accountCreatedTitle' | translate }}
+              </strong>
+
+              <p>{{ member.email }}</p>
+
+              <small>
+                {{ 'profiles.clinicUsers.accountCreatedHint' | translate }}
+              </small>
+            </div>
+          </div>
+
+          @if (profileError()) {
+            <div class="profile-error" role="alert">
+              <app-icon name="alert" [size]="19" />
+
+              <span>{{ profileError()! | translate }}</span>
+            </div>
+          }
+
+          <!-- Profile bounded context -->
+          <app-veterinarian-profile-form
+            [email]="member.email"
+            [saving]="creatingProfile()"
+            (submitted)="createVeterinarianProfile($event, memberDrawer)"
+            (cancelled)="cancelProfessionalProfile(memberDrawer)"
+          />
+
+        }
+
+      }
+
+    </div>
+
+  </mat-drawer>
+
+</mat-drawer-container>

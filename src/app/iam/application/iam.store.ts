@@ -5,6 +5,8 @@ import { User } from '../domain/model/user.entity';
 import { IamApi } from '../infrastructure/iam.api';
 import { TokenStorage } from '../infrastructure/token.storage';
 import { UserAssembler } from '../infrastructure/user.assembler';
+import { CreateMemberUserCommand } from '../domain/model/create-member-user.command';
+import { CreateMemberUserRequest } from '../infrastructure/resources/create-member-user.request';
 
 /** Estado de la sesión y casos de uso de IAM. Las vistas solo hablan con esta clase. */
 @Injectable({ providedIn: 'root' })
@@ -55,5 +57,19 @@ export class IamStore {
   signOut(): void {
     this.tokens.clear();
     this._currentUser.set(null);
+  }
+
+  /**
+   * Creates a veterinarian member within a clinic account.
+   */
+  createMember(command: CreateMemberUserCommand): Observable<User> {
+
+    const request: CreateMemberUserRequest = {
+      email: command.email.trim(),
+      password: command.password
+    };
+
+    return this.api.createMember(command.accountId, request)
+      .pipe(map(response => UserAssembler.fromUserResponse(response)));
   }
 }

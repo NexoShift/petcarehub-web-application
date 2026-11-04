@@ -1,0 +1,362 @@
+
+<section class="veterinarians-page">
+
+  <a routerLink="/profiles/clinic" class="back-link">
+    <span class="back-arrow">
+      <app-icon name="arrow-right" [size]="17" />
+    </span>
+    {{ 'profiles.clinicVeterinarians.back' | translate }}
+  </a>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <div class="page-title">
+      <div class="title-icon">
+        <app-icon name="stethoscope" [size]="28" />
+      </div>
+
+      <div>
+        <h1>
+          {{ 'profiles.clinicVeterinarians.title' | translate }}
+        </h1>
+        <p>
+          {{ 'profiles.clinicVeterinarians.subtitle' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <a
+      mat-flat-button
+      routerLink="/profiles/clinic/users"
+      class="users-button"
+    >
+      <app-icon name="users" [size]="18" />
+      {{ 'profiles.clinicVeterinarians.manageUsers' | translate }}
+    </a>
+  </header>
+
+  @if (clinicStore.loading() && !clinic()) {
+
+    <div class="state-panel">
+      <mat-spinner diameter="38" />
+      <p>{{ 'profiles.clinic.loading' | translate }}</p>
+    </div>
+
+  } @else if (clinicStore.profileNotFound()) {
+
+    <mat-card class="state-panel">
+      <app-icon name="building" [size]="39" />
+
+      <h2>{{ 'profiles.clinic.noProfileTitle' | translate }}</h2>
+      <p>{{ 'profiles.clinic.noProfileHint' | translate }}</p>
+
+      <a mat-flat-button routerLink="/profiles/clinic/complete">
+        {{ 'profiles.clinic.completeProfile' | translate }}
+      </a>
+    </mat-card>
+
+  } @else if (clinic(); as currentClinic) {
+
+    <!-- Clinic information -->
+    <mat-card class="clinic-card">
+      <div class="clinic-avatar">
+        @if (currentClinic.profileImageUrl) {
+          <img
+            [src]="currentClinic.profileImageUrl"
+            [alt]="currentClinic.name"
+          />
+        } @else {
+          <app-icon name="building" [size]="27" />
+        }
+      </div>
+
+      <div>
+        <span class="section-eyebrow">
+          {{ 'profiles.clinicVeterinarians.institution' | translate }}
+        </span>
+        <h2>{{ currentClinic.name }}</h2>
+      </div>
+    </mat-card>
+
+    <!-- Directory -->
+    <mat-card class="directory-card">
+
+      <div class="directory-heading">
+        <div>
+          <h2>
+            {{ 'profiles.clinicVeterinarians.directory' | translate }}
+          </h2>
+          <p>
+            {{ 'profiles.clinicVeterinarians.directoryHint' | translate }}
+          </p>
+        </div>
+
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="veterinarianStore.loading()"
+          (click)="refresh()"
+        >
+          <app-icon name="history" [size]="17" />
+          {{ 'profiles.clinicVeterinarians.refresh' | translate }}
+        </button>
+      </div>
+
+      <!-- Search -->
+      <mat-form-field
+        appearance="outline"
+        class="search-field"
+        subscriptSizing="dynamic"
+      >
+        <mat-label>
+          {{ 'profiles.clinicVeterinarians.search' | translate }}
+        </mat-label>
+
+        <input
+          matInput
+          type="search"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="onSearchChange($event)"
+        />
+      </mat-form-field>
+
+      @if (veterinarianStore.loading() && veterinarians().length === 0) {
+
+        <div class="directory-state">
+          <mat-spinner diameter="34" />
+          <p>
+            {{ 'profiles.clinicVeterinarians.loading' | translate }}
+          </p>
+        </div>
+
+      } @else if (veterinarianStore.error()) {
+
+        <div class="directory-state">
+          <app-icon name="alert" [size]="33" />
+
+          <h3>
+            {{ 'profiles.clinicVeterinarians.loadError' | translate }}
+          </h3>
+
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="refresh()"
+          >
+            {{ 'profiles.clinicVeterinarians.retry' | translate }}
+          </button>
+        </div>
+
+      } @else if (veterinarians().length === 0) {
+
+        <div class="directory-state">
+          <div class="empty-icon">
+            <app-icon name="stethoscope" [size]="38" />
+          </div>
+
+          <h3>
+            {{ 'profiles.clinicVeterinarians.emptyTitle' | translate }}
+          </h3>
+
+          <p>
+            {{ 'profiles.clinicVeterinarians.emptyHint' | translate }}
+          </p>
+
+          <a mat-flat-button routerLink="/profiles/clinic/users">
+            {{ 'profiles.clinicVeterinarians.manageUsers' | translate }}
+          </a>
+        </div>
+
+      } @else if (filteredVeterinarians().length === 0) {
+
+        <div class="directory-state">
+          <app-icon name="search" [size]="33" />
+
+          <h3>
+            {{ 'profiles.clinicVeterinarians.noResults' | translate }}
+          </h3>
+
+          <p>
+            {{ 'profiles.clinicVeterinarians.noResultsHint' | translate }}
+          </p>
+        </div>
+
+      } @else {
+
+        <div class="results-heading">
+          <span>
+            {{ 'profiles.clinicVeterinarians.results' | translate }}
+          </span>
+          <strong>{{ filteredVeterinarians().length }}</strong>
+        </div>
+
+        <!-- Veterinarian cards -->
+        <div class="veterinarians-grid">
+
+          @for (veterinarian of filteredVeterinarians(); track veterinarian.id) {
+
+            <button
+              type="button"
+              class="veterinarian-card"
+              [class.selected]="selectedVeterinarianId() === veterinarian.id"
+              (click)="selectVeterinarian(veterinarian.id)"
+            >
+
+              <div class="vet-avatar">
+                @if (veterinarian.profileImageUrl) {
+                  <img
+                    [src]="veterinarian.profileImageUrl"
+                    [alt]="veterinarian.firstName + ' ' + veterinarian.lastName"
+                  />
+                } @else {
+                  <span>
+                    {{ initials(veterinarian.firstName, veterinarian.lastName) }}
+                  </span>
+                }
+              </div>
+
+              <div class="vet-information">
+                <strong>
+                  {{ veterinarian.firstName }}
+                  {{ veterinarian.lastName }}
+                </strong>
+
+                <span class="vet-specialty">
+                  {{
+                    veterinarian.specialty ||
+                    ('profiles.clinicVeterinarians.noSpecialty' | translate)
+                  }}
+                </span>
+
+                <div class="vet-meta">
+                  <app-icon name="shield" [size]="15" />
+                  {{
+                    veterinarian.licenseNumber ||
+                    ('profiles.clinicVeterinarians.noLicense' | translate)
+                  }}
+                </div>
+
+                <div class="vet-email">
+                  {{ veterinarian.email }}
+                </div>
+              </div>
+
+              <span class="view-details">
+                {{ 'profiles.clinicVeterinarians.viewDetails' | translate }}
+                <app-icon name="chevron-right" [size]="16" />
+              </span>
+
+            </button>
+
+          }
+
+        </div>
+
+      }
+
+    </mat-card>
+
+    <!-- Selected veterinarian details -->
+    @if (selectedVeterinarian(); as selected) {
+
+      <mat-card class="details-card">
+
+        <div class="details-heading">
+          <h2>
+            {{ 'profiles.clinicVeterinarians.details' | translate }}
+          </h2>
+
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="closeDetails()"
+          >
+            {{ 'profiles.clinicVeterinarians.close' | translate }}
+          </button>
+        </div>
+
+        <div class="details-profile">
+          <div class="details-avatar">
+            @if (selected.profileImageUrl) {
+              <img
+                [src]="selected.profileImageUrl"
+                [alt]="selected.firstName + ' ' + selected.lastName"
+              />
+            } @else {
+              {{ initials(selected.firstName, selected.lastName) }}
+            }
+          </div>
+
+          <div>
+            <h3>{{ selected.firstName }} {{ selected.lastName }}</h3>
+
+            <p>
+              {{
+                selected.specialty ||
+                ('profiles.clinicVeterinarians.noSpecialty' | translate)
+              }}
+            </p>
+          </div>
+        </div>
+
+        <div class="details-grid">
+
+          <div class="detail-item">
+            <span>
+              {{ 'profiles.clinicVeterinarians.license' | translate }}
+            </span>
+            <strong>
+              {{
+                selected.licenseNumber ||
+                ('profiles.clinicVeterinarians.notSpecified' | translate)
+              }}
+            </strong>
+          </div>
+
+          <div class="detail-item">
+            <span>
+              {{ 'profiles.clinicVeterinarians.email' | translate }}
+            </span>
+            <strong>{{ selected.email }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>
+              {{ 'profiles.clinicVeterinarians.phone' | translate }}
+            </span>
+            <strong>
+              {{
+                selected.phoneNumber ||
+                ('profiles.clinicVeterinarians.notSpecified' | translate)
+              }}
+            </strong>
+          </div>
+
+          <div class="detail-item">
+            <span>
+              {{ 'profiles.clinicVeterinarians.specialty' | translate }}
+            </span>
+            <strong>
+              {{
+                selected.specialty ||
+                ('profiles.clinicVeterinarians.notSpecified' | translate)
+              }}
+            </strong>
+          </div>
+
+        </div>
+
+      </mat-card>
+
+    }
+
+  } @else {
+
+    <mat-card class="state-panel">
+      <app-icon name="alert" [size]="34" />
+      <p>{{ 'profiles.clinic.loadError' | translate }}</p>
+    </mat-card>
+
+  }
+
+</section>

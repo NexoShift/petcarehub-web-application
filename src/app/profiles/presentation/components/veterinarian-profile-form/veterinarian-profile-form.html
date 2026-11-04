@@ -1,0 +1,255 @@
+
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="veterinarian-form"
+>
+
+  <!-- Personal information -->
+  <div class="form-section">
+
+    <div class="section-heading">
+      <div class="section-icon">
+        <app-icon name="user" [size]="22" />
+      </div>
+
+      <div>
+        <h3>
+          {{ 'profiles.veterinarianForm.personalTitle' | translate }}
+        </h3>
+        <p>
+          {{ 'profiles.veterinarianForm.personalHint' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+
+      <mat-form-field appearance="outline">
+        <mat-label>
+          {{ 'profiles.veterinarianForm.firstName' | translate }}
+        </mat-label>
+
+        <input
+          matInput
+          formControlName="firstName"
+          maxlength="100"
+        />
+
+        @if (
+          form.controls.firstName.invalid &&
+          form.controls.firstName.touched
+          ) {
+          <mat-error>
+            {{ 'profiles.veterinarianForm.required' | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>
+          {{ 'profiles.veterinarianForm.lastName' | translate }}
+        </mat-label>
+
+        <input
+          matInput
+          formControlName="lastName"
+          maxlength="100"
+        />
+
+        @if (
+          form.controls.lastName.invalid &&
+          form.controls.lastName.touched
+          ) {
+          <mat-error>
+            {{ 'profiles.veterinarianForm.required' | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>
+          {{ 'profiles.veterinarianForm.email' | translate }}
+        </mat-label>
+
+        <input
+          matInput
+          type="email"
+          [value]="veterinarian()?.email ?? email()"
+          readonly
+        />
+
+        <mat-hint>
+          {{ 'profiles.veterinarianForm.emailHint' | translate }}
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>
+          {{ 'profiles.veterinarianForm.phone' | translate }}
+        </mat-label>
+
+        <input
+          matInput
+          type="tel"
+          formControlName="phoneNumber"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>
+          {{ 'profiles.veterinarianForm.sex' | translate }}
+        </mat-label>
+
+        <mat-select formControlName="sex">
+          <mat-option value="">
+            {{ 'profiles.veterinarianForm.notSpecified' | translate }}
+          </mat-option>
+
+          <mat-option value="MALE">
+            {{ 'profiles.veterinarianForm.male' | translate }}
+          </mat-option>
+
+          <mat-option value="FEMALE">
+            {{ 'profiles.veterinarianForm.female' | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+  </div>
+
+  <!-- Professional information -->
+  <div class="form-section">
+
+    <div class="section-heading">
+      <div class="section-icon">
+        <app-icon name="stethoscope" [size]="22" />
+      </div>
+
+      <div>
+        <h3>
+          {{ 'profiles.veterinarianForm.professionalTitle' | translate }}
+        </h3>
+        <p>
+          {{ 'profiles.veterinarianForm.professionalHint' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+
+      <mat-form-field appearance="outline">
+        <mat-label>
+          {{ 'profiles.veterinarianForm.licenseNumber' | translate }}
+        </mat-label>
+
+        <input
+          matInput
+          formControlName="licenseNumber"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>
+          {{ 'profiles.veterinarianForm.specialty' | translate }}
+        </mat-label>
+
+        <input
+          matInput
+          formControlName="specialty"
+        />
+      </mat-form-field>
+
+    </div>
+
+  </div>
+
+  <!-- Optional image during creation -->
+  @if (!veterinarian()) {
+
+    <div class="form-section">
+
+      <div class="section-heading">
+        <div class="section-icon">
+          <app-icon name="image" [size]="22" />
+        </div>
+
+        <div>
+          <h3>
+            {{ 'profiles.veterinarianForm.imageTitle' | translate }}
+          </h3>
+          <p>
+            {{ 'profiles.veterinarianForm.imageHint' | translate }}
+          </p>
+        </div>
+      </div>
+
+      <div class="image-upload">
+        <div class="image-placeholder">
+          <app-icon name="user" [size]="32" />
+        </div>
+
+        <div class="image-controls">
+          <label for="veterinarian-profile-image">
+            {{ 'profiles.veterinarianForm.selectImage' | translate }}
+          </label>
+
+          <input
+            id="veterinarian-profile-image"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            (change)="onImageSelected($event)"
+          />
+
+          @if (selectedImage(); as image) {
+            <span class="selected-file">
+              {{ image.name }}
+            </span>
+          }
+
+          @if (imageError()) {
+            <span class="image-error">
+              {{ 'profiles.veterinarianForm.invalidImage' | translate }}
+            </span>
+          }
+        </div>
+      </div>
+
+    </div>
+
+  }
+
+  <!-- Actions -->
+  <div class="form-actions">
+
+    <button
+      mat-stroked-button
+      type="button"
+      [disabled]="saving()"
+      (click)="cancelled.emit()"
+    >
+      {{ 'profiles.veterinarianForm.cancel' | translate }}
+    </button>
+
+    <button
+      mat-flat-button
+      type="submit"
+      class="save-button"
+      [disabled]="saving()"
+    >
+      <app-icon name="check" [size]="18" />
+
+      {{
+        (
+          veterinarian()
+            ? 'profiles.veterinarianForm.saveChanges'
+            : 'profiles.veterinarianForm.createProfile'
+        ) | translate
+      }}
+    </button>
+
+  </div>
+
+</form>

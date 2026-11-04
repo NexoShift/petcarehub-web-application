@@ -1,0 +1,492 @@
+
+<section class="patients-page">
+
+  <a
+    routerLink="/profiles/clinic"
+    class="back-link"
+  >
+    <span class="back-arrow">
+      <app-icon name="arrow-right" [size]="17" />
+    </span>
+
+    {{ 'profiles.clinicPatients.back' | translate }}
+  </a>
+
+  <!-- Page header -->
+  <header class="page-header">
+
+    <div class="page-heading">
+
+      <div class="heading-icon">
+        <app-icon name="paw" [size]="28" />
+      </div>
+
+      <div>
+        <h1>
+          {{ 'profiles.clinicPatients.title' | translate }}
+        </h1>
+
+        <p>
+          {{ 'profiles.clinicPatients.subtitle' | translate }}
+        </p>
+      </div>
+
+    </div>
+
+    @if (isClinicAdmin()) {
+      <button
+        mat-stroked-button
+        type="button"
+        class="register-patient-button"
+        (click)="openRegistration()"
+      >
+        <app-icon name="plus" [size]="18" />
+        {{ 'profiles.clinicPatients.registerPatient' | translate }}
+      </button>
+    }
+
+  </header>
+
+  @if (clinicStore.loading() && !clinic()) {
+
+    <mat-card class="state-card">
+      <mat-spinner diameter="38" />
+
+      <p>
+        {{ 'profiles.clinic.loading' | translate }}
+      </p>
+    </mat-card>
+
+  } @else if (clinicStore.profileNotFound()) {
+
+    <mat-card class="state-card">
+
+      <div class="state-icon">
+        <app-icon name="building" [size]="36" />
+      </div>
+
+      <h2>
+        {{ 'profiles.clinic.noProfileTitle' | translate }}
+      </h2>
+
+      <p>
+        {{ 'profiles.clinic.noProfileHint' | translate }}
+      </p>
+
+      <a
+        mat-stroked-button
+        routerLink="/profiles/clinic/complete"
+      >
+        {{ 'profiles.clinic.completeProfile' | translate }}
+      </a>
+
+    </mat-card>
+
+  } @else if (clinic(); as currentClinic) {
+
+    @if (registrationSuccess(); as message) {
+      <div class="registration-success" role="status">
+        <app-icon name="check-circle" [size]="19" />
+
+        {{ ('profiles.clinicPatients.' + message) | translate }}
+      </div>
+    }
+    <!-- Clinic information -->
+    <mat-card class="clinic-card">
+
+      <div class="clinic-avatar">
+        @if (currentClinic.profileImageUrl) {
+          <img
+            [src]="currentClinic.profileImageUrl"
+            [alt]="currentClinic.name"
+          />
+        } @else {
+          <app-icon name="building" [size]="28" />
+        }
+      </div>
+
+      <div>
+        <span class="eyebrow">
+          {{ 'profiles.clinicPatients.institution' | translate }}
+        </span>
+
+        <h2>{{ currentClinic.name }}</h2>
+      </div>
+
+    </mat-card>
+
+
+    @if (registrationOpen() && isClinicAdmin()) {
+
+      <mat-card class="registration-card">
+
+        <div class="registration-heading">
+
+          <div>
+            <h2>
+              {{ 'profiles.clinicPatients.registerTitle' | translate }}
+            </h2>
+
+            <p>
+              {{ 'profiles.clinicPatients.registerHint' | translate }}
+            </p>
+          </div>
+
+          <button
+            mat-stroked-button
+            type="button"
+            [disabled]="searchingPet() || patientsStore.registering()"
+            (click)="closeRegistration()"
+          >
+            {{ 'profiles.clinicPatients.cancel' | translate }}
+          </button>
+
+        </div>
+
+        <!-- Search existing pet -->
+        <form
+          class="pet-search-form"
+          (submit)="$event.preventDefault(); searchPet()"
+        >
+
+          <mat-form-field
+            appearance="outline"
+            class="pet-code-field"
+            subscriptSizing="dynamic"
+          >
+
+            <mat-label>
+              {{ 'profiles.clinicPatients.searchCode' | translate }}
+            </mat-label>
+
+            <input
+              matInput
+              type="text"
+              [ngModel]="petCodeInput()"
+              (ngModelChange)="onPetCodeChange($event)"
+              name="petCode"
+              [ngModelOptions]="{ standalone: true }"
+              [disabled]="searchingPet() || patientsStore.registering()"
+              autocomplete="off"
+            />
+
+          </mat-form-field>
+
+          <button
+            mat-stroked-button
+            type="submit"
+            [disabled]="
+          !petCodeInput().trim() ||
+          searchingPet() ||
+          patientsStore.registering()
+        "
+          >
+            <app-icon name="search" [size]="17" />
+            {{ 'profiles.clinicPatients.searchPet' | translate }}
+          </button>
+
+        </form>
+
+        @if (searchingPet()) {
+
+          <div class="lookup-state">
+            <mat-spinner diameter="25" />
+
+            <span>
+          {{ 'profiles.clinicPatients.searching' | translate }}
+        </span>
+          </div>
+
+        }
+
+        @if (petNotFound()) {
+
+          <div class="registration-notice">
+            <app-icon name="alert" [size]="19" />
+
+            {{ 'profiles.clinicPatients.petNotFound' | translate }}
+          </div>
+
+        }
+
+        @if (registrationError(); as errorKey) {
+
+          <div class="registration-error" role="alert">
+            <app-icon name="alert" [size]="19" />
+
+            {{ ('profiles.clinicPatients.' + errorKey) | translate }}
+          </div>
+
+        }
+
+        <!-- Search result -->
+        @if (foundPet(); as pet) {
+
+          <div class="found-pet">
+
+            <div class="found-pet-icon">
+              <app-icon name="paw" [size]="27" />
+            </div>
+
+            <div class="found-pet-information">
+
+          <span class="found-pet-label">
+            {{ 'profiles.clinicPatients.petFound' | translate }}
+          </span>
+
+              <h3>{{ pet.name }}</h3>
+
+              <p>
+                {{ speciesKey(pet.species) | translate }}
+
+                @if (pet.breed) {
+                  · {{ pet.breed }}
+                }
+              </p>
+
+              <span class="found-pet-code">
+            {{ 'profiles.clinicPatients.petCode' | translate }}
+                {{ pet.petCode }}
+          </span>
+
+            </div>
+
+          </div>
+
+          @if (alreadyRegistered()) {
+
+            <div class="registration-notice">
+              <app-icon name="check-circle" [size]="19" />
+
+              {{ 'profiles.clinicPatients.alreadyRegistered' | translate }}
+            </div>
+
+          } @else {
+
+            <div class="registration-actions">
+
+              <p>
+                {{ 'profiles.clinicPatients.confirmHint' | translate }}
+              </p>
+
+              <button
+                mat-stroked-button
+                type="button"
+                [disabled]="patientsStore.registering()"
+                (click)="registerPatient()"
+              >
+                @if (patientsStore.registering()) {
+                  {{ 'profiles.clinicPatients.registering' | translate }}
+                } @else {
+                  <app-icon name="check" [size]="17" />
+                  {{ 'profiles.clinicPatients.confirmRegistration' | translate }}
+                }
+              </button>
+            </div>
+          }
+        }
+      </mat-card>
+    }
+
+    <!-- Patient directory -->
+    <mat-card class="directory-card">
+
+      <div class="directory-header">
+
+        <div>
+          <h2>
+            {{ 'profiles.clinicPatients.directory' | translate }}
+          </h2>
+
+          <p>
+            {{ 'profiles.clinicPatients.directoryHint' | translate }}
+          </p>
+        </div>
+
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="patientsStore.loadingPatients()"
+          (click)="refresh()"
+        >
+          {{ 'profiles.clinicPatients.refresh' | translate }}
+        </button>
+
+      </div>
+
+      <!-- Search -->
+      <mat-form-field
+        appearance="outline"
+        class="search-field"
+        subscriptSizing="dynamic"
+      >
+
+        <mat-label>
+          {{ 'profiles.clinicPatients.search' | translate }}
+        </mat-label>
+
+        <input
+          matInput
+          type="search"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="onSearchChange($event)"
+        />
+
+      </mat-form-field>
+
+      <!-- Loading -->
+      @if (patientsStore.loadingPatients()) {
+
+        <div class="directory-state">
+          <mat-spinner diameter="34" />
+
+          <p>
+            {{ 'profiles.clinicPatients.loading' | translate }}
+          </p>
+        </div>
+
+      } @else if (patientsStore.error()) {
+
+        <!-- Error -->
+        <div class="directory-state">
+
+          <app-icon name="alert" [size]="34" />
+
+          <h3>
+            {{ 'profiles.clinicPatients.loadError' | translate }}
+          </h3>
+
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="refresh()"
+          >
+            {{ 'profiles.clinicPatients.retry' | translate }}
+          </button>
+
+        </div>
+
+      } @else if (patients().length === 0) {
+
+        <!-- Empty directory -->
+        <div class="directory-state">
+
+          <div class="state-icon">
+            <app-icon name="paw" [size]="38" />
+          </div>
+
+          <h3>
+            {{ 'profiles.clinicPatients.emptyTitle' | translate }}
+          </h3>
+
+          <p>
+            {{ 'profiles.clinicPatients.emptyHint' | translate }}
+          </p>
+
+        </div>
+
+      } @else if (filteredPatients().length === 0) {
+
+        <!-- Empty search results -->
+        <div class="directory-state">
+
+          <app-icon name="search" [size]="34" />
+
+          <h3>
+            {{ 'profiles.clinicPatients.noResults' | translate }}
+          </h3>
+
+          <p>
+            {{ 'profiles.clinicPatients.noResultsHint' | translate }}
+          </p>
+
+        </div>
+
+      } @else {
+
+        <!-- Results -->
+        <div class="results-heading">
+
+          <span>
+            {{ 'profiles.clinicPatients.results' | translate }}
+          </span>
+
+          <strong>{{ filteredPatients().length }}</strong>
+
+        </div>
+
+        <div class="patients-grid">
+
+          @for (pet of filteredPatients(); track pet.id) {
+
+            <article class="patient-card">
+
+              <div class="patient-avatar">
+
+                @if (pet.profileImageUrl) {
+                  <img
+                    [src]="pet.profileImageUrl"
+                    [alt]="pet.name"
+                  />
+                } @else {
+                  <app-icon name="paw" [size]="32" />
+                }
+
+              </div>
+
+              <div class="patient-details">
+
+                <h3>{{ pet.name }}</h3>
+
+                <span class="species-label">
+                  {{ speciesKey(pet.species) | translate }}
+                </span>
+
+                <div class="detail-line">
+                  <span>
+                    {{ 'profiles.clinicPatients.breed' | translate }}
+                  </span>
+
+                  <strong>
+                    {{
+                      pet.breed ||
+                      ('profiles.clinicPatients.notSpecified' | translate)
+                    }}
+                  </strong>
+                </div>
+
+                <div class="detail-line">
+                  <span>
+                    {{ 'profiles.clinicPatients.petCode' | translate }}
+                  </span>
+
+                  <strong>{{ pet.petCode }}</strong>
+                </div>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+    </mat-card>
+
+  } @else {
+
+    <mat-card class="state-card">
+
+      <app-icon name="alert" [size]="35" />
+
+      <h2>
+        {{ 'profiles.clinic.loadError' | translate }}
+      </h2>
+
+    </mat-card>
+
+  }
+
+</section>

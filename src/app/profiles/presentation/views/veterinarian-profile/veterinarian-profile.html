@@ -1,0 +1,272 @@
+
+<section class="veterinarian-page">
+
+  <header class="page-header">
+    <div class="page-heading">
+      <div class="heading-icon">
+        <app-icon name="stethoscope" [size]="28" />
+      </div>
+
+      <div>
+        <h1>{{ 'profiles.veterinarian.title' | translate }}</h1>
+        <p>{{ 'profiles.veterinarian.subtitle' | translate }}</p>
+      </div>
+    </div>
+
+    @if (veterinarian() && !editing()) {
+      <button
+        mat-stroked-button
+        type="button"
+        [disabled]="loading() || saving() || uploadingImage()"
+        (click)="refresh()"
+      >
+        {{ 'profiles.veterinarian.refresh' | translate }}
+      </button>
+    }
+  </header>
+
+  @if (loading() && !veterinarian()) {
+
+    <mat-card class="state-card">
+      <mat-spinner diameter="40" />
+      <p>{{ 'profiles.veterinarian.loading' | translate }}</p>
+    </mat-card>
+
+  } @else if (profileNotFound()) {
+
+    <mat-card class="state-card">
+      <div class="state-icon">
+        <app-icon name="stethoscope" [size]="36" />
+      </div>
+
+      <h2>{{ 'profiles.veterinarian.noProfileTitle' | translate }}</h2>
+      <p>{{ 'profiles.veterinarian.noProfileHint' | translate }}</p>
+    </mat-card>
+
+  } @else if (error() && !veterinarian()) {
+
+    <mat-card class="state-card">
+      <app-icon name="alert" [size]="35" />
+
+      <h2>{{ 'profiles.veterinarian.loadError' | translate }}</h2>
+
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="refresh()"
+      >
+        {{ 'profiles.veterinarian.retry' | translate }}
+      </button>
+    </mat-card>
+
+  } @else if (veterinarian(); as profile) {
+
+    @if (feedback(); as message) {
+      <div class="feedback-message" role="status">
+        <app-icon name="check" [size]="18" />
+
+        {{ ('profiles.veterinarian.' + message) | translate }}
+      </div>
+    }
+
+    @if (operationError(); as message) {
+      <div class="error-message" role="alert">
+        <app-icon name="alert" [size]="18" />
+
+        {{ ('profiles.veterinarian.' + message) | translate }}
+      </div>
+    }
+
+    @if (invalidImage()) {
+      <div class="error-message" role="alert">
+        {{ 'profiles.veterinarian.invalidImage' | translate }}
+      </div>
+    }
+
+    @if (editing()) {
+
+      <mat-card class="content-card">
+        <div class="section-heading">
+          <div>
+            <h2>{{ 'profiles.veterinarian.editTitle' | translate }}</h2>
+            <p>{{ 'profiles.veterinarian.editHint' | translate }}</p>
+          </div>
+        </div>
+
+        <app-veterinarian-profile-form
+          [veterinarian]="profile"
+          [email]="profile.email"
+          [saving]="saving()"
+          (submitted)="saveProfile($event)"
+          (cancelled)="cancelEditing()"
+        />
+      </mat-card>
+
+    } @else {
+
+      <!-- Profile header and photograph -->
+      <mat-card class="profile-card">
+
+        <div class="profile-identity">
+          <div class="profile-avatar">
+            @if (profile.profileImageUrl) {
+              <img
+                [src]="profile.profileImageUrl"
+                [alt]="profile.firstName + ' ' + profile.lastName"
+              />
+            } @else {
+              <span>
+                {{ initials(profile.firstName, profile.lastName) }}
+              </span>
+            }
+          </div>
+
+          <div class="identity-content">
+            <span class="eyebrow">
+              {{ 'profiles.veterinarian.professionalProfile' | translate }}
+            </span>
+
+            <h2>
+              {{ profile.firstName }} {{ profile.lastName }}
+            </h2>
+
+            <p>
+              {{
+                profile.specialty ||
+                ('profiles.veterinarian.notSpecified' | translate)
+              }}
+            </p>
+
+            <div class="profile-actions">
+              <input
+                #photoInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+                (change)="changeImage($event)"
+              />
+
+              <button
+                mat-stroked-button
+                type="button"
+                [disabled]="loading() || uploadingImage()"
+                (click)="photoInput.click()"
+              >
+                <app-icon name="image" [size]="17" />
+                {{ 'profiles.veterinarian.changePhoto' | translate }}
+              </button>
+
+              <button
+                mat-stroked-button
+                type="button"
+                [disabled]="loading() || uploadingImage()"
+                (click)="startEditing()"
+              >
+                <app-icon name="pencil" [size]="17" />
+                {{ 'profiles.veterinarian.edit' | translate }}
+              </button>
+            </div>
+
+            @if (uploadingImage()) {
+              <p class="upload-hint">
+                {{ 'profiles.veterinarian.uploadingImage' | translate }}
+              </p>
+            }
+          </div>
+        </div>
+
+      </mat-card>
+
+      <!-- Personal information -->
+      <mat-card class="content-card">
+        <div class="section-heading">
+          <h2>{{ 'profiles.veterinarian.personalInformation' | translate }}</h2>
+          <p>{{ 'profiles.veterinarian.personalHint' | translate }}</p>
+        </div>
+
+        <div class="information-grid">
+
+          <div class="info-field">
+            <span>{{ 'profiles.veterinarian.firstName' | translate }}</span>
+            <strong>{{ profile.firstName }}</strong>
+          </div>
+
+          <div class="info-field">
+            <span>{{ 'profiles.veterinarian.lastName' | translate }}</span>
+            <strong>{{ profile.lastName }}</strong>
+          </div>
+
+          <div class="info-field">
+            <span>{{ 'profiles.veterinarian.email' | translate }}</span>
+            <strong>{{ profile.email }}</strong>
+          </div>
+
+          <div class="info-field">
+            <span>{{ 'profiles.veterinarian.phone' | translate }}</span>
+            <strong>
+              {{
+                profile.phoneNumber ||
+                ('profiles.veterinarian.notSpecified' | translate)
+              }}
+            </strong>
+          </div>
+
+          <div class="info-field">
+            <span>{{ 'profiles.veterinarian.sex' | translate }}</span>
+            <strong>
+              @if (profile.sex === 'MALE') {
+                {{ 'profiles.veterinarian.male' | translate }}
+              } @else if (profile.sex === 'FEMALE') {
+                {{ 'profiles.veterinarian.female' | translate }}
+              } @else {
+                {{ 'profiles.veterinarian.notSpecified' | translate }}
+              }
+            </strong>
+          </div>
+
+        </div>
+      </mat-card>
+
+      <!-- Professional information -->
+      <mat-card class="content-card">
+        <div class="section-heading">
+          <h2>{{ 'profiles.veterinarian.professionalInformation' | translate }}</h2>
+          <p>{{ 'profiles.veterinarian.professionalHint' | translate }}</p>
+        </div>
+
+        <div class="information-grid">
+          <div class="info-field">
+            <span>{{ 'profiles.veterinarian.licenseNumber' | translate }}</span>
+            <strong>
+              {{
+                profile.licenseNumber ||
+                ('profiles.veterinarian.notSpecified' | translate)
+              }}
+            </strong>
+          </div>
+
+          <div class="info-field">
+            <span>{{ 'profiles.veterinarian.specialty' | translate }}</span>
+            <strong>
+              {{
+                profile.specialty ||
+                ('profiles.veterinarian.notSpecified' | translate)
+              }}
+            </strong>
+          </div>
+        </div>
+      </mat-card>
+
+    }
+
+  } @else {
+
+    <mat-card class="state-card">
+      <h2>{{ 'profiles.veterinarian.loadError' | translate }}</h2>
+      <button mat-stroked-button type="button" (click)="refresh()">
+        {{ 'profiles.veterinarian.retry' | translate }}
+      </button>
+    </mat-card>
+
+  }
+</section>

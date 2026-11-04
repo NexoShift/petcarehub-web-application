@@ -8,6 +8,8 @@ import { PasswordResetRequest } from './resources/password-reset.request';
 import { SignInRequest } from './resources/sign-in.request';
 import { SignUpRequest } from './resources/sign-up.request';
 import { UserResponse } from './resources/user.response';
+import { CreateMemberUserRequest } from './resources/create-member-user.request';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class IamApi {
@@ -32,5 +34,9 @@ export class IamApi {
 
   resetPassword(body: PasswordResetRequest) {
     return this.http.post<MessageResponse>(`${this.baseUrl}/authentication/password-reset`, body);
+  }
+
+  createMember(accountId: number, request: CreateMemberUserRequest): Observable<UserResponse> {
+    return this.http.post<UserResponse>(`${this.baseUrl}/accounts/${accountId}/users`, request);
   }
 }

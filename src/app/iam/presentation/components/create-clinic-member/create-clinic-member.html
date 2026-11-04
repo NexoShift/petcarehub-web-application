@@ -1,0 +1,177 @@
+
+<section class="member-form-container">
+
+  <!-- Header -->
+  <header class="form-header">
+
+    <div class="header-icon">
+      <span class="material-symbols-outlined">person_add</span>
+    </div>
+
+    <div class="header-text">
+      <h2>
+        {{ 'profiles.clinicMembers.title' | translate }}
+      </h2>
+
+      <p>
+        {{ 'profiles.clinicMembers.subtitle' | translate }}
+      </p>
+    </div>
+
+  </header>
+
+  <!-- Account information -->
+  <div class="account-info">
+
+    <div class="info-icon">
+      <span class="material-symbols-outlined">shield_person</span>
+    </div>
+
+    <div class="info-content">
+      <strong>
+        {{ 'profiles.clinicMembers.memberRole' | translate }}
+      </strong>
+
+      <p>
+        {{ 'profiles.clinicMembers.memberRoleHint' | translate }}
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Registration form -->
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="member-form"
+  >
+
+    <!-- Email -->
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        {{ 'profiles.clinicMembers.email' | translate }}
+      </mat-label>
+
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        autocomplete="off"
+        placeholder="veterinario@clinica.com"
+      />
+
+      @if (
+        form.controls.email.hasError('required') &&
+        form.controls.email.touched
+        ) {
+        <mat-error>
+          {{ 'profiles.clinicMembers.requiredEmail' | translate }}
+        </mat-error>
+      } @else if (
+        form.controls.email.hasError('email') &&
+        form.controls.email.touched
+        ) {
+        <mat-error>
+          {{ 'profiles.clinicMembers.invalidEmail' | translate }}
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+    <!-- Initial password -->
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        {{ 'profiles.clinicMembers.password' | translate }}
+      </mat-label>
+
+      <input
+        matInput
+        [type]="showPassword() ? 'text' : 'password'"
+        formControlName="password"
+        autocomplete="new-password"
+        placeholder="••••••••"
+      />
+
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        [attr.aria-label]="
+          'profiles.clinicMembers.togglePassword' | translate
+        "
+        (click)="togglePassword()"
+      >
+        <span class="material-symbols-outlined">
+          {{ showPassword() ? 'visibility_off' : 'visibility' }}
+        </span>
+      </button>
+
+      @if (
+        form.controls.password.hasError('required') &&
+        form.controls.password.touched
+        ) {
+        <mat-error>
+          {{ 'profiles.clinicMembers.requiredPassword' | translate }}
+        </mat-error>
+      } @else if (
+        form.controls.password.invalid &&
+        form.controls.password.touched
+        ) {
+        <mat-error>
+          {{ 'profiles.clinicMembers.invalidPassword' | translate }}
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+    <p class="password-hint">
+      <span class="material-symbols-outlined">info</span>
+
+      {{ 'profiles.clinicMembers.passwordHint' | translate }}
+    </p>
+
+    <!-- Error -->
+    @if (errorKey()) {
+      <div class="error-message" role="alert">
+        <span class="material-symbols-outlined">error</span>
+        <span>{{ errorKey()! | translate }}</span>
+      </div>
+    }
+
+    <!-- Actions -->
+    <div class="form-actions">
+
+      <button
+        mat-stroked-button
+        type="button"
+        [disabled]="saving()"
+        (click)="cancel()"
+      >
+        {{ 'profiles.clinicMembers.cancel' | translate }}
+      </button>
+
+      <button
+        mat-flat-button
+        type="submit"
+        class="submit-button"
+        [disabled]="saving()"
+      >
+        @if (saving()) {
+          <mat-spinner diameter="20" />
+          {{ 'profiles.clinicMembers.creating' | translate }}
+        } @else {
+          <ng-container>
+            <span class="material-symbols-outlined">person_add</span>
+          </ng-container>
+
+          {{ 'profiles.clinicMembers.create' | translate }}
+        }
+      </button>
+
+    </div>
+
+  </form>
+
+</section>

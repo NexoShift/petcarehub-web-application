@@ -170,18 +170,44 @@
       <!-- Clinic administration -->
       <div class="clinic-side">
 
+
         <mat-card class="section-card shortcut-card">
+
           <div class="shortcut-icon">
             <app-icon name="stethoscope" [size]="25" />
           </div>
+
           <div class="shortcut-content">
-            <h3>{{ 'profiles.clinic.veterinarians' | translate }}</h3>
-            <p>{{ 'profiles.clinic.veterinariansHint' | translate }}</p>
-            <a mat-stroked-button routerLink="/profiles/clinic/veterinarians">
-              {{ 'profiles.clinic.manage' | translate }}
-            </a>
+
+            <h3>
+              {{ 'profiles.clinic.veterinarians' | translate }}
+            </h3>
+
+            <p>
+              {{ 'profiles.clinic.veterinariansHint' | translate }}
+            </p>
+
+            <!-- Actions -->
+            <div class="clinic-veterinarian-actions">
+
+              <!-- Professional directory -->
+              <a
+                mat-stroked-button
+                routerLink="/profiles/clinic/veterinarians"
+              >
+                <app-icon name="stethoscope" [size]="17" />
+
+                {{ 'profiles.clinicVeterinarians.viewDirectory' | translate }}
+              </a>
+
+              <!-- IAM user management -->
+              <a mat-stroked-button routerLink="/profiles/clinic/users" class="manage-users-button">
+                <app-icon name="users" [size]="17" />{{ 'profiles.clinicUsers.manageUsers' | translate }}
+              </a>
+            </div>
           </div>
         </mat-card>
+
 
         <mat-card class="section-card shortcut-card">
           <div class="shortcut-icon">
