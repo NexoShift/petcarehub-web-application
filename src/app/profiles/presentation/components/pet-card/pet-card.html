@@ -1,0 +1,62 @@
+
+<mat-card class="pet-card">
+  <div class="pet-photo">
+    @if (pet().profileImageUrl) {
+      <img
+        [src]="pet().profileImageUrl"
+        [alt]="pet().name"
+      />
+    } @else {
+      <div class="photo-placeholder">
+        <app-icon name="paw" [size]="44" />
+      </div>
+    }
+  </div>
+
+  <div class="pet-content">
+    <div class="pet-header">
+      <div>
+        <h3>{{ pet().name }}</h3>
+        <span class="pet-code">{{ pet().petCode }}</span>
+      </div>
+
+      <span class="species-badge">
+        @switch (pet().species) {
+          @case ('DOG') {
+            {{ 'profiles.pets.dog' | translate }}
+          }
+          @case ('CAT') {
+            {{ 'profiles.pets.cat' | translate }}
+          }
+          @default {
+            {{ 'profiles.pets.other' | translate }}
+          }
+        }
+      </span>
+    </div>
+
+    <div class="pet-details">
+      <div>
+        <span>{{ 'profiles.pets.breed' | translate }}</span>
+        <strong>
+          {{ pet().breed || ('profiles.pets.notSpecified' | translate) }}
+        </strong>
+      </div>
+
+      <div>
+        <span>{{ 'profiles.pets.birthDate' | translate }}</span>
+        <strong>
+          {{ pet().birthDate || ('profiles.pets.notSpecified' | translate) }}
+        </strong>
+      </div>
+    </div>
+
+    <a
+      class="pet-link"
+      [routerLink]="['/profiles/pets', pet().id]"
+    >
+      {{ 'profiles.pets.viewDetails' | translate }}
+      <app-icon name="arrow-right" [size]="17" />
+    </a>
+  </div>
+</mat-card>
