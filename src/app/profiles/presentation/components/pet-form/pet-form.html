@@ -1,0 +1,136 @@
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <div class="form-grid">
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        {{ 'profiles.pets.name' | translate }}
+      </mat-label>
+
+      <input matInput formControlName="name" maxlength="100" />
+
+      @if (form.controls.name.invalid &&
+      form.controls.name.touched) {
+        <mat-error>
+          {{ 'profiles.pets.required' | translate }}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        {{ 'profiles.pets.species' | translate }}
+      </mat-label>
+
+      <mat-select formControlName="species">
+        <mat-option value="DOG">
+          {{ 'profiles.pets.dog' | translate }}
+        </mat-option>
+
+        <mat-option value="CAT">
+          {{ 'profiles.pets.cat' | translate }}
+        </mat-option>
+
+        <mat-option value="OTHER">
+          {{ 'profiles.pets.other' | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        {{ 'profiles.pets.breed' | translate }}
+      </mat-label>
+
+      <input matInput formControlName="breed" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        {{ 'profiles.pets.birthDate' | translate }}
+      </mat-label>
+
+      <input
+        matInput
+        type="date"
+        formControlName="birthDate"
+      />
+
+      @if (form.controls.birthDate.hasError('futureDate')) {
+        <mat-error>
+          {{ 'profiles.pets.futureDate' | translate }}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        {{ 'profiles.pets.sex' | translate }}
+      </mat-label>
+
+      <mat-select formControlName="sex">
+        <mat-option value="">
+          {{ 'profiles.pets.notSpecified' | translate }}
+        </mat-option>
+
+        <mat-option value="MALE">
+          {{ 'profiles.pets.male' | translate }}
+        </mat-option>
+
+        <mat-option value="FEMALE">
+          {{ 'profiles.pets.female' | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+
+  @if (!pet()) {
+    <div class="image-upload">
+      <label for="pet-image">
+        {{ 'profiles.pets.photo' | translate }}
+      </label>
+
+      <input
+        id="pet-image"
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        (change)="onImageSelected($event)"
+      />
+
+      @if (selectedImage()) {
+        <p>{{ selectedImage()!.name }}</p>
+      }
+
+      @if (imageError()) {
+        <p class="form-error">
+          {{ 'profiles.pets.invalidImage' | translate }}
+        </p>
+      }
+    </div>
+  }
+
+  <div class="form-actions">
+    <button
+      mat-button
+      type="button"
+      [disabled]="saving()"
+      (click)="cancelled.emit()"
+    >
+      {{ 'profiles.pets.cancel' | translate }}
+    </button>
+
+    <button
+      mat-flat-button
+      type="submit"
+      [disabled]="saving()"
+    >
+      {{
+        (pet() ? 'profiles.pets.save' : 'profiles.pets.register')
+          | translate
+      }}
+    </button>
+  </div>
+
+</form>
