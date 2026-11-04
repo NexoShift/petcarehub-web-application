@@ -27,6 +27,11 @@ export const routes: Routes = [
             (m) => m.CLINICAL_ATTENTION_ROUTES,
           ),
       },
+      {
+        path: 'profiles',
+        loadChildren: () =>
+          import('./profiles/presentation/profiles.routes').then((m) => m.profileRoutes),
+      },
       { path: '', pathMatch: 'full', redirectTo: 'home' },
       // Enlaces del menú que aún no tienen pantalla
       {
