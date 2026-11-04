@@ -1,0 +1,222 @@
+
+<section class="clinic-page">
+
+  <header class="page-heading">
+    <h1>{{ 'profiles.clinic.title' | translate }}</h1>
+    <p>{{ 'profiles.clinic.subtitle' | translate }}</p>
+  </header>
+
+  @if (clinicStore.loading() && !clinic()) {
+
+    <div class="state-panel">
+      <mat-spinner diameter="38" />
+      <p>{{ 'profiles.clinic.loading' | translate }}</p>
+    </div>
+
+  } @else if (clinicStore.profileNotFound()) {
+
+    <mat-card class="state-panel">
+      <app-icon name="building" [size]="42" />
+      <h2>{{ 'profiles.clinic.noProfileTitle' | translate }}</h2>
+      <p>{{ 'profiles.clinic.noProfileHint' | translate }}</p>
+
+      <a mat-flat-button routerLink="/profiles/clinic/complete">
+        {{ 'profiles.clinic.completeProfile' | translate }}
+      </a>
+    </mat-card>
+
+  } @else if (!clinic()) {
+
+    <mat-card class="state-panel">
+      <app-icon name="alert" [size]="32" />
+      <p>{{ 'profiles.clinic.loadError' | translate }}</p>
+    </mat-card>
+
+  } @else {
+
+    <!-- Institutional header -->
+    <mat-card class="clinic-banner">
+      <div class="banner-main">
+        <div class="clinic-logo">
+          @if (clinic()!.profileImageUrl) {
+            <img
+              [src]="clinic()!.profileImageUrl"
+              [alt]="clinic()!.name"
+            />
+          } @else {
+            <span>{{ initials() }}</span>
+          }
+        </div>
+
+        <div class="banner-info">
+          <h2>{{ clinic()!.name }}</h2>
+
+          <div class="banner-meta">
+            @if (clinic()!.address) {
+              <span>
+                <app-icon name="map-pin" [size]="16" />
+                {{ clinic()!.address }}
+              </span>
+            }
+
+            @if (clinic()!.phoneNumber) {
+              <span>
+                <app-icon name="phone" [size]="16" />
+                {{ clinic()!.phoneNumber }}
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <input
+        #logoInput
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        class="visually-hidden"
+        (change)="onImageSelected($event)"
+      />
+
+      <button
+        mat-stroked-button
+        type="button"
+        [disabled]="uploadingImage() || clinicStore.loading()"
+        (click)="logoInput.click()"
+      >
+        <app-icon name="image" [size]="17" />
+        {{ 'profiles.clinic.changeLogo' | translate }}
+      </button>
+    </mat-card>
+
+    <div class="clinic-grid">
+
+      <!-- Main institutional information -->
+      <mat-card class="section-card information-card">
+
+        <div class="section-header">
+          <div class="section-heading">
+            <app-icon name="building" [size]="24" />
+            <div>
+              <h2>{{ 'profiles.clinic.information' | translate }}</h2>
+              <p>{{ 'profiles.clinic.informationHint' | translate }}</p>
+            </div>
+          </div>
+
+          @if (!editing()) {
+            <button mat-stroked-button (click)="startEditing()">
+              {{ 'profiles.clinic.edit' | translate }}
+            </button>
+          }
+        </div>
+
+        @if (editing()) {
+
+          <app-clinic-form
+            [clinic]="clinic()"
+            [saving]="clinicStore.loading()"
+            (submitted)="saveClinic($event)"
+            (cancelled)="cancelEditing()"
+          />
+
+        } @else {
+
+          <div class="data-grid">
+
+            <div class="data-item">
+              <span>{{ 'profiles.clinic.name' | translate }}</span>
+              <strong>{{ clinic()!.name }}</strong>
+            </div>
+
+            <div class="data-item">
+              <span>RUC</span>
+              <strong>
+                {{ clinic()!.ruc || ('profiles.clinic.notSpecified' | translate) }}
+              </strong>
+            </div>
+
+            <div class="data-item">
+              <span>{{ 'profiles.clinic.address' | translate }}</span>
+              <strong>
+                {{ clinic()!.address || ('profiles.clinic.notSpecified' | translate) }}
+              </strong>
+            </div>
+
+            <div class="data-item">
+              <span>{{ 'profiles.clinic.phone' | translate }}</span>
+              <strong>
+                {{ clinic()!.phoneNumber || ('profiles.clinic.notSpecified' | translate) }}
+              </strong>
+            </div>
+
+            <div class="data-item full-width">
+              <span>{{ 'profiles.clinic.description' | translate }}</span>
+              <p>
+                {{ clinic()!.description || ('profiles.clinic.notSpecified' | translate) }}
+              </p>
+            </div>
+
+          </div>
+
+          <div class="information-footer">
+            <button mat-flat-button (click)="startEditing()">
+              <app-icon name="check" [size]="17" />
+              {{ 'profiles.clinic.updateInformation' | translate }}
+            </button>
+          </div>
+        }
+
+      </mat-card>
+
+      <!-- Clinic administration -->
+      <div class="clinic-side">
+
+        <mat-card class="section-card shortcut-card">
+          <div class="shortcut-icon">
+            <app-icon name="stethoscope" [size]="25" />
+          </div>
+          <div class="shortcut-content">
+            <h3>{{ 'profiles.clinic.veterinarians' | translate }}</h3>
+            <p>{{ 'profiles.clinic.veterinariansHint' | translate }}</p>
+            <a mat-stroked-button routerLink="/profiles/clinic/veterinarians">
+              {{ 'profiles.clinic.manage' | translate }}
+            </a>
+          </div>
+        </mat-card>
+
+        <mat-card class="section-card shortcut-card">
+          <div class="shortcut-icon">
+            <app-icon name="paw" [size]="25" />
+          </div>
+          <div class="shortcut-content">
+            <h3>{{ 'profiles.clinic.patients' | translate }}</h3>
+            <p>{{ 'profiles.clinic.patientsHint' | translate }}</p>
+            <a mat-stroked-button routerLink="/profiles/clinic/patients">
+              {{ 'profiles.clinic.manage' | translate }}
+            </a>
+          </div>
+        </mat-card>
+
+        <mat-card class="section-card shortcut-card">
+          <div class="shortcut-icon">
+            <app-icon name="building" [size]="25" />
+          </div>
+          <div class="shortcut-content">
+            <h3>{{ 'profiles.clinic.consultingRooms' | translate }}</h3>
+            <p>{{ 'profiles.clinic.consultingRoomsHint' | translate }}</p>
+            <a mat-stroked-button routerLink="/profiles/clinic/consulting-rooms">
+              {{ 'profiles.clinic.manage' | translate }}
+            </a>
+          </div>
+        </mat-card>
+
+        <mat-card class="section-card subscription-card">
+          <app-icon name="card" [size]="23" />
+          <h3>{{ 'profiles.clinic.subscription' | translate }}</h3>
+          <p>{{ 'profiles.clinic.subscriptionPending' | translate }}</p>
+        </mat-card>
+
+      </div>
+
+    </div>
+  }
+</section>
