@@ -1,0 +1,184 @@
+
+<section class="detail-page">
+
+  <a routerLink="/profiles/pets" class="back-link">
+    {{ 'profiles.pets.backPets' | translate }}
+  </a>
+
+  @if (invalidId()) {
+
+    <div class="state-panel">
+      <p>{{ 'profiles.pets.notFound' | translate }}</p>
+    </div>
+
+  } @else if (
+    petStore.loading() && !pet() ||
+    ownerStore.loading() && !ownerStore.petOwner()
+    ) {
+
+    <div class="state-panel">
+      <mat-spinner diameter="40" />
+      <p>{{ 'profiles.pets.loading' | translate }}</p>
+    </div>
+
+  } @else if (petStore.notFound()) {
+
+    <div class="state-panel">
+      <p>{{ 'profiles.pets.notFound' | translate }}</p>
+    </div>
+
+  } @else if (petStore.error() || ownerStore.error()) {
+
+    <div class="state-panel">
+      <p>{{ 'profiles.pets.loadError' | translate }}</p>
+    </div>
+
+  } @else if (!canViewPet()) {
+
+    <div class="state-panel">
+      <p>{{ 'profiles.pets.notAvailable' | translate }}</p>
+    </div>
+
+  } @else {
+
+    <header class="detail-header">
+      <div>
+        <h1>{{ pet()!.name }}</h1>
+        <p>{{ pet()!.petCode }}</p>
+      </div>
+
+      @if (!editing()) {
+        <button
+          mat-stroked-button
+          (click)="startEditing()"
+        >
+          {{ 'profiles.pets.edit' | translate }}
+        </button>
+      }
+    </header>
+
+    <div class="detail-grid">
+
+      <mat-card class="photo-card">
+        <div class="pet-photo">
+          @if (pet()!.profileImageUrl) {
+            <img
+              [src]="pet()!.profileImageUrl"
+              [alt]="pet()!.name"
+            />
+          } @else {
+            <div class="photo-placeholder">
+              <app-icon name="paw" [size]="66" />
+            </div>
+          }
+        </div>
+
+        <input
+          #imageInput
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          class="visually-hidden"
+          (change)="onImageSelected($event)"
+        />
+
+        <button
+          mat-stroked-button
+          class="change-photo"
+          [disabled]="uploadingImage() || petStore.loading()"
+          (click)="imageInput.click()"
+        >
+          <app-icon name="image" [size]="18" />
+          {{ 'profiles.pets.changePhoto' | translate }}
+        </button>
+      </mat-card>
+
+      <mat-card class="information-card">
+        <h2>
+          {{ 'profiles.pets.information' | translate }}
+        </h2>
+
+        @if (editing()) {
+
+          <app-pet-form
+            [pet]="pet()"
+            [saving]="petStore.loading()"
+            (submitted)="savePet($event)"
+            (cancelled)="cancelEditing()"
+          />
+
+        } @else {
+
+          <div class="information-grid">
+
+            <div>
+              <span>{{ 'profiles.pets.name' | translate }}</span>
+              <strong>{{ pet()!.name }}</strong>
+            </div>
+
+            <div>
+              <span>{{ 'profiles.pets.species' | translate }}</span>
+              <strong>
+                @switch (pet()!.species) {
+                  @case ('DOG') {
+                    {{ 'profiles.pets.dog' | translate }}
+                  }
+                  @case ('CAT') {
+                    {{ 'profiles.pets.cat' | translate }}
+                  }
+                  @default {
+                    {{ 'profiles.pets.other' | translate }}
+                  }
+                }
+              </strong>
+            </div>
+
+            <div>
+              <span>{{ 'profiles.pets.breed' | translate }}</span>
+              <strong>
+                {{ pet()!.breed || ('profiles.pets.notSpecified' | translate) }}
+              </strong>
+            </div>
+
+            <div>
+              <span>{{ 'profiles.pets.birthDate' | translate }}</span>
+              <strong>
+                {{ pet()!.birthDate || ('profiles.pets.notSpecified' | translate) }}
+              </strong>
+            </div>
+
+            <div>
+              <span>{{ 'profiles.pets.sex' | translate }}</span>
+              <strong>
+                @switch (pet()!.sex) {
+                  @case ('MALE') {
+                    {{ 'profiles.pets.male' | translate }}
+                  }
+                  @case ('FEMALE') {
+                    {{ 'profiles.pets.female' | translate }}
+                  }
+                  @default {
+                    {{ 'profiles.pets.notSpecified' | translate }}
+                  }
+                }
+              </strong>
+            </div>
+
+            <div>
+              <span>{{ 'profiles.pets.petCode' | translate }}</span>
+              <strong>{{ pet()!.petCode }}</strong>
+            </div>
+
+          </div>
+
+        }
+      </mat-card>
+
+    </div>
+
+    <mat-card class="clinical-card">
+      <h2>{{ 'profiles.pets.clinicalHistory' | translate }}</h2>
+      <p>{{ 'profiles.pets.clinicalHistoryPending' | translate }}</p>
+    </mat-card>
+
+  }
+</section>
