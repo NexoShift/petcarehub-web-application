@@ -1,0 +1,170 @@
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.veterinarian-form {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+}
+
+/* Sections */
+
+.form-section {
+  display: grid;
+  gap: 20px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e5ebf3;
+}
+
+.section-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 11px;
+  background: #e0f8f4;
+  color: #008a82;
+}
+
+.section-heading h3 {
+  margin: 0 0 5px;
+  color: #10254b;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.section-heading p {
+  margin: 0;
+  color: #718096;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Fields */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 16px;
+}
+
+.form-grid mat-form-field {
+  width: 100%;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Image upload */
+
+.image-upload {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 19px;
+  border: 1px dashed #9ecbd0;
+  border-radius: 12px;
+  background: #f5fbfc;
+}
+
+.image-placeholder {
+  display: grid;
+  place-items: center;
+  width: 75px;
+  height: 75px;
+  flex: none;
+  border-radius: 13px;
+  background: #e0f7f3;
+  color: #0b8385;
+}
+
+.image-controls {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.image-controls label {
+  color: #10254b;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.image-controls input {
+  max-width: 100%;
+  color: #60728b;
+  font-size: 12px;
+}
+
+.selected-file {
+  color: #007e78;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.image-error {
+  color: #b42318;
+  font-size: 12px;
+}
+
+/* Actions */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 22px;
+  border-top: 1px solid #e5ebf3;
+}
+
+.form-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 0 19px;
+  border-radius: 9px;
+}
+
+.save-button {
+  background: #00d5c4 !important;
+  color: #062b55 !important;
+  font-weight: 650;
+}
+
+@media (max-width: 650px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .image-upload {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
