@@ -31,6 +31,16 @@ const completeClinicProfile = () =>
     (m) => m.CompleteClinicProfile,
   );
 
+const clinicUsers = () => import('./views/clinic-users/clinic-users').then((m) => m.ClinicUsers);
+
+const clinicVeterinarians = () =>
+  import('./views/clinic-veterinarians/clinic-veterinarians').then((m) => m.ClinicVeterinarians);
+
+const veterinarianProfile = () =>
+  import('./views/veterinarian-profile/veterinarian-profile').then((m) => m.VeterinarianProfile);
+
+const clinicPatients = () =>
+  import('./views/clinic-patients/clinic-patients').then((m) => m.ClinicPatients);
 
 /**
  * Temporary view for features not yet implemented.
@@ -107,14 +117,19 @@ export const profileRoutes: Routes = [
   // --------------------------------------------------
 
   {
+    path: 'clinic/users',
+    canActivate: [roleGuard('ROLE_CLINIC_ADMIN')],
+    loadComponent: clinicUsers,
+  },
+  {
     path: 'clinic/veterinarians',
     canActivate: [roleGuard('ROLE_CLINIC_ADMIN')],
-    loadComponent: comingSoon,
+    loadComponent: clinicVeterinarians,
   },
   {
     path: 'clinic/patients',
-    canActivate: [roleGuard('ROLE_CLINIC_ADMIN')],
-    loadComponent: comingSoon,
+    canActivate: [roleGuard('ROLE_VETERINARIAN')],
+    loadComponent: clinicPatients,
   },
   {
     path: 'clinic/consulting-rooms',
@@ -134,6 +149,6 @@ export const profileRoutes: Routes = [
   {
     path: 'veterinarian',
     canActivate: [roleGuard('ROLE_VETERINARIAN')],
-    loadComponent: comingSoon,
+    loadComponent: veterinarianProfile,
   },
 ];
