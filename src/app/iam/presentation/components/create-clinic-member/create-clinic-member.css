@@ -1,0 +1,202 @@
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.member-form-container {
+  width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+/* Header */
+
+.form-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  border-radius: 13px;
+  background: #ddf9f5;
+  color: #008e87;
+}
+
+.header-icon .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.header-text {
+  min-width: 0;
+}
+
+.header-text h2 {
+  margin: 0 0 6px;
+  color: #10254b;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.header-text p {
+  margin: 0;
+  color: #68778d;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Account information */
+
+.account-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 26px;
+  padding: 17px;
+  border: 1px solid #c7f0e9;
+  border-radius: 13px;
+  background: #edfbf8;
+}
+
+.info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #d5f7f0;
+  color: #008d86;
+}
+
+.info-content {
+  min-width: 0;
+}
+
+.info-content strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #123b55;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.info-content p {
+  margin: 0;
+  color: #557283;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Form */
+
+.member-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.member-form mat-form-field {
+  width: 100%;
+}
+
+.password-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 15px;
+  color: #728198;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.password-hint .material-symbols-outlined {
+  flex-shrink: 0;
+  color: #5c82a0;
+  font-size: 17px;
+}
+
+/* Errors */
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #ffd4cf;
+  border-radius: 11px;
+  background: #fff0ee;
+  color: #b42318;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.error-message .material-symbols-outlined {
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+/* Actions */
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 22px;
+  border-top: 1px solid #e7ecf4;
+}
+
+.form-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 43px;
+  padding: 0 22px;
+  border-radius: 9px;
+  font-weight: 600;
+}
+
+.submit-button {
+  background: #00d5c4 !important;
+  color: #062b55 !important;
+}
+
+.submit-button .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.submit-button:disabled {
+  opacity: 0.65;
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+  .form-header {
+    align-items: flex-start;
+  }
+
+  .header-text h2 {
+    font-size: 20px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
