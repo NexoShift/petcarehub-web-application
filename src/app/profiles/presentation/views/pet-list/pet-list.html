@@ -1,0 +1,76 @@
+
+<section class="pets-page">
+
+  <header class="page-header">
+    <div>
+      <a routerLink="/profiles/pet-owner" class="back-link">
+        {{ 'profiles.pets.backProfile' | translate }}
+      </a>
+
+      <h1>{{ 'profiles.pets.title' | translate }}</h1>
+      <p>{{ 'profiles.pets.subtitle' | translate }}</p>
+    </div>
+
+    <a mat-flat-button routerLink="/profiles/pets/new">
+      <app-icon name="plus" [size]="18" />
+      {{ 'profiles.pets.addPet' | translate }}
+    </a>
+  </header>
+
+  @if (ownerStore.loading() || petStore.loading()) {
+
+    <div class="state-panel">
+      <mat-spinner diameter="40" />
+      <p>{{ 'profiles.pets.loading' | translate }}</p>
+    </div>
+
+  } @else if (ownerStore.profileNotFound()) {
+
+    <div class="state-panel">
+      <h2>{{ 'profiles.pets.ownerRequired' | translate }}</h2>
+
+      <a mat-flat-button routerLink="/profiles/pet-owner/complete">
+        {{ 'profiles.pets.completeOwner' | translate }}
+      </a>
+    </div>
+
+  } @else if (ownerStore.error() || petStore.error()) {
+
+    <div class="state-panel">
+      <app-icon name="alert" [size]="32" />
+
+      <p>{{ 'profiles.pets.loadError' | translate }}</p>
+
+      <button mat-stroked-button (click)="reload()">
+        {{ 'profiles.pets.retry' | translate }}
+      </button>
+    </div>
+
+  } @else if (!petStore.hasPets()) {
+
+    <div class="state-panel">
+      <app-icon name="paw" [size]="56" />
+
+      <h2>{{ 'profiles.pets.emptyTitle' | translate }}</h2>
+      <p>{{ 'profiles.pets.emptyDescription' | translate }}</p>
+
+      <a mat-flat-button routerLink="/profiles/pets/new">
+        {{ 'profiles.pets.registerFirst' | translate }}
+      </a>
+    </div>
+
+  } @else {
+
+    <div class="list-summary">
+      <strong>{{ petStore.petCount() }}</strong>
+      {{ 'profiles.pets.registeredPets' | translate }}
+    </div>
+
+    <div class="pets-grid">
+      @for (pet of petStore.pets(); track pet.id) {
+        <app-pet-card [pet]="pet" />
+      }
+    </div>
+
+  }
+</section>

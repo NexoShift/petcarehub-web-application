@@ -1,0 +1,323 @@
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.clinic-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.page-heading {
+  margin-bottom: 24px;
+}
+
+.page-heading h1 {
+  margin: 0 0 6px;
+  color: #10254b;
+  font-size: 32px;
+}
+
+.page-heading p {
+  margin: 0;
+  color: #68758b;
+}
+
+.clinic-banner,
+.section-card {
+  border: 1px solid #e3eaf2;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 5px 20px rgba(22, 43, 77, .06);
+}
+
+.clinic-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 22px;
+  padding: 25px;
+  margin-bottom: 22px;
+  border-top: 5px solid #00d5c4;
+}
+
+.banner-main {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+
+.clinic-logo {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 17px;
+  background: #062b55;
+  color: white;
+  font-size: 25px;
+  font-weight: 750;
+}
+
+.clinic-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.banner-info {
+  min-width: 0;
+}
+
+.banner-info h2 {
+  margin: 0 0 10px;
+  color: #10254b;
+  font-size: 24px;
+  overflow-wrap: anywhere;
+}
+
+.banner-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 17px;
+  color: #64758d;
+  font-size: 13px;
+}
+
+.banner-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.clinic-banner button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.clinic-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, .85fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.section-card {
+  padding: 24px;
+}
+
+.section-header,
+.section-heading {
+  display: flex;
+  align-items: center;
+}
+
+.section-header {
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 25px;
+}
+
+.section-heading {
+  gap: 13px;
+  color: #083f78;
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: #10254b;
+  font-size: 20px;
+}
+
+.section-heading p {
+  margin: 5px 0 0;
+  color: #68758b;
+  font-size: 13px;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.data-item {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+  min-width: 0;
+}
+
+.data-item span {
+  color: #61748d;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.data-item strong,
+.data-item p {
+  min-height: 45px;
+  margin: 0;
+  padding: 13px;
+  border-radius: 9px;
+  background: #f0f4fc;
+  color: #213d5f;
+  font-size: 14px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.information-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+
+.information-footer button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #062b55;
+  color: white;
+}
+
+.clinic-side {
+  display: grid;
+  gap: 17px;
+}
+
+.shortcut-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.shortcut-icon {
+  display: grid;
+  place-items: center;
+  width: 49px;
+  height: 49px;
+  flex: none;
+  border-radius: 11px;
+  background: #e0faf6;
+  color: #007c84;
+}
+
+.shortcut-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.shortcut-content h3 {
+  margin: 0 0 6px;
+  color: #10254b;
+  font-size: 18px;
+}
+
+.shortcut-content p {
+  margin: 0 0 13px;
+  color: #68768c;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.shortcut-content a {
+  color: #063e70;
+}
+
+.subscription-card {
+  background: #062b55;
+  color: #b5d8ee;
+}
+
+.subscription-card h3 {
+  margin: 12px 0 8px;
+  color: white;
+}
+
+.subscription-card p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.state-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  min-height: 280px;
+  padding: 25px;
+  text-align: center;
+  color: #10254b;
+}
+
+.state-panel h2,
+.state-panel p {
+  margin: 0;
+}
+
+.state-panel a[mat-flat-button] {
+  background: #00d5c4;
+  color: #062b55;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 1100px) {
+  .clinic-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .clinic-page {
+    padding: 14px;
+  }
+
+  .clinic-banner,
+  .banner-main {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .clinic-banner button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .data-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .section-header {
+    flex-wrap: wrap;
+  }
+}

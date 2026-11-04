@@ -1,0 +1,57 @@
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.image-upload {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  margin-top: 12px;
+  border: 1px dashed #aecbd3;
+  border-radius: 12px;
+  background: #f6fbfb;
+}
+
+.image-upload label {
+  color: #193d5f;
+  font-weight: 650;
+}
+
+.image-upload input {
+  max-width: 100%;
+}
+
+.image-upload p {
+  margin: 0;
+  color: #66768b;
+  font-size: 13px;
+}
+
+.image-upload .form-error {
+  color: #b42318;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.form-actions button[mat-flat-button] {
+  background: #06c9b7;
+  color: #07353b;
+}
+
+@media (max-width: 650px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

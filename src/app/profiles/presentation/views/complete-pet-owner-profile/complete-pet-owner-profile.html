@@ -1,0 +1,137 @@
+
+
+<section class="onboarding-container">
+
+  <header class="onboarding-header">
+    <h1>Completa tu perfil</h1>
+    <p>Registra tu información personal para comenzar a utilizar PetCare Hub.</p>
+  </header>
+
+  <mat-card class="profile-card">
+    <mat-card-content>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <h2>Información personal</h2>
+
+        <div class="form-grid">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombres</mat-label>
+            <mat-icon matPrefix>person</mat-icon>
+
+            <input matInput formControlName="firstName"
+                   maxlength="100" required>
+
+            @if (form.controls.firstName.hasError('required')) {
+              <mat-error>Los nombres son obligatorios.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Apellidos</mat-label>
+            <mat-icon matPrefix>person_outline</mat-icon>
+
+            <input matInput formControlName="lastName"
+                   maxlength="100" required>
+
+            @if (form.controls.lastName.hasError('required')) {
+              <mat-error>Los apellidos son obligatorios.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Correo electrónico</mat-label>
+            <mat-icon matPrefix>email</mat-icon>
+
+            <input matInput
+                   [value]="currentUser()?.email ?? ''"
+                   readonly>
+
+            <mat-hint>Correo asociado a tu cuenta de IAM.</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Teléfono</mat-label>
+            <mat-icon matPrefix>phone</mat-icon>
+
+            <input matInput
+                   type="tel"
+                   formControlName="phoneNumber"
+                   maxlength="12">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Sexo</mat-label>
+
+            <mat-select formControlName="sex">
+              <mat-option value="">No especificado</mat-option>
+              <mat-option value="MALE">Masculino</mat-option>
+              <mat-option value="FEMALE">Femenino</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+        <h2>Fotografía de perfil</h2>
+
+        <div class="image-section">
+
+          <input
+            #imageInput
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
+            (change)="onImageSelected($event)">
+
+          <button mat-stroked-button type="button"
+                  (click)="imageInput.click()">
+            <mat-icon>add_photo_alternate</mat-icon>
+            Seleccionar fotografía
+          </button>
+
+          @if (selectedImage(); as image) {
+            <span>{{ image.name }}</span>
+          } @else {
+            <span class="image-hint">Opcional · JPG, PNG o WebP</span>
+          }
+
+          @if (imageError()) {
+            <p class="error">{{ imageError() }}</p>
+          }
+
+        </div>
+
+        @if (error()) {
+          <p class="error" role="alert">{{ error() }}</p>
+        }
+
+        <div class="form-actions">
+
+
+          <button
+            mat-flat-button
+            type="submit"
+            [disabled]="loading() || !!imageError()">
+
+            @if (loading()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            }
+
+            <mat-icon [style.display]="loading() ? 'none' : ''">
+              save
+            </mat-icon>
+
+            <span>
+              {{ loading() ? 'Guardando...' : 'Crear mi perfil' }}
+            </span>
+
+          </button>
+        </div>
+
+      </form>
+
+    </mat-card-content>
+  </mat-card>
+
+</section>

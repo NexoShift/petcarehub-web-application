@@ -1,0 +1,75 @@
+
+.onboarding-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+.onboarding-header {
+  margin-bottom: 24px;
+}
+
+.onboarding-header h1 {
+  margin-bottom: 8px;
+}
+
+.onboarding-header p,
+.image-hint {
+  color: #64748b;
+}
+
+.profile-card {
+  border-radius: 16px;
+}
+
+.profile-card mat-card-content {
+  padding: 32px;
+}
+
+h2 {
+  margin: 0 0 24px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.image-section {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.form-actions button {
+  min-width: 180px;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-card mat-card-content {
+    padding: 20px;
+  }
+}

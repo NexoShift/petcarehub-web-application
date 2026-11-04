@@ -1,0 +1,61 @@
+
+<section class="complete-page">
+
+  <a routerLink="/profiles/clinic" class="back-link">
+    {{ 'profiles.clinic.back' | translate }}
+  </a>
+
+  <div class="page-header">
+    <div class="header-icon">
+      <app-icon name="building" [size]="30" />
+    </div>
+    <div>
+      <h1>{{ 'profiles.clinic.completeTitle' | translate }}</h1>
+      <p>{{ 'profiles.clinic.completeSubtitle' | translate }}</p>
+    </div>
+  </div>
+
+  @if (clinicStore.loading() && !clinicStore.clinic()) {
+    <div class="state-panel">
+      <mat-spinner diameter="38" />
+      <p>{{ 'profiles.clinic.loading' | translate }}</p>
+    </div>
+
+  } @else if (clinicStore.clinic()) {
+    <mat-card class="state-panel">
+      <app-icon name="check-circle" [size]="36" />
+
+      <h2>{{ 'profiles.clinic.alreadyCreated' | translate }}</h2>
+
+      <a mat-flat-button routerLink="/profiles/clinic">
+        {{ 'profiles.clinic.viewProfile' | translate }}
+      </a>
+    </mat-card>
+
+  } @else if (clinicStore.profileNotFound()) {
+    <mat-card class="form-card">
+      <div class="form-heading">
+        <h2>{{ 'profiles.clinic.institutionalData' | translate }}</h2>
+        <p>{{ 'profiles.clinic.formHint' | translate }}</p>
+      </div>
+
+      <div class="notice">
+        <app-icon name="shield" [size]="21" />
+        <span>{{ 'profiles.clinic.accountLinked' | translate }}</span>
+      </div>
+
+      <app-clinic-form
+        [saving]="clinicStore.loading()"
+        (submitted)="registerClinic($event)"
+        (cancelled)="cancel()"
+      />
+    </mat-card>
+
+  } @else {
+    <mat-card class="state-panel">
+      <app-icon name="alert" [size]="32" />
+      <p>{{ 'profiles.clinic.loadError' | translate }}</p>
+    </mat-card>
+  }
+
+</section>

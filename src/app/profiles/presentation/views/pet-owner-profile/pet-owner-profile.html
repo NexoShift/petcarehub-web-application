@@ -1,0 +1,404 @@
+
+<section class="profile-page">
+
+  <header class="page-heading">
+    <h1>{{ 'profiles.owner.title' | translate }}</h1>
+    <p>{{ 'profiles.owner.subtitle' | translate }}</p>
+  </header>
+
+  @if (petOwnerStore.loading() && !owner()) {
+    <div class="state-panel">
+      <mat-spinner diameter="38" />
+      <p>{{ 'profiles.owner.loading' | translate }}</p>
+    </div>
+
+  } @else if (petOwnerStore.profileNotFound()) {
+    <mat-card class="state-panel">
+      <app-icon name="user-plus" [size]="36" />
+
+      <h2>{{ 'profiles.owner.incompleteTitle' | translate }}</h2>
+      <p>{{ 'profiles.owner.incompleteText' | translate }}</p>
+
+      <a mat-flat-button routerLink="/profiles/pet-owner/complete">
+        {{ 'profiles.owner.completeProfile' | translate }}
+      </a>
+    </mat-card>
+
+  } @else if (!owner()) {
+    <mat-card class="state-panel">
+      <app-icon name="alert" [size]="32" />
+      <p>{{ 'profiles.owner.loadError' | translate }}</p>
+    </mat-card>
+
+  } @else {
+
+    <div class="profile-grid">
+
+      <!-- Left column -->
+      <div class="profile-column">
+
+        <!-- Profile summary -->
+        <mat-card class="profile-summary">
+          <div class="summary-content">
+
+            <div class="avatar-container">
+              @if (owner()!.profileImageUrl) {
+                <img
+                  class="profile-avatar"
+                  [src]="owner()!.profileImageUrl"
+                  [alt]="fullName()"
+                />
+              } @else {
+                <div class="avatar-placeholder">
+                  {{ initials() }}
+                </div>
+              }
+
+              <input
+                #imageInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                class="visually-hidden"
+                (change)="onImageSelected($event)"
+              />
+
+              <button
+                mat-icon-button
+                type="button"
+                class="photo-button"
+                [disabled]="uploadingImage() || petOwnerStore.loading()"
+                [attr.aria-label]="'profiles.owner.changePhoto' | translate"
+                (click)="imageInput.click()"
+              >
+                <app-icon name="image" [size]="19" />
+              </button>
+            </div>
+
+            <div class="summary-info">
+              <h2>{{ fullName() }}</h2>
+
+              <span class="role-pill">
+                <app-icon name="paw" [size]="16" />
+                {{ 'profiles.owner.role' | translate }}
+              </span>
+
+              <p>{{ owner()!.email }}</p>
+            </div>
+          </div>
+
+          <div class="summary-footer">
+            <span class="account-state">
+              <span class="status-dot"></span>
+              {{ 'profiles.owner.signedIn' | translate }}
+            </span>
+
+            <span class="plan-placeholder">
+              {{ 'profiles.owner.planPending' | translate }}
+            </span>
+          </div>
+        </mat-card>
+
+        <!-- Pets -->
+        <mat-card class="section-card">
+          <div class="section-header">
+            <div class="section-heading">
+              <app-icon name="paw" [size]="23" />
+              <h2>{{ 'profiles.owner.myPets' | translate }}</h2>
+            </div>
+
+            @if (!petStore.loading() && !petStore.error()) {
+              <span class="count-pill">
+                {{ petStore.petCount() }}
+              </span>
+            }
+          </div>
+
+          @if (petStore.loading()) {
+            <p class="muted">
+              {{ 'profiles.owner.loadingPets' | translate }}
+            </p>
+
+          } @else if (petStore.error()) {
+            <p class="muted">
+              {{ 'profiles.owner.petsError' | translate }}
+            </p>
+
+          } @else if (!petStore.hasPets()) {
+            <div class="empty-pets">
+              <app-icon name="paw" [size]="32" />
+              <p>{{ 'profiles.owner.noPets' | translate }}</p>
+            </div>
+
+          } @else {
+            <div class="pet-list">
+              @for (pet of petsPreview(); track pet.id) {
+                <a
+                  class="pet-item"
+                  [routerLink]="['/profiles/pets', pet.id]"
+                >
+                  @if (pet.profileImageUrl) {
+                    <img
+                      class="pet-image"
+                      [src]="pet.profileImageUrl"
+                      [alt]="pet.name"
+                    />
+                  } @else {
+                    <span class="pet-placeholder">
+                      <app-icon name="paw" [size]="23" />
+                    </span>
+                  }
+
+                  <span class="pet-info">
+                    <strong>{{ pet.name }}</strong>
+                    <small>
+                      {{ pet.breed || pet.species }}
+                    </small>
+                  </span>
+
+                  <app-icon name="chevron-right" [size]="18" />
+                </a>
+              }
+            </div>
+          }
+
+          <div class="card-actions">
+            <a mat-button routerLink="/profiles/pets">
+              {{ 'profiles.owner.viewPets' | translate }}
+              <app-icon name="arrow-right" [size]="17" />
+            </a>
+
+            <a mat-button routerLink="/profiles/pets/new">
+              <app-icon name="plus" [size]="17" />
+              {{ 'profiles.owner.addPet' | translate }}
+            </a>
+          </div>
+        </mat-card>
+
+        <!-- Security -->
+        <mat-card class="section-card">
+          <div class="section-header">
+            <div class="section-heading">
+              <app-icon name="shield" [size]="23" />
+              <h2>{{ 'profiles.owner.security' | translate }}</h2>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <strong>{{ 'profiles.owner.accountEmail' | translate }}</strong>
+            <span>{{ iamStore.currentUser()?.email }}</span>
+          </div>
+
+          <p class="section-note">
+            {{ 'profiles.owner.passwordHint' | translate }}
+          </p>
+        </mat-card>
+
+      </div>
+
+      <!-- Right column -->
+      <div class="profile-column">
+
+        <!-- Personal information -->
+        <mat-card class="section-card personal-card">
+
+          <div class="section-header">
+            <div class="section-heading">
+              <app-icon name="user" [size]="23" />
+              <div>
+                <h2>{{ 'profiles.owner.personalData' | translate }}</h2>
+                <p>{{ 'profiles.owner.personalDataHint' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+          <form
+            [formGroup]="profileForm"
+            (ngSubmit)="saveProfile()"
+          >
+            <div class="form-grid">
+
+              <mat-form-field appearance="outline">
+                <mat-label>
+                  {{ 'profiles.owner.firstName' | translate }}
+                </mat-label>
+
+                <input
+                  matInput
+                  formControlName="firstName"
+                  [readonly]="!editing()"
+                />
+
+                @if (profileForm.controls.firstName.invalid &&
+                profileForm.controls.firstName.touched) {
+                  <mat-error>
+                    {{ 'profiles.owner.requiredField' | translate }}
+                  </mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>
+                  {{ 'profiles.owner.lastName' | translate }}
+                </mat-label>
+
+                <input
+                  matInput
+                  formControlName="lastName"
+                  [readonly]="!editing()"
+                />
+
+                @if (profileForm.controls.lastName.invalid &&
+                profileForm.controls.lastName.touched) {
+                  <mat-error>
+                    {{ 'profiles.owner.requiredField' | translate }}
+                  </mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>
+                  {{ 'profiles.owner.phone' | translate }}
+                </mat-label>
+
+                <input
+                  matInput
+                  type="tel"
+                  formControlName="phoneNumber"
+                  [readonly]="!editing()"
+                />
+
+                @if (profileForm.controls.phoneNumber.invalid &&
+                profileForm.controls.phoneNumber.touched) {
+                  <mat-error>
+                    {{ 'profiles.owner.invalidPhone' | translate }}
+                  </mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>
+                  {{ 'profiles.owner.email' | translate }}
+                </mat-label>
+
+                <input
+                  matInput
+                  [value]="owner()!.email"
+                  readonly
+                />
+              </mat-form-field>
+
+              <div class="sex-field">
+                <span class="field-caption">
+                  {{ 'profiles.owner.sex' | translate }}
+                </span>
+
+                @if (editing()) {
+                  <mat-form-field appearance="outline">
+                    <mat-select formControlName="sex">
+                      <mat-option value="">
+                        {{ 'profiles.owner.notSpecified' | translate }}
+                      </mat-option>
+                      <mat-option value="MALE">
+                        {{ 'profiles.owner.male' | translate }}
+                      </mat-option>
+                      <mat-option value="FEMALE">
+                        {{ 'profiles.owner.female' | translate }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                } @else {
+                  <div class="readonly-value">
+                    @switch (owner()!.sex) {
+                      @case ('MALE') {
+                        {{ 'profiles.owner.male' | translate }}
+                      }
+                      @case ('FEMALE') {
+                        {{ 'profiles.owner.female' | translate }}
+                      }
+                      @default {
+                        {{ 'profiles.owner.notSpecified' | translate }}
+                      }
+                    }
+                  </div>
+                }
+              </div>
+
+            </div>
+
+            <div class="form-actions">
+              @if (!editing()) {
+                <button
+                  mat-stroked-button
+                  type="button"
+                  (click)="startEditing()"
+                >
+                  {{ 'profiles.owner.edit' | translate }}
+                </button>
+
+              } @else {
+                <button
+                  mat-button
+                  type="button"
+                  [disabled]="petOwnerStore.loading()"
+                  (click)="cancelEditing()"
+                >
+                  {{ 'profiles.owner.cancel' | translate }}
+                </button>
+
+                <button
+                  mat-flat-button
+                  type="submit"
+                  [disabled]="profileForm.invalid || petOwnerStore.loading()"
+                >
+                  {{ 'profiles.owner.save' | translate }}
+                </button>
+              }
+            </div>
+
+          </form>
+        </mat-card>
+
+        <!-- Communication preferences -->
+        <mat-card class="section-card">
+          <div class="section-header">
+            <div class="section-heading">
+              <app-icon name="bell" [size]="23" />
+              <div>
+                <h2>{{ 'profiles.owner.preferences' | translate }}</h2>
+                <p>{{ 'profiles.owner.preferencesHint' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="future-feature">
+            <app-icon name="bell" [size]="24" />
+            <div>
+              <strong>
+                {{ 'profiles.owner.notificationsTitle' | translate }}
+              </strong>
+              <p>
+                {{ 'profiles.owner.notificationsPending' | translate }}
+              </p>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- Subscription -->
+        <mat-card class="section-card">
+          <div class="section-header">
+            <div class="section-heading">
+              <app-icon name="card" [size]="23" />
+              <h2>{{ 'profiles.owner.subscription' | translate }}</h2>
+            </div>
+          </div>
+
+          <p class="section-note">
+            {{ 'profiles.owner.subscriptionPending' | translate }}
+          </p>
+        </mat-card>
+
+      </div>
+
+    </div>
+  }
+</section>

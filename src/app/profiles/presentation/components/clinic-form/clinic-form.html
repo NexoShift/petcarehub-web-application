@@ -1,0 +1,114 @@
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <div class="form-grid">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>
+        {{ 'profiles.clinic.name' | translate }}
+      </mat-label>
+      <input matInput formControlName="name" maxlength="150" />
+      @if (form.controls.name.invalid &&
+      form.controls.name.touched) {
+        <mat-error>
+          {{ 'profiles.clinic.required' | translate }}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>RUC</mat-label>
+      <input
+        matInput
+        formControlName="ruc"
+        maxlength="11"
+        inputmode="numeric"
+      />
+      @if (form.controls.ruc.invalid &&
+      form.controls.ruc.touched) {
+        <mat-error>
+          {{ 'profiles.clinic.invalidRuc' | translate }}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        {{ 'profiles.clinic.phone' | translate }}
+      </mat-label>
+      <input matInput formControlName="phoneNumber" type="tel" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>
+        {{ 'profiles.clinic.address' | translate }}
+      </mat-label>
+      <input matInput formControlName="address" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>
+        {{ 'profiles.clinic.description' | translate }}
+      </mat-label>
+      <textarea
+        matInput
+        rows="3"
+        formControlName="description"
+      ></textarea>
+    </mat-form-field>
+
+  </div>
+
+  @if (!clinic()) {
+    <div class="image-field">
+      <div class="image-icon">
+        <app-icon name="image" [size]="28" />
+      </div>
+
+      <div class="image-description">
+        <strong>
+          {{ 'profiles.clinic.logo' | translate }}
+        </strong>
+        <span>
+          {{ 'profiles.clinic.logoHint' | translate }}
+        </span>
+
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          (change)="onImageSelected($event)"
+        />
+
+        @if (selectedImage()) {
+          <small>{{ selectedImage()!.name }}</small>
+        }
+
+        @if (imageError()) {
+          <small class="error">
+            {{ 'profiles.clinic.invalidImage' | translate }}
+          </small>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="form-actions">
+    <button
+      mat-stroked-button
+      type="button"
+      [disabled]="saving()"
+      (click)="cancelled.emit()"
+    >
+      {{ 'profiles.clinic.cancel' | translate }}
+    </button>
+
+    <button mat-flat-button type="submit" [disabled]="saving()">
+      <app-icon name="check" [size]="18" />
+      {{
+        (clinic()
+          ? 'profiles.clinic.saveChanges'
+          : 'profiles.clinic.createProfile') | translate
+      }}
+    </button>
+  </div>
+</form>

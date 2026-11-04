@@ -1,0 +1,96 @@
+
+:host {
+  display: block;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 18px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.image-field {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 18px;
+  border: 1px dashed #9dc9d2;
+  border-radius: 13px;
+  background: #f3fbfb;
+}
+
+.image-icon {
+  display: grid;
+  place-items: center;
+  width: 55px;
+  height: 55px;
+  flex: none;
+  border-radius: 12px;
+  background: #dcf9f4;
+  color: #008c87;
+}
+
+.image-description {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.image-description strong {
+  color: #10254b;
+}
+
+.image-description span,
+.image-description small {
+  color: #63758e;
+  font-size: 13px;
+}
+
+.image-description input {
+  max-width: 100%;
+}
+
+.image-description .error {
+  color: #b42318;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.form-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-actions button[mat-flat-button] {
+  background: #00d5c4;
+  color: #062b55;
+}
+
+@media (max-width: 650px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .image-field {
+    flex-direction: column;
+  }
+}

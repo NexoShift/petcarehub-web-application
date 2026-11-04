@@ -41,7 +41,7 @@ const OWNER_MENU: NavSection[] = [
   {
     items: [
       { label: 'shell.menu.home', path: '/home', icon: 'home' },
-      { label: 'shell.menu.pets', path: '/pets', icon: 'paw' },
+      { label: 'shell.menu.pets', path: '/profiles/pets', icon: 'paw' },
       { label: 'shell.menu.medicalHistory', path: '/medical-history', icon: 'history' },
       { label: 'shell.menu.treatments', path: '/treatments', icon: 'pill' },
       { label: 'shell.menu.exams', path: '/exams', icon: 'flask' },
@@ -52,7 +52,7 @@ const OWNER_MENU: NavSection[] = [
 ];
 const OWNER_FOOTER: NavItem[] = [
   { label: 'shell.menu.myPlan', path: '/plan', icon: 'card' },
-  { label: 'shell.menu.profile', path: '/profile', icon: 'user' },
+  { label: 'shell.menu.profile', path: '/profiles/pet-owner', icon: 'user' },
 ];
 
 const VET_MENU: NavSection[] = [
@@ -71,7 +71,7 @@ const VET_MENU: NavSection[] = [
         label: 'shell.menu.admin',
         icon: 'building',
         children: [
-          { label: 'shell.menu.clinic', path: '/clinic', icon: 'building' },
+          { label: 'shell.menu.clinic', path: '/profiles/clinic', icon: 'building' },
           { label: 'shell.menu.offices', path: '/offices', icon: 'list' },
           { label: 'shell.menu.planSubscription', path: '/plan', icon: 'card' },
         ],
@@ -79,7 +79,7 @@ const VET_MENU: NavSection[] = [
     ],
   },
 ];
-const VET_FOOTER: NavItem[] = [{ label: 'shell.menu.profile', path: '/profile', icon: 'user' }];
+const VET_FOOTER: NavItem[] = [{ label: 'shell.menu.profile', path: '/profiles/clinic', icon: 'user' }];
 
 /** Desde este ancho para abajo el menú lateral se esconde y se abre con ☰. */
 const MOBILE = '(max-width: 1024px)';

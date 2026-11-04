@@ -1,0 +1,49 @@
+
+:host {
+  display: block;
+}
+
+.create-page {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.back-link {
+  color: #007f86;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+header {
+  margin: 20px 0 25px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+  color: #10254b;
+  font-size: 30px;
+}
+
+header p {
+  margin: 0;
+  color: #68778d;
+}
+
+.form-card {
+  padding: 28px;
+  border: 1px solid #e4eaf2;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 5px 20px rgba(22, 43, 77, .06);
+}
+
+@media (max-width: 600px) {
+  .create-page {
+    padding: 14px;
+  }
+
+  .form-card {
+    padding: 18px;
+  }
+}
