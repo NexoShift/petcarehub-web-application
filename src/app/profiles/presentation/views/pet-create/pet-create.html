@@ -1,0 +1,43 @@
+
+<section class="create-page">
+
+  <a routerLink="/profiles/pets" class="back-link">
+    {{ 'profiles.pets.backPets' | translate }}
+  </a>
+
+  <header>
+    <h1>{{ 'profiles.pets.createTitle' | translate }}</h1>
+    <p>{{ 'profiles.pets.createSubtitle' | translate }}</p>
+  </header>
+
+  <mat-card class="form-card">
+
+    @if (ownerStore.loading()) {
+
+      <p>{{ 'profiles.pets.loading' | translate }}</p>
+
+    } @else if (ownerStore.profileNotFound()) {
+
+      <p>{{ 'profiles.pets.ownerRequired' | translate }}</p>
+
+      <a routerLink="/profiles/pet-owner/complete">
+        {{ 'profiles.pets.completeOwner' | translate }}
+      </a>
+
+    } @else if (!ownerStore.petOwner()) {
+
+      <p>{{ 'profiles.pets.loadError' | translate }}</p>
+
+    } @else {
+
+      <app-pet-form
+        [saving]="petStore.loading()"
+        (submitted)="registerPet($event)"
+        (cancelled)="cancel()"
+      />
+
+    }
+
+  </mat-card>
+
+</section>
