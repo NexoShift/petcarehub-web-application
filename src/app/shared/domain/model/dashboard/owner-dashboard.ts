@@ -14,13 +14,13 @@ export interface PetTag {
 export interface PetSummary {
   id: number;
   name: string;
-  species: string;            // "Canino", "Felino"
+  species: string; // "Canino", "Felino"
   breed: string;
-  ageYears: number;
-  weightKg: number;
-  photoUrl?: string;          // opcional: si no hay foto se muestra la inicial
+  ageYears: number | null; // null si la mascota no tiene fecha de nacimiento
+  weightKg?: number; // opcional: Profiles aún no guarda el peso
+  photoUrl?: string; // opcional: si no hay foto se muestra la inicial
   active: boolean;
-  verified: boolean;          // historia validada por un veterinario
+  verified: boolean; // historia validada por un veterinario
   tags: PetTag[];
 }
 
