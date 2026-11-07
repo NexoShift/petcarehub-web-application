@@ -107,7 +107,7 @@ const CLINIC_ADMIN_MENU: NavItem = {
     },
     {
       label: 'shell.menu.offices',
-      path: '/offices',
+      path: '/profiles/clinic/consulting-rooms', // antes: '/offices'
       icon: 'list',
     },
     {
