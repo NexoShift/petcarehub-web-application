@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { Icon } from '../../../../shared/presentation/components/icon/icon';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BodySystem } from '../../../domain/enums/body-system.enum';
 import { FindingSeverity } from '../../../domain/enums/finding-severity.enum';
@@ -30,6 +31,7 @@ export interface FindingFormValue {
 @Component({
   selector: 'app-findings-panel',
   imports: [
+    Icon,
     DatePipe,
     ReactiveFormsModule,
     MatButtonModule,
