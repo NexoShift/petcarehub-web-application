@@ -1,27 +1,38 @@
 import { Routes } from '@angular/router';
 import { guestGuard } from './presentation/guards/guest.guard';
+import { temporaryPasswordGuard } from './presentation/guards/password-change.guard';
 
 export const IAM_ROUTES: Routes = [
   {
     path: 'sign-in',
     canActivate: [guestGuard],
-    loadComponent: () => import('./presentation/views/sign-in/sign-in').then(m => m.SignIn),
+    loadComponent: () => import('./presentation/views/sign-in/sign-in').then((m) => m.SignIn),
   },
   {
     path: 'sign-up',
     canActivate: [guestGuard],
-    loadComponent: () => import('./presentation/views/sign-up/sign-up').then(m => m.SignUp),
+    loadComponent: () => import('./presentation/views/sign-up/sign-up').then((m) => m.SignUp),
   },
   {
     path: 'password-recovery',
     canActivate: [guestGuard],
     loadComponent: () =>
-      import('./presentation/views/password-recovery/password-recovery').then(m => m.PasswordRecovery),
+      import('./presentation/views/password-recovery/password-recovery').then(
+        (m) => m.PasswordRecovery,
+      ),
   },
   {
     // El backend arma el enlace del correo como /reset-password?token=...
     path: 'reset-password',
     canActivate: [guestGuard],
-    loadComponent: () => import('./presentation/views/reset-password/reset-password').then(m => m.ResetPassword),
+    loadComponent: () =>
+      import('./presentation/views/reset-password/reset-password').then((m) => m.ResetPassword),
+  },
+  {
+    // Primer ingreso de un veterinario creado por su clínica: cambia la contraseña temporal
+    path: 'change-password',
+    canActivate: [temporaryPasswordGuard],
+    loadComponent: () =>
+      import('./presentation/views/change-password/change-password').then((m) => m.ChangePassword),
   },
 ];
