@@ -8,6 +8,8 @@ export class User {
     public readonly accountType: AccountType,
     public readonly email: string,
     public readonly roles: Role[],
+    /** true mientras el usuario tenga la contraseña temporal que le creó el admin de la clínica. */
+    public readonly mustChangePassword = false,
   ) {}
 
   hasRole(role: Role): boolean {
@@ -20,5 +22,14 @@ export class User {
 
   get isPetOwner(): boolean {
     return this.hasRole('ROLE_PET_OWNER');
+  }
+
+  get isClinicAdmin(): boolean {
+    return this.hasRole('ROLE_CLINIC_ADMIN');
+  }
+
+  /** Copia del usuario después de cambiar su contraseña temporal. */
+  withPasswordChanged(): User {
+    return new User(this.id, this.accountId, this.accountType, this.email, this.roles, false);
   }
 }
