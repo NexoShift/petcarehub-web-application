@@ -1072,14 +1072,20 @@
       "date": "Fecha",
       "reason": "Motivo",
       "statusColumn": "Estado",
-      "open": "Abrir"
+      "open": "Abrir",
+      "patients": "Pacientes",
+      "searchPatient": "Buscar paciente o código",
+      "noPatients": "Tu clínica aún no tiene pacientes.",
+      "registerPatient": "Registrar paciente",
+      "pickTitle": "Elige un paciente",
+      "pickText": "Selecciona una mascota de la lista para ver su historial de consultas."
     },
     "new": {
       "title": "Nueva consulta",
       "subtitle": "Registra la visita del paciente. Luego completarás la anamnesis, la evaluación y el diagnóstico.",
       "back": "Volver a las consultas",
       "petId": "N.° de mascota",
-      "petRequired": "Ingresa el número de la mascota.",
+      "petRequired": "Elige el paciente.",
       "clinicId": "N.° de clínica",
       "clinicRequired": "Ingresa el número de la clínica.",
       "consultingRoomId": "N.° de consultorio",
@@ -1087,7 +1093,20 @@
       "reason": "Motivo de la consulta",
       "reasonRequired": "Describe el motivo de la consulta.",
       "submit": "Registrar consulta",
-      "created": "Consulta registrada"
+      "created": "Consulta registrada",
+      "clinic": "Clínica",
+      "pet": "Paciente",
+      "consultingRoom": "Consultorio",
+      "noRoom": "Sin consultorio",
+      "noPatients": "Primero registra la mascota en Pacientes.",
+      "loadError": "No se pudieron cargar los datos de tu clínica.",
+      "cancel": "Cancelar",
+      "nextTitle": "Después de registrar",
+      "nextAnamnesis": "Anamnesis",
+      "nextAssessment": "Evaluación fisiológica",
+      "nextFindings": "Hallazgos clínicos",
+      "nextDiagnosis": "Diagnóstico",
+      "vetHint": "Quedarás como veterinario a cargo de esta consulta."
     },
     "workspace": {
       "title": "Consulta N.° {{id}}",
@@ -1111,7 +1130,8 @@
       "closedCancelled": "Consulta cancelada el {{date}}",
       "cancellationReason": "Motivo de cancelación",
       "readOnly": "Es un registro clínico cerrado: solo se puede consultar, no modificar.",
-      "notAvailable": "Consulta no disponible"
+      "notAvailable": "Consulta no disponible",
+      "owner": "Tutor"
     },
     "anamnesis": {
       "title": "Anamnesis",
@@ -1151,7 +1171,13 @@
       "registered": "Anamnesis registrada",
       "none": "No indicado",
       "locked": "Registro clínico: la anamnesis no se modifica.",
-      "notRegistered": "No se registró anamnesis."
+      "notRegistered": "No se registró anamnesis.",
+      "sectionReason": "Motivo de consulta",
+      "evolutionOther": "Tiempo de evolución (o escríbelo)",
+      "symptomsHint": "Toca los frecuentes o escribe otros",
+      "noSymptoms": "Aún no agregaste síntomas.",
+      "sectionContext": "Contexto del paciente",
+      "optionalHint": "Opcional, ayuda en el diagnóstico"
     },
     "assessment": {
       "title": "Evaluación fisiológica",

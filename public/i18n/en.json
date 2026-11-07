@@ -1084,14 +1084,20 @@
       "date": "Date",
       "reason": "Reason",
       "statusColumn": "Status",
-      "open": "Open"
+      "open": "Open",
+      "patients": "Patients",
+      "searchPatient": "Search patient or code",
+      "noPatients": "Your clinic has no patients yet.",
+      "registerPatient": "Register patient",
+      "pickTitle": "Choose a patient",
+      "pickText": "Select a pet from the list to see its consultation history."
     },
     "new": {
       "title": "New consultation",
       "subtitle": "Register the patient's visit. Next you will fill in the anamnesis, assessment and diagnosis.",
       "back": "Back to consultations",
       "petId": "Pet no.",
-      "petRequired": "Enter the pet number.",
+      "petRequired": "Choose the patient.",
       "clinicId": "Clinic no.",
       "clinicRequired": "Enter the clinic number.",
       "consultingRoomId": "Consulting room no.",
@@ -1099,7 +1105,20 @@
       "reason": "Reason for the consultation",
       "reasonRequired": "Describe the reason for the consultation.",
       "submit": "Register consultation",
-      "created": "Consultation registered"
+      "created": "Consultation registered",
+      "clinic": "Clinic",
+      "pet": "Patient",
+      "consultingRoom": "Consulting room",
+      "noRoom": "No consulting room",
+      "noPatients": "Register the pet in Patients first.",
+      "loadError": "Could not load your clinic data.",
+      "cancel": "Cancel",
+      "nextTitle": "After registering",
+      "nextAnamnesis": "Anamnesis",
+      "nextAssessment": "Physiological assessment",
+      "nextFindings": "Clinical findings",
+      "nextDiagnosis": "Diagnosis",
+      "vetHint": "You will be the veterinarian in charge of this consultation."
     },
     "workspace": {
       "title": "Consultation no. {{id}}",
@@ -1123,7 +1142,8 @@
       "closedCancelled": "Consultation cancelled on {{date}}",
       "cancellationReason": "Cancellation reason",
       "readOnly": "This is a closed clinical record: it can be read but not changed.",
-      "notAvailable": "Consultation not available"
+      "notAvailable": "Consultation not available",
+      "owner": "Owner"
     },
     "anamnesis": {
       "title": "Anamnesis",
@@ -1163,7 +1183,13 @@
       "registered": "Anamnesis registered",
       "none": "Not provided",
       "locked": "Clinical record: the anamnesis is not modified.",
-      "notRegistered": "No anamnesis was registered."
+      "notRegistered": "No anamnesis was registered.",
+      "sectionReason": "Reason for visit",
+      "evolutionOther": "Time since onset (or type it)",
+      "symptomsHint": "Tap the common ones or type others",
+      "noSymptoms": "No symptoms added yet.",
+      "sectionContext": "Patient context",
+      "optionalHint": "Optional, helps the diagnosis"
     },
     "assessment": {
       "title": "Physiological assessment",
