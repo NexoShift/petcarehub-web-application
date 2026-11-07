@@ -16,20 +16,20 @@ export interface Kpi {
 export type PatientStatus = 'waiting' | 'alert' | 'ok';
 
 export interface TodayPatient {
-  code: string;               // "#PET-97420"
+  code: string; // "#PET-97420"
   name: string;
-  species: 'Canino' | 'Felino';
+  species: 'Canino' | 'Felino' | 'Otro';
+  ageYears: number | null;
+  weightKg?: number;
   breed: string;
-  ageYears: number;
-  weightKg: number;
   photoUrl?: string;
   ownerName: string;
   ownerPhone: string;
   status: PatientStatus;
-  statusText: string;         // franja superior de la tarjeta
-  noteTitle: string;          // "MOTIVO DE INGRESO", "ÚLTIMA EVOLUCIÓN (12 SEP 2026)"
+  statusText: string; // franja superior de la tarjeta
+  noteTitle: string; // "MOTIVO DE INGRESO", "ÚLTIMA EVOLUCIÓN (12 SEP 2026)"
   note: string;
-  primaryAction: string;      // "Iniciar consulta", "Nueva consulta"
+  primaryAction: string; // "Iniciar consulta", "Nueva consulta"
 }
 
 export interface PendingExam {

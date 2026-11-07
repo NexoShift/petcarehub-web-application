@@ -1,12 +1,13 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, catchError, delay, map, of, switchMap } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { IamStore } from '../../iam';
 import { ProfileApi } from '../../profiles/infrastructure/profile-api';
 import { Pet } from '../../profiles/domain/model/pet.entity';
 import { OwnerDashboard, PetSummary } from '../domain/model/dashboard/owner-dashboard';
-import { VetDashboard } from '../domain/model/dashboard/vet-dashboard';
 import { OWNER_DASHBOARD_DEMO } from './demo/owner-dashboard.demo';
 import { VET_DASHBOARD_DEMO } from './demo/vet-dashboard.demo';
+import { PetOwner } from '../../profiles/domain/model/pet-owner.entity';
+import { TodayPatient, VetDashboard } from '../domain/model/dashboard/vet-dashboard';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardApi {
@@ -32,7 +33,50 @@ export class DashboardApi {
   }
 
   getVetDashboard(): Observable<VetDashboard> {
-    return of(VET_DASHBOARD_DEMO).pipe(delay(250));
+    const user = this.iam.currentUser();
+    if (!user) return of(VET_DASHBOARD_DEMO);
+
+    // admin y vets comparten accountId → misma clínica
+    const clinic$ = this.profiles.getClinicByAccountId(user.accountId);
+    const vetName$ = this.profiles.getVeterinarianByUserId(user.id).pipe(
+      map((vet) => vet.lastName),
+      catchError(() => of(user.email.split('@')[0])), // admin sin perfil de vet
+    );
+
+    return forkJoin({ clinic: clinic$, vetName: vetName$ }).pipe(
+      switchMap(({ clinic, vetName }) =>
+        this.profiles.getPatientsByClinicId(clinic.id).pipe(
+          catchError(() => of([] as Pet[])),
+          switchMap((pets) => this.withOwners(pets)),
+          map((patients) => ({
+            ...VET_DASHBOARD_DEMO,
+            vetLastName: vetName,
+            clinic: clinic.name,
+            scheduledToday: patients.length,
+            waitingNow: 0,
+            syncedAt: new Date().toLocaleTimeString('es-PE', {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+            patients,
+          })),
+        ),
+      ),
+    );
+  }
+
+  private withOwners(pets: Pet[]): Observable<TodayPatient[]> {
+    if (pets.length === 0) return of([]);
+    const ownerIds = [...new Set(pets.map((p) => p.ownerId))];
+    const owners$ = ownerIds.map((id) =>
+      this.profiles.getPetOwnerById(id).pipe(catchError(() => of(null as PetOwner | null))),
+    );
+    return forkJoin(owners$).pipe(
+      map((owners) => {
+        const byId = new Map(owners.filter((o) => o !== null).map((o) => [o!.id, o!]));
+        return pets.map((pet) => toTodayPatient(pet, byId.get(pet.ownerId) ?? null));
+      }),
+    );
   }
 }
 
@@ -47,6 +91,30 @@ function toPetSummary(pet: Pet): PetSummary {
     active: true,
     verified: false,
     tags: [],
+  };
+}
+
+const SPECIES_LABEL: Record<Pet['species'], TodayPatient['species']> = {
+  DOG: 'Canino',
+  CAT: 'Felino',
+  OTHER: 'Otro',
+};
+
+function toTodayPatient(pet: Pet, owner: PetOwner | null): TodayPatient {
+  return {
+    code: `#${pet.petCode}`,
+    name: pet.name,
+    species: SPECIES_LABEL[pet.species],
+    breed: pet.breed ?? '',
+    ageYears: ageInYears(pet.birthDate),
+    photoUrl: pet.profileImageUrl ?? undefined,
+    ownerName: owner ? `${owner.firstName} ${owner.lastName}` : '—',
+    ownerPhone: owner?.phoneNumber ?? '',
+    status: 'ok',
+    statusText: 'Paciente registrado en la clínica',
+    noteTitle: '',
+    note: '',
+    primaryAction: 'Nueva consulta',
   };
 }
 
