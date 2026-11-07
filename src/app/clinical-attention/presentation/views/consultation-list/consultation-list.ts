@@ -1,40 +1,36 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ClinicalAttentionStore } from '../../../application/clinical-attention.store';
 import { ConsultationStatusChip } from '../../components/consultation-status-chip/consultation-status-chip';
+import { IamStore } from '../../../../iam';
+import { ProfileApi } from '../../../../profiles/infrastructure/profile-api';
+import { Clinic } from '../../../../profiles/domain/model/clinic.entity';
+import { Pet } from '../../../../profiles/domain/model/pet.entity';
+import { Icon } from '../../../../shared/presentation/components/icon/icon';
+import { PetAvatar } from '../../../../shared/presentation/components/pet-avatar/pet-avatar';
 
 /**
- * Consultations of a pet (MW-22). The API lists consultations by pet, so the veterinarian
- * looks the patient up by its number until the Profiles context offers a patient directory.
+ * Consultations of a pet (MW-22). The veterinarian picks the patient from the clinic directory
+ * (Profiles) and sees its consultations (Clinical Attention lists them by pet).
  */
 @Component({
   selector: 'app-consultation-list',
   imports: [
     DatePipe,
-    ReactiveFormsModule,
     RouterLink,
     MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
     MatProgressSpinnerModule,
-    MatTableModule,
     TranslatePipe,
     ConsultationStatusChip,
+    Icon,
+    PetAvatar,
   ],
   templateUrl: './consultation-list.html',
-  styleUrl: '../../clinical-attention.css',
+  styleUrl: './consultation-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConsultationList implements OnInit {
@@ -42,30 +38,64 @@ export class ConsultationList implements OnInit {
   readonly petId = input<string>();
 
   protected readonly store = inject(ClinicalAttentionStore);
-  protected readonly columns = ['id', 'createdAt', 'reason', 'status', 'actions'];
+  private readonly iam = inject(IamStore);
+  private readonly profiles = inject(ProfileApi);
+
+  protected readonly clinic = signal<Clinic | null>(null);
+  protected readonly patients = signal<Pet[]>([]);
+  protected readonly patientsLoading = signal(true);
+  protected readonly query = signal('');
   protected readonly shownPetId = signal<number | null>(null);
 
-  protected readonly form = inject(NonNullableFormBuilder).group({
-    petId: [null as number | null, [Validators.required, Validators.min(1)]],
+  /** Pacientes filtrados por nombre, código o raza. */
+  protected readonly visiblePatients = computed(() => {
+    const q = this.query().trim().toLowerCase();
+    if (!q) return this.patients();
+    return this.patients().filter(p =>
+      [p.name, p.petCode, p.breed ?? ''].some(v => v.toLowerCase().includes(q)),
+    );
   });
+
+  protected readonly selectedPet = computed(() =>
+    this.patients().find(p => p.id === this.shownPetId()) ?? null,
+  );
 
   ngOnInit(): void {
     this.store.clearError();
+    this.loadPatients();
     const petId = Number(this.petId());
     if (Number.isInteger(petId) && petId > 0) {
-      this.form.controls.petId.setValue(petId);
-      void this.search();
+      void this.select(petId);
     }
   }
 
-  protected async search(): Promise<void> {
-    const control = this.form.controls.petId;
-    if (control.invalid || control.value === null) {
-      control.markAsTouched();
+  protected async select(petId: number): Promise<void> {
+    this.shownPetId.set(petId);
+    await this.store.loadByPet(petId);
+  }
+
+  protected onQuery(event: Event): void {
+    this.query.set((event.target as HTMLInputElement).value);
+  }
+
+  private loadPatients(): void {
+    const user = this.iam.currentUser();
+    if (!user) {
+      this.patientsLoading.set(false);
       return;
     }
-    if (await this.store.loadByPet(control.value)) {
-      this.shownPetId.set(control.value);
-    }
+    this.profiles.getClinicByAccountId(user.accountId).subscribe({
+      next: clinic => {
+        this.clinic.set(clinic);
+        this.profiles.getPatientsByClinicId(clinic.id).subscribe({
+          next: pets => {
+            this.patients.set(pets);
+            this.patientsLoading.set(false);
+          },
+          error: () => this.patientsLoading.set(false),
+        });
+      },
+      error: () => this.patientsLoading.set(false),
+    });
   }
 }

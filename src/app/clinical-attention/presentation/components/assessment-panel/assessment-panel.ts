@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { Icon } from '../../../../shared/presentation/components/icon/icon';
 import { TranslatePipe } from '@ngx-translate/core';
 import { HydrationStatus } from '../../../domain/enums/hydration-status.enum';
 import { ClinicalConsultation } from '../../../domain/model/clinical-consultation.entity';
@@ -38,6 +39,7 @@ export interface AssessmentFormValue {
 @Component({
   selector: 'app-assessment-panel',
   imports: [
+    Icon,
     DatePipe,
     ReactiveFormsModule,
     MatButtonModule,

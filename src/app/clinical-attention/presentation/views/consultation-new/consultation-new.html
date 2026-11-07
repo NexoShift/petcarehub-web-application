@@ -1,83 +1,131 @@
-<section class="page">
-  <header class="page-header">
-    <div class="title-row">
-      <a
-        id="back-to-list"
-        mat-icon-button
-        routerLink="/consultations"
-        [attr.aria-label]="'clinicalAttention.new.back' | translate"
-      >
-        <mat-icon>arrow_back</mat-icon>
-      </a>
-      <div>
-        <h1 class="page-title">{{ 'clinicalAttention.new.title' | translate }}</h1>
-        <p class="page-subtitle">{{ 'clinicalAttention.new.subtitle' | translate }}</p>
-      </div>
+<section class="new-page">
+  <a id="back-to-list" class="back-link" routerLink="/consultations">
+    <app-icon name="arrow-right" [size]="14" class="flip" /> {{ 'clinicalAttention.new.back' | translate }}
+  </a>
+
+  <header class="page-head">
+    <span class="head-icon"><app-icon name="stethoscope" [size]="28" /></span>
+    <div>
+      <h1>{{ 'clinicalAttention.new.title' | translate }}</h1>
+      <p>{{ 'clinicalAttention.new.subtitle' | translate }}</p>
     </div>
   </header>
 
-  <mat-card appearance="outlined">
-    <mat-card-content>
-      <form id="new-consultation-form" [formGroup]="form" (ngSubmit)="submit()">
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'clinicalAttention.new.petId' | translate }}</mat-label>
-            <input id="pet-id" matInput type="number" min="1" formControlName="petId" />
-            @if (form.controls.petId.invalid) {
-              <mat-error>{{ 'clinicalAttention.new.petRequired' | translate }}</mat-error>
-            }
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'clinicalAttention.new.clinicId' | translate }}</mat-label>
-            <input id="clinic-id" matInput type="number" min="1" formControlName="clinicId" />
-            @if (form.controls.clinicId.invalid) {
-              <mat-error>{{ 'clinicalAttention.new.clinicRequired' | translate }}</mat-error>
-            }
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'clinicalAttention.new.consultingRoomId' | translate }}</mat-label>
-            <input
-              id="consulting-room-id"
-              matInput
-              type="number"
-              min="1"
-              formControlName="consultingRoomId"
-            />
-            <mat-hint>{{ 'clinicalAttention.new.optional' | translate }}</mat-hint>
-          </mat-form-field>
+  <div class="layout">
+    <!-- ===== Formulario ===== -->
+    <form id="new-consultation-form" class="card form-card" [formGroup]="form" (ngSubmit)="submit()">
+      @if (clinic(); as c) {
+        <div class="clinic-line">
+          <app-icon name="building" [size]="18" />
+          <span>{{ 'clinicalAttention.new.clinic' | translate }}</span>
+          <strong>{{ c.name }}</strong>
         </div>
+      }
+      @if (loadError()) {
+        <p class="error-message" role="alert">
+          <app-icon name="alert" [size]="16" /> {{ 'clinicalAttention.new.loadError' | translate }}
+        </p>
+      }
 
+      <!-- 1. Paciente -->
+      <div class="block">
+        <h2><span class="step">1</span> {{ 'clinicalAttention.new.pet' | translate }}</h2>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'clinicalAttention.new.pet' | translate }}</mat-label>
+          <mat-select id="pet-id" formControlName="petId">
+            @for (pet of patients(); track pet.id) {
+              <mat-option [value]="pet.id">{{ pet.name }} · {{ pet.petCode }}</mat-option>
+            }
+          </mat-select>
+          @if (patients().length === 0 && clinic()) {
+            <mat-hint>{{ 'clinicalAttention.new.noPatients' | translate }}</mat-hint>
+          }
+          @if (form.controls.petId.invalid) {
+            <mat-error>{{ 'clinicalAttention.new.petRequired' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        @if (selectedPet(); as pet) {
+          <div class="pet-preview">
+            <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="48" />
+            <div>
+              <strong>{{ pet.name }}</strong>
+              <small>
+                {{ 'enums.species.' + pet.species | translate }}@if (pet.breed) { · {{ pet.breed }} }
+              </small>
+            </div>
+            <span class="code">{{ pet.petCode }}</span>
+          </div>
+        } @else if (patients().length === 0 && clinic()) {
+          <a class="empty-link" routerLink="/profiles/clinic/patients">
+            <app-icon name="user-plus" [size]="16" /> {{ 'clinicalAttention.new.noPatients' | translate }}
+          </a>
+        }
+      </div>
+
+      <!-- 2. Consultorio -->
+      <div class="block">
+        <h2>
+          <span class="step">2</span> {{ 'clinicalAttention.new.consultingRoom' | translate }}
+          <small class="optional">{{ 'clinicalAttention.new.optional' | translate }}</small>
+        </h2>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'clinicalAttention.new.consultingRoom' | translate }}</mat-label>
+          <mat-select id="consulting-room-id" formControlName="consultingRoomId">
+            <mat-option [value]="null">{{ 'clinicalAttention.new.noRoom' | translate }}</mat-option>
+            @for (room of rooms(); track room.id) {
+              <mat-option [value]="room.id">{{ room.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- 3. Motivo -->
+      <div class="block">
+        <h2><span class="step">3</span> {{ 'clinicalAttention.new.reason' | translate }}</h2>
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>{{ 'clinicalAttention.new.reason' | translate }}</mat-label>
           <textarea
             id="consultation-reason"
             matInput
-            rows="3"
+            rows="4"
             formControlName="reason"
             [maxlength]="reasonMaxLength"
           ></textarea>
-          <mat-hint align="end">
-            {{ form.controls.reason.value.length }} / {{ reasonMaxLength }}
-          </mat-hint>
+          <mat-hint align="end">{{ form.controls.reason.value.length }} / {{ reasonMaxLength }}</mat-hint>
           @if (form.controls.reason.invalid) {
             <mat-error>{{ 'clinicalAttention.new.reasonRequired' | translate }}</mat-error>
           }
         </mat-form-field>
+      </div>
 
-        <div class="actions">
-          @if (store.error(); as error) {
-            <p id="create-error" class="error-message" role="alert">{{ error | translate }}</p>
-          }
-          <button
-            id="create-consultation-button"
-            mat-flat-button
-            type="submit"
-            [disabled]="store.isSaving()"
-          >
-            {{ 'clinicalAttention.new.submit' | translate }}
-          </button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+      @if (store.error(); as error) {
+        <p id="create-error" class="error-message" role="alert">
+          <app-icon name="alert" [size]="16" /> {{ error | translate }}
+        </p>
+      }
+
+      <div class="form-actions">
+        <a class="btn-cancel" mat-stroked-button routerLink="/consultations">
+          {{ 'clinicalAttention.new.cancel' | translate }}
+        </a>
+        <button id="create-consultation-button" class="btn-submit" mat-flat-button type="submit"
+                [disabled]="store.isSaving()">
+          <app-icon name="check" [size]="16" /> {{ 'clinicalAttention.new.submit' | translate }}
+        </button>
+      </div>
+    </form>
+
+    <!-- ===== Lo que sigue ===== -->
+    <aside class="card next-card">
+      <h2>{{ 'clinicalAttention.new.nextTitle' | translate }}</h2>
+      <ol>
+        <li><app-icon name="chat" [size]="16" /> {{ 'clinicalAttention.new.nextAnamnesis' | translate }}</li>
+        <li><app-icon name="activity" [size]="16" /> {{ 'clinicalAttention.new.nextAssessment' | translate }}</li>
+        <li><app-icon name="search" [size]="16" /> {{ 'clinicalAttention.new.nextFindings' | translate }}</li>
+        <li><app-icon name="check-circle" [size]="16" /> {{ 'clinicalAttention.new.nextDiagnosis' | translate }}</li>
+      </ol>
+      <p class="hint"><app-icon name="shield" [size]="15" /> {{ 'clinicalAttention.new.vetHint' | translate }}</p>
+    </aside>
+  </div>
 </section>

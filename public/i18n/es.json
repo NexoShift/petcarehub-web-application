@@ -351,7 +351,11 @@
       "information": "Información general",
       "changePhoto": "Cambiar fotografía",
       "clinicalHistory": "Historial clínico",
-      "clinicalHistoryPending": "Las consultas, diagnósticos y tratamientos de esta mascota se mostrarán cuando integremos el módulo de atención clínica."
+      "clinicalHistoryPending": "Las consultas, diagnósticos y tratamientos de esta mascota se mostrarán cuando integremos el módulo de atención clínica.",
+      "clinicsTitle": "Clínicas donde se atiende",
+      "clinicsHint": "Clínicas que registraron a tu mascota como paciente",
+      "noClinics": "Aún no está registrada en ninguna clínica",
+      "noClinicsHint": "Comparte el código de tu mascota con la clínica para que la registre como paciente."
     },
 
     "clinic": {
@@ -591,6 +595,52 @@
       "registerNotAuthorized": "No tienes permisos para registrar pacientes en esta clínica.",
       "petUnavailable": "La clínica o la mascota ya no está disponible.",
       "registerError": "No se pudo registrar la mascota como paciente."
+    },
+    "consultingRooms": {
+      "back": "Volver a mi clínica",
+      "title": "Consultorios",
+      "subtitle": "Organiza los ambientes de atención y quién está a cargo de cada uno",
+      "new": "Nuevo consultorio",
+      "stats": {
+        "total": "Consultorios",
+        "active": "Activos",
+        "staffed": "Con veterinario a cargo"
+      },
+      "createTitle": "Nuevo consultorio",
+      "editTitle": "Editar consultorio",
+      "name": "Nombre",
+      "namePlaceholder": "Ej. Consultorio 1",
+      "nameRequired": "Escribe el nombre del consultorio.",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Ej. Atención general, vacunas",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "emptyTitle": "Aún no tienes consultorios",
+      "emptyText": "Crea el primero para poder elegirlo al registrar una consulta.",
+      "noDescription": "Sin descripción",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "onDuty": "Veterinario a cargo",
+      "generalVet": "Medicina general",
+      "pickVet": "Veterinario",
+      "noFreeVets": "No hay veterinarios libres",
+      "assign": "Asignar",
+      "unassign": "Quitar",
+      "inactiveHint": "Actívalo para asignar un veterinario.",
+      "edit": "Editar",
+      "activate": "Activar",
+      "deactivate": "Desactivar",
+      "delete": "Eliminar",
+      "confirmDelete": "¿Eliminar este consultorio?",
+      "errors": {
+        "save": "No se pudo guardar el consultorio.",
+        "duplicate": "Ya existe un consultorio con ese nombre.",
+        "hasVet": "Quita primero al veterinario a cargo para desactivarlo.",
+        "hasHistory": "No se puede eliminar porque tiene historial de asignaciones. Desactívalo.",
+        "delete": "No se pudo eliminar el consultorio.",
+        "assign": "No se pudo asignar al veterinario.",
+        "unassign": "No se pudo quitar al veterinario."
+      }
     }
   },
 
@@ -1072,14 +1122,20 @@
       "date": "Fecha",
       "reason": "Motivo",
       "statusColumn": "Estado",
-      "open": "Abrir"
+      "open": "Abrir",
+      "patients": "Pacientes",
+      "searchPatient": "Buscar paciente o código",
+      "noPatients": "Tu clínica aún no tiene pacientes.",
+      "registerPatient": "Registrar paciente",
+      "pickTitle": "Elige un paciente",
+      "pickText": "Selecciona una mascota de la lista para ver su historial de consultas."
     },
     "new": {
       "title": "Nueva consulta",
       "subtitle": "Registra la visita del paciente. Luego completarás la anamnesis, la evaluación y el diagnóstico.",
       "back": "Volver a las consultas",
       "petId": "N.° de mascota",
-      "petRequired": "Ingresa el número de la mascota.",
+      "petRequired": "Elige el paciente.",
       "clinicId": "N.° de clínica",
       "clinicRequired": "Ingresa el número de la clínica.",
       "consultingRoomId": "N.° de consultorio",
@@ -1087,7 +1143,20 @@
       "reason": "Motivo de la consulta",
       "reasonRequired": "Describe el motivo de la consulta.",
       "submit": "Registrar consulta",
-      "created": "Consulta registrada"
+      "created": "Consulta registrada",
+      "clinic": "Clínica",
+      "pet": "Paciente",
+      "consultingRoom": "Consultorio",
+      "noRoom": "Sin consultorio",
+      "noPatients": "Primero registra la mascota en Pacientes.",
+      "loadError": "No se pudieron cargar los datos de tu clínica.",
+      "cancel": "Cancelar",
+      "nextTitle": "Después de registrar",
+      "nextAnamnesis": "Anamnesis",
+      "nextAssessment": "Evaluación fisiológica",
+      "nextFindings": "Hallazgos clínicos",
+      "nextDiagnosis": "Diagnóstico",
+      "vetHint": "Quedarás como veterinario a cargo de esta consulta."
     },
     "workspace": {
       "title": "Consulta N.° {{id}}",
@@ -1111,7 +1180,8 @@
       "closedCancelled": "Consulta cancelada el {{date}}",
       "cancellationReason": "Motivo de cancelación",
       "readOnly": "Es un registro clínico cerrado: solo se puede consultar, no modificar.",
-      "notAvailable": "Consulta no disponible"
+      "notAvailable": "Consulta no disponible",
+      "owner": "Tutor"
     },
     "anamnesis": {
       "title": "Anamnesis",
@@ -1151,7 +1221,13 @@
       "registered": "Anamnesis registrada",
       "none": "No indicado",
       "locked": "Registro clínico: la anamnesis no se modifica.",
-      "notRegistered": "No se registró anamnesis."
+      "notRegistered": "No se registró anamnesis.",
+      "sectionReason": "Motivo de consulta",
+      "evolutionOther": "Tiempo de evolución (o escríbelo)",
+      "symptomsHint": "Toca los frecuentes o escribe otros",
+      "noSymptoms": "Aún no agregaste síntomas.",
+      "sectionContext": "Contexto del paciente",
+      "optionalHint": "Opcional, ayuda en el diagnóstico"
     },
     "assessment": {
       "title": "Evaluación fisiológica",

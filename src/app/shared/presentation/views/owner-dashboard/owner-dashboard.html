@@ -20,12 +20,12 @@
     <section class="pets-section reveal" style="--i: 1">
       <div class="section-title">
         <h2>{{ 'dashboard.owner.myPets' | translate }} <small>{{ 'dashboard.owner.registered' | translate: { count: d.pets.length } }}</small></h2>
-        <a class="link" routerLink="/pets">{{ 'dashboard.owner.managePets' | translate }} <app-icon name="chevron-right" [size]="14" /></a>
+        <a class="link" routerLink="/profiles/pets">{{ 'dashboard.owner.managePets' | translate }} <app-icon name="chevron-right" [size]="14" /></a>
       </div>
 
       <div class="pets">
         @for (pet of d.pets; track pet.id) {
-          <article class="card pet-card" [class.is-active]="pet.active">
+          <a class="card pet-card" [class.is-active]="pet.active" [routerLink]="['/profiles/pets', pet.id]">
             <div class="pet-main">
               <app-pet-avatar [name]="pet.name" [photoUrl]="pet.photoUrl" [size]="56" [online]="pet.active" />
               <div class="pet-info">
@@ -33,8 +33,12 @@
                   {{ pet.name }}
                   @if (pet.verified) { <app-icon class="verified-icon" name="check-circle" [size]="16" /> }
                 </h3>
-                <p>{{ pet.species | translate }} · {{ pet.breed }}</p>
-                <p>{{ 'common.years' | translate: { count: pet.ageYears } }} · {{ pet.weightKg }} kg</p>
+                <p>{{ pet.species | translate }}@if (pet.breed) { · {{ pet.breed }} }</p>
+                <p>
+                  @if (pet.ageYears !== null) { {{ 'common.years' | translate: { count: pet.ageYears } }} }
+                  @if (pet.ageYears !== null && pet.weightKg) { · }
+                  @if (pet.weightKg) { {{ pet.weightKg }} kg }
+                </p>
               </div>
               @if (pet.active) { <span class="chip success">{{ 'common.active' | translate }}</span> }
             </div>
@@ -45,10 +49,10 @@
                 </span>
               }
             </div>
-          </article>
+          </a>
         }
 
-        <a class="card new-pet" routerLink="/pets">
+        <a class="card new-pet" routerLink="/profiles/pets/new">
           <span class="plus"><app-icon name="plus" /></span>
           <strong>{{ 'dashboard.owner.newPet' | translate }}</strong>
           <small>{{ 'dashboard.owner.newPetHint' | translate }}</small>

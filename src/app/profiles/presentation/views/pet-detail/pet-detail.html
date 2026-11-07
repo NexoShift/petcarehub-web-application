@@ -175,6 +175,53 @@
 
     </div>
 
+    <!-- Clínicas donde se atiende -->
+    <mat-card id="pet-clinics" class="clinics-card">
+      <div class="clinics-head">
+        <span class="clinics-icon"><app-icon name="building" [size]="20" /></span>
+        <div>
+          <h2>{{ 'profiles.pets.clinicsTitle' | translate }}</h2>
+          <p>{{ 'profiles.pets.clinicsHint' | translate }}</p>
+        </div>
+        @if (clinics().length > 0) {
+          <span class="clinics-count">{{ clinics().length }}</span>
+        }
+      </div>
+
+      @if (clinicPatientStore.loadingClinics()) {
+        <div class="clinics-loading"><mat-spinner diameter="30" /></div>
+      } @else if (clinics().length === 0) {
+        <div id="no-pet-clinics" class="clinics-empty">
+          <app-icon name="building" [size]="26" />
+          <p>{{ 'profiles.pets.noClinics' | translate }}</p>
+          <small>{{ 'profiles.pets.noClinicsHint' | translate }}</small>
+        </div>
+      } @else {
+        <ul class="clinics-list">
+          @for (clinic of clinics(); track clinic.id) {
+            <li class="clinic-item" [id]="'pet-clinic-' + clinic.id">
+              <span class="clinic-logo">
+                @if (clinic.profileImageUrl) {
+                  <img [src]="clinic.profileImageUrl" [alt]="clinic.name" />
+                } @else {
+                  <app-icon name="building" [size]="20" />
+                }
+              </span>
+              <div class="clinic-text">
+                <strong>{{ clinic.name }}</strong>
+                @if (clinic.address) {
+                  <span><app-icon name="map-pin" [size]="13" /> {{ clinic.address }}</span>
+                }
+                @if (clinic.phoneNumber) {
+                  <span><app-icon name="phone" [size]="13" /> {{ clinic.phoneNumber }}</span>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </mat-card>
+
     <mat-card class="clinical-card">
       <h2>{{ 'profiles.pets.clinicalHistory' | translate }}</h2>
       <p>{{ 'profiles.pets.clinicalHistoryPending' | translate }}</p>

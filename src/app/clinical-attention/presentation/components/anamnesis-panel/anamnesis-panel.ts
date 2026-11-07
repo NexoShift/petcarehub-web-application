@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { Icon } from '../../../../shared/presentation/components/icon/icon';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ClinicalConsultation } from '../../../domain/model/clinical-consultation.entity';
 import { CLINICAL_FIELD_LIMITS } from '../../../domain/model/clinical-field-limits';
@@ -30,6 +31,7 @@ const notBlank = Validators.pattern(/\S/);
 @Component({
   selector: 'app-anamnesis-panel',
   imports: [
+    Icon,
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,

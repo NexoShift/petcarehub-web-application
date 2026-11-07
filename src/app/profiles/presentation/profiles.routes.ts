@@ -15,13 +15,11 @@ const completePetOwnerProfile = () =>
     (m) => m.CompletePetOwnerProfile,
   );
 
-
 const petList = () => import('./views/pet-list/pet-list').then((m) => m.PetList);
 
 const petCreate = () => import('./views/pet-create/pet-create').then((m) => m.PetCreate);
 
 const petDetail = () => import('./views/pet-detail/pet-detail').then((m) => m.PetDetail);
-
 
 const clinicProfile = () =>
   import('./views/clinic-profile/clinic-profile').then((m) => m.ClinicProfile);
@@ -38,6 +36,11 @@ const clinicVeterinarians = () =>
 
 const veterinarianProfile = () =>
   import('./views/veterinarian-profile/veterinarian-profile').then((m) => m.VeterinarianProfile);
+
+const clinicConsultingRooms = () =>
+  import('./views/clinic-consulting-rooms/clinic-consulting-rooms').then(
+    (m) => m.ClinicConsultingRooms,
+  );
 
 const clinicPatients = () =>
   import('./views/clinic-patients/clinic-patients').then((m) => m.ClinicPatients);
@@ -134,12 +137,11 @@ export const profileRoutes: Routes = [
   {
     path: 'clinic/consulting-rooms',
     canActivate: [roleGuard('ROLE_CLINIC_ADMIN')],
-    loadComponent: comingSoon,
+    loadComponent: clinicConsultingRooms,
   },
   {
     path: 'clinic/consulting-rooms/:roomId/assignments',
-    canActivate: [roleGuard('ROLE_CLINIC_ADMIN')],
-    loadComponent: comingSoon,
+    redirectTo: '/profiles/clinic/consulting-rooms',
   },
 
   // --------------------------------------------------
