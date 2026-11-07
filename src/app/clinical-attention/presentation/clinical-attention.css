@@ -205,3 +205,101 @@
 .consultations-table {
   width: 100%;
 }
+
+/* ==========================================================================
+   Tema PetCare Hub para la consulta (mismo estilo que Profiles):
+   tarjetas redondeadas con sombra, íconos turquesa y botones tipo píldora.
+   ========================================================================== */
+.mat-mdc-card {
+  --mat-card-outlined-outline-color: #e1e8f2;
+  border-radius: 17px !important;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(18, 40, 80, .06);
+}
+
+.mat-mdc-card-header {
+  align-items: center;
+  padding: 20px 22px 6px;
+}
+
+.mat-mdc-card-content:last-child {
+  padding: 6px 22px 22px;
+}
+
+.mat-mdc-card-title {
+  color: #10254b;
+  font-size: 17px !important;
+  font-weight: 600 !important;
+}
+
+.mat-mdc-card-subtitle {
+  color: #65758d !important;
+  font-size: 13px !important;
+}
+
+.card-icon {
+  display: grid !important;
+  place-items: center;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.mat-mdc-unelevated-button:not(:disabled) {
+  border-radius: 999px;
+  background: #0bc3bd;
+  color: #062b55;
+  font-weight: 600;
+}
+
+.mat-mdc-outlined-button,
+.mat-mdc-button {
+  border-radius: 999px;
+}
+
+.details dt {
+  color: #8a97aa;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.details dd {
+  color: #10254b;
+}
+
+.record {
+  border-color: #e1e8f2;
+  background: #f7f9fc;
+}
+
+.tag {
+  background: #e8eef7;
+  color: #032b59;
+}
+
+.tag.strong {
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.tag.warn {
+  background: #fff3f2;
+  color: #b42318;
+}
+
+.inline-form {
+  border-top-color: #eef2f7;
+}
+
+.error-message {
+  color: #b42318;
+}
+
+/* Campos con sufijo (kg, °C, lpm): más ancho para que la etiqueta no se monte */
+.form-row mat-form-field {
+  flex: 1 1 240px;
+}
