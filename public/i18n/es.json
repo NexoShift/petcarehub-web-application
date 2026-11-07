@@ -351,7 +351,11 @@
       "information": "Información general",
       "changePhoto": "Cambiar fotografía",
       "clinicalHistory": "Historial clínico",
-      "clinicalHistoryPending": "Las consultas, diagnósticos y tratamientos de esta mascota se mostrarán cuando integremos el módulo de atención clínica."
+      "clinicalHistoryPending": "Las consultas, diagnósticos y tratamientos de esta mascota se mostrarán cuando integremos el módulo de atención clínica.",
+      "clinicsTitle": "Clínicas donde se atiende",
+      "clinicsHint": "Clínicas que registraron a tu mascota como paciente",
+      "noClinics": "Aún no está registrada en ninguna clínica",
+      "noClinicsHint": "Comparte el código de tu mascota con la clínica para que la registre como paciente."
     },
 
     "clinic": {
@@ -591,6 +595,52 @@
       "registerNotAuthorized": "No tienes permisos para registrar pacientes en esta clínica.",
       "petUnavailable": "La clínica o la mascota ya no está disponible.",
       "registerError": "No se pudo registrar la mascota como paciente."
+    },
+    "consultingRooms": {
+      "back": "Volver a mi clínica",
+      "title": "Consultorios",
+      "subtitle": "Organiza los ambientes de atención y quién está a cargo de cada uno",
+      "new": "Nuevo consultorio",
+      "stats": {
+        "total": "Consultorios",
+        "active": "Activos",
+        "staffed": "Con veterinario a cargo"
+      },
+      "createTitle": "Nuevo consultorio",
+      "editTitle": "Editar consultorio",
+      "name": "Nombre",
+      "namePlaceholder": "Ej. Consultorio 1",
+      "nameRequired": "Escribe el nombre del consultorio.",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Ej. Atención general, vacunas",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "emptyTitle": "Aún no tienes consultorios",
+      "emptyText": "Crea el primero para poder elegirlo al registrar una consulta.",
+      "noDescription": "Sin descripción",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "onDuty": "Veterinario a cargo",
+      "generalVet": "Medicina general",
+      "pickVet": "Veterinario",
+      "noFreeVets": "No hay veterinarios libres",
+      "assign": "Asignar",
+      "unassign": "Quitar",
+      "inactiveHint": "Actívalo para asignar un veterinario.",
+      "edit": "Editar",
+      "activate": "Activar",
+      "deactivate": "Desactivar",
+      "delete": "Eliminar",
+      "confirmDelete": "¿Eliminar este consultorio?",
+      "errors": {
+        "save": "No se pudo guardar el consultorio.",
+        "duplicate": "Ya existe un consultorio con ese nombre.",
+        "hasVet": "Quita primero al veterinario a cargo para desactivarlo.",
+        "hasHistory": "No se puede eliminar porque tiene historial de asignaciones. Desactívalo.",
+        "delete": "No se pudo eliminar el consultorio.",
+        "assign": "No se pudo asignar al veterinario.",
+        "unassign": "No se pudo quitar al veterinario."
+      }
     }
   },
 

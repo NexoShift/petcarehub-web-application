@@ -741,7 +741,11 @@
       "information": "General information",
       "changePhoto": "Change photo",
       "clinicalHistory": "Clinical history",
-      "clinicalHistoryPending": "This pet's consultations, diagnoses and treatments will appear when the clinical care module is integrated."
+      "clinicalHistoryPending": "This pet's consultations, diagnoses and treatments will appear when the clinical care module is integrated.",
+      "clinicsTitle": "Clinics where it is treated",
+      "clinicsHint": "Clinics that registered your pet as a patient",
+      "noClinics": "Not registered at any clinic yet",
+      "noClinicsHint": "Share your pet code with the clinic so it can register it as a patient."
     },
 
     "clinic": {
@@ -982,6 +986,52 @@
       "registerNotAuthorized": "You are not authorized to register patients in this clinic.",
       "petUnavailable": "The clinic or pet is no longer available.",
       "registerError": "Unable to register the pet as a clinic patient."
+    },
+    "consultingRooms": {
+      "back": "Back to my clinic",
+      "title": "Consulting rooms",
+      "subtitle": "Organize your care rooms and who is in charge of each one",
+      "new": "New room",
+      "stats": {
+        "total": "Rooms",
+        "active": "Active",
+        "staffed": "With a vet in charge"
+      },
+      "createTitle": "New consulting room",
+      "editTitle": "Edit consulting room",
+      "name": "Name",
+      "namePlaceholder": "e.g. Room 1",
+      "nameRequired": "Enter the room name.",
+      "description": "Description",
+      "descriptionPlaceholder": "e.g. General care, vaccines",
+      "save": "Save",
+      "cancel": "Cancel",
+      "emptyTitle": "You have no consulting rooms yet",
+      "emptyText": "Create the first one so you can pick it when registering a consultation.",
+      "noDescription": "No description",
+      "active": "Active",
+      "inactive": "Inactive",
+      "onDuty": "Vet in charge",
+      "generalVet": "General practice",
+      "pickVet": "Veterinarian",
+      "noFreeVets": "No free veterinarians",
+      "assign": "Assign",
+      "unassign": "Remove",
+      "inactiveHint": "Activate it to assign a veterinarian.",
+      "edit": "Edit",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "delete": "Delete",
+      "confirmDelete": "Delete this room?",
+      "errors": {
+        "save": "The room could not be saved.",
+        "duplicate": "A room with that name already exists.",
+        "hasVet": "Remove the vet in charge before deactivating it.",
+        "hasHistory": "It cannot be deleted because it has assignment history. Deactivate it instead.",
+        "delete": "The room could not be deleted.",
+        "assign": "The veterinarian could not be assigned.",
+        "unassign": "The veterinarian could not be removed."
+      }
     }
   },
 
