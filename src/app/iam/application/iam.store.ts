@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
 import { AccountType } from '../domain/model/account-type';
 import { User } from '../domain/model/user.entity';
 import { IamApi } from '../infrastructure/iam.api';
@@ -16,27 +16,53 @@ export class IamStore {
 
   private readonly _currentUser = signal<User | null>(null);
   readonly currentUser = this._currentUser.asReadonly();
-  readonly isSignedIn = computed(() => this.tokens.token() !== null && this._currentUser() !== null);
+  readonly isSignedIn = computed(
+    () => this.tokens.token() !== null && this._currentUser() !== null,
+  );
 
   signIn(email: string, password: string): Observable<User> {
     return this.api.signIn({ email, password }).pipe(
-      tap(r => this.tokens.save(r.token)),
-      map(r => UserAssembler.fromAuthenticatedResponse(r)),
-      tap(user => this._currentUser.set(user)),
+      tap((r) => this.tokens.save(r.token)),
+      map((r) => UserAssembler.fromAuthenticatedResponse(r)),
+      tap((user) => this._currentUser.set(user)),
     );
   }
 
   signUp(email: string, password: string, accountType: AccountType): Observable<User> {
-    return this.api.signUp({ email, password, accountType })
-      .pipe(map(r => UserAssembler.fromUserResponse(r)));
+    return this.api
+      .signUp({ email, password, accountType })
+      .pipe(map((r) => UserAssembler.fromUserResponse(r)));
+  }
+
+  /**
+   * Paso 1 del onboarding: crea la cuenta y entra de una vez, para que el usuario
+   * pase directo a "Configura tu perfil" (paso 2, en Profiles) sin volver a escribir nada.
+   */
+  signUpAndSignIn(email: string, password: string, accountType: AccountType): Observable<User> {
+    return this.signUp(email, password, accountType).pipe(
+      switchMap(() => this.signIn(email, password)),
+    );
+  }
+
+  /**
+   * Cambia la contraseña del usuario con sesión. Se usa cuando un veterinario
+   * entra por primera vez con la contraseña temporal que le dio su clínica.
+   */
+  changePassword(currentPassword: string, newPassword: string): Observable<User> {
+    const user = this._currentUser();
+    if (!user) return throwError(() => new Error('No hay sesión'));
+    return this.api.changePassword(user.id, { currentPassword, newPassword }).pipe(
+      map(() => user.withPasswordChanged()),
+      tap((updated) => this._currentUser.set(updated)),
+    );
   }
 
   /** Al recargar la página, recupera el usuario si hay un token guardado. */
   restoreSession(): Observable<User | null> {
     if (!this.tokens.token()) return of(null);
     return this.api.me().pipe(
-      map(r => UserAssembler.fromUserResponse(r)),
-      tap(user => this._currentUser.set(user)),
+      map((r) => UserAssembler.fromUserResponse(r)),
+      tap((user) => this._currentUser.set(user)),
       catchError(() => {
         this.signOut();
         return of(null);
@@ -63,13 +89,13 @@ export class IamStore {
    * Creates a veterinarian member within a clinic account.
    */
   createMember(command: CreateMemberUserCommand): Observable<User> {
-
     const request: CreateMemberUserRequest = {
       email: command.email.trim(),
-      password: command.password
+      password: command.password,
     };
 
-    return this.api.createMember(command.accountId, request)
-      .pipe(map(response => UserAssembler.fromUserResponse(response)));
+    return this.api
+      .createMember(command.accountId, request)
+      .pipe(map((response) => UserAssembler.fromUserResponse(response)));
   }
 }
