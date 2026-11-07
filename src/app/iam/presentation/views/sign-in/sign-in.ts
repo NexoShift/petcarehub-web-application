@@ -35,7 +35,7 @@ export class SignIn {
   });
 
   protected togglePassword(): void {
-    this.showPassword.update(visible => !visible);
+    this.showPassword.update((visible) => !visible);
   }
 
   protected submit(): void {
@@ -48,7 +48,9 @@ export class SignIn {
     const { email, password } = this.form.getRawValue();
 
     this.store.signIn(email, password).subscribe({
-      next: () => this.router.navigate(['/home']),
+      // Un veterinario creado por su clínica entra con una contraseña temporal: primero la cambia
+      next: (user) =>
+        this.router.navigate([user.mustChangePassword ? '/change-password' : '/home']),
       error: (e: ApiError) => {
         this.errorMessage.set(e.status === 401 ? 'auth.signIn.wrongCredentials' : e.message);
         this.loading.set(false);
