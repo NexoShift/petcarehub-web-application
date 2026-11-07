@@ -1,0 +1,449 @@
+/* Consultorios de la clínica: mismo estilo que el resto de Profiles */
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.rooms-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 26px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  color: #007e87;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.flip {
+  display: inline-flex;
+  transform: rotate(180deg);
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-bottom: 22px;
+}
+
+.head-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.head-text {
+  flex: 1;
+}
+
+.page-head h1 {
+  margin: 0 0 6px;
+  color: #10254b;
+  font-size: 28px;
+}
+
+.page-head p {
+  margin: 0;
+  color: #65758d;
+}
+
+.page-head strong {
+  color: #10254b;
+}
+
+.btn-accent {
+  border-radius: 999px !important;
+  background: #0bc3bd !important;
+  color: #062b55 !important;
+  font-weight: 600;
+}
+
+.btn-accent:disabled {
+  opacity: .5;
+}
+
+.btn-outline {
+  border-radius: 999px !important;
+}
+
+.btn-danger {
+  border-radius: 999px !important;
+  background: #d92d20 !important;
+  color: #fff !important;
+}
+
+.btn-accent app-icon,
+.room-actions app-icon {
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+
+.card {
+  border: 1px solid #e1e8f2;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(18, 40, 80, .06);
+}
+
+/* ----- Resumen ----- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border: 1px solid #e1e8f2;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.stat strong {
+  display: block;
+  color: #10254b;
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.stat small {
+  color: #65758d;
+  font-size: 13px;
+}
+
+.stat-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.stat-icon.green {
+  background: #e3f8ea;
+  color: #17803d;
+}
+
+.stat-icon.navy {
+  background: #e8eef7;
+  color: #032b59;
+}
+
+/* ----- Formulario ----- */
+.form-card {
+  margin-bottom: 20px;
+  padding: 22px 24px;
+  border-left: 4px solid #0bc3bd;
+}
+
+.form-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.form-title h2 {
+  margin: 0;
+  color: #10254b;
+  font-size: 17px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 14px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ----- Lista de consultorios ----- */
+.rooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.room {
+  display: flex;
+  flex-direction: column;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.room:hover {
+  border-color: #b9e9e5;
+  box-shadow: 0 10px 26px rgba(18, 40, 80, .09);
+}
+
+.room.inactive {
+  background: #fbfcfe;
+}
+
+.room.inactive .room-icon {
+  background: #eef2f7;
+  color: #8a97aa;
+}
+
+.room-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 20px 20px 14px;
+}
+
+.room-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.room-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.room-title h3 {
+  margin: 0 0 3px;
+  color: #10254b;
+  font-size: 16px;
+}
+
+.room-title p {
+  margin: 0;
+  color: #65758d;
+  font-size: 13px;
+}
+
+.status {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #65758d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status.on {
+  background: #e3f8ea;
+  color: #17803d;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.duty {
+  margin: 0 20px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f7f9fc;
+}
+
+.duty-label {
+  display: block;
+  margin-bottom: 10px;
+  color: #8a97aa;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.vet {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.vet-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #032b59;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.vet-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vet-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.vet-text strong {
+  color: #10254b;
+  font-size: 14px;
+}
+
+.vet-text small {
+  color: #65758d;
+  font-size: 12px;
+}
+
+.assign {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.assign-field {
+  flex: 1;
+  --mat-form-field-container-height: 44px;
+  --mat-form-field-container-vertical-padding: 10px;
+}
+
+.muted {
+  margin: 0;
+  color: #8a97aa;
+  font-size: 13px;
+}
+
+.link-danger {
+  color: #b42318 !important;
+}
+
+.room-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: auto;
+  padding: 12px 14px;
+  border-top: 1px solid #eef2f7;
+}
+
+.room-actions button {
+  border-radius: 999px;
+}
+
+.confirm-text {
+  flex: 1;
+  color: #b42318;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ----- Estados ----- */
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 44px 20px;
+  color: #65758d;
+  text-align: center;
+}
+
+.state h2 {
+  margin: 6px 0 0;
+  color: #10254b;
+  font-size: 18px;
+}
+
+.state p {
+  max-width: 380px;
+  margin: 0 0 8px;
+}
+
+.state-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  padding: 40px;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 11px 14px;
+  border: 1px solid #f7c8c4;
+  border-radius: 10px;
+  background: #fff3f2;
+  color: #b42318;
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  .rooms-page {
+    padding: 14px;
+  }
+
+  .page-head {
+    flex-wrap: wrap;
+  }
+
+  .page-head h1 {
+    font-size: 23px;
+  }
+
+  .stats,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rooms {
+    grid-template-columns: 1fr;
+  }
+}
