@@ -9,4 +9,5 @@ export interface UserResponse {
   accessRole: string;
   status: string;
   roles: Role[];
+  mustChangePassword: boolean;
 }
