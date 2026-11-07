@@ -9,6 +9,7 @@ import { SignInRequest } from './resources/sign-in.request';
 import { SignUpRequest } from './resources/sign-up.request';
 import { UserResponse } from './resources/user.response';
 import { CreateMemberUserRequest } from './resources/create-member-user.request';
+import { ChangePasswordRequest } from './resources/change-password.request';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +18,10 @@ export class IamApi {
   private readonly baseUrl = environment.apiBaseUrl;
 
   signIn(body: SignInRequest) {
-    return this.http.post<AuthenticatedUserResponse>(`${this.baseUrl}/authentication/sign-in`, body);
+    return this.http.post<AuthenticatedUserResponse>(
+      `${this.baseUrl}/authentication/sign-in`,
+      body,
+    );
   }
 
   signUp(body: SignUpRequest) {
@@ -29,11 +33,18 @@ export class IamApi {
   }
 
   requestPasswordRecovery(body: PasswordRecoveryRequest) {
-    return this.http.post<MessageResponse>(`${this.baseUrl}/authentication/password-recovery`, body);
+    return this.http.post<MessageResponse>(
+      `${this.baseUrl}/authentication/password-recovery`,
+      body,
+    );
   }
 
   resetPassword(body: PasswordResetRequest) {
     return this.http.post<MessageResponse>(`${this.baseUrl}/authentication/password-reset`, body);
+  }
+
+  changePassword(userId: number, body: ChangePasswordRequest) {
+    return this.http.put<MessageResponse>(`${this.baseUrl}/users/${userId}/password`, body);
   }
 
   createMember(accountId: number, request: CreateMemberUserRequest): Observable<UserResponse> {

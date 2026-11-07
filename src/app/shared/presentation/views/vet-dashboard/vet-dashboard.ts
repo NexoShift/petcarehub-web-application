@@ -9,7 +9,7 @@ import { KpiCard } from '../../components/kpi-card/kpi-card';
 import { PetAvatar } from '../../components/pet-avatar/pet-avatar';
 
 /** Pestañas del filtro de "Pacientes de hoy". */
-type SpeciesFilter = 'Todos' | TodayPatient['species'];
+type SpeciesFilter = 'Todos' | 'Canino' | 'Felino';
 
 /**
  * MW-05 · Panel del veterinario de guardia.

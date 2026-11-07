@@ -7,5 +7,6 @@ export interface AuthenticatedUserResponse {
   accountType: AccountType;
   email: string;
   roles: Role[];
+  mustChangePassword: boolean;
   token: string;
 }

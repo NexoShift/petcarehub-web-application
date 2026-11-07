@@ -63,7 +63,7 @@ const VET_MENU: NavSection[] = [
       { label: 'shell.menu.patients', path: '/profiles/clinic/patients', icon: 'paw' },
       { label: 'shell.menu.consultations', path: '/consultations', icon: 'stethoscope' },
       { label: 'shell.menu.medicalHistory', path: '/medical-history', icon: 'history' },
-      { label: 'shell.menu.laboratory', path: '/laboratory', icon: 'microscope' },
+      { label: 'shell.menu.laboratory', path: '/clinical-exams', icon: 'microscope' },
       { label: 'shell.menu.imaging', path: '/imaging', icon: 'image' },
       { label: 'shell.menu.aiAssistant', path: '/ai-assistant', icon: 'sparkles' },
     ],

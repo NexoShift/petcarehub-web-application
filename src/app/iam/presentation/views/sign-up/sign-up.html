@@ -26,33 +26,13 @@
       </div>
     </fieldset>
 
+    <!-- Paso 1 (IAM): solo credenciales. Nombre, teléfono, etc. se piden en el paso 2 (Profiles). -->
     <div class="field">
-      <label for="fullName">{{ 'auth.signUp.fullName' | translate }}</label>
-      <input id="fullName" type="text" formControlName="fullName" autocomplete="name" placeholder="Roberto García">
-      @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
-        <span class="field-error">{{ 'auth.signUp.fullNameRequired' | translate }}</span>
+      <label for="email">{{ 'common.email' | translate }}</label>
+      <input id="email" type="email" formControlName="email" autocomplete="email" [placeholder]="'auth.signIn.emailPlaceholder' | translate">
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <span class="field-error">{{ 'common.invalidEmail' | translate }}</span>
       }
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label for="email">{{ 'common.email' | translate }}</label>
-        <input id="email" type="email" formControlName="email" autocomplete="email" [placeholder]="'auth.signIn.emailPlaceholder' | translate">
-        @if (form.controls.email.touched && form.controls.email.invalid) {
-          <span class="field-error">{{ 'common.invalidEmail' | translate }}</span>
-        }
-      </div>
-
-      <div class="field">
-        <label for="phone">{{ 'auth.signUp.phone' | translate }}</label>
-        <div class="input-wrap phone">
-          <span class="phone-prefix">+51</span>
-          <input id="phone" type="tel" formControlName="phone" autocomplete="tel-national" placeholder="987 654 321" maxlength="9">
-        </div>
-        @if (form.controls.phone.touched && form.controls.phone.invalid) {
-          <span class="field-error">{{ 'auth.signUp.phoneInvalid' | translate }}</span>
-        }
-      </div>
     </div>
 
     <div class="field">

@@ -62,8 +62,12 @@
               <div class="patient-head">
                 <app-pet-avatar [name]="p.name" [photoUrl]="p.photoUrl" [size]="52" />
                 <div class="patient-info">
-                  <h3>{{ p.name }} <span class="chip info">{{ p.breed }}</span></h3>
-                  <p>{{ 'common.years' | translate: { count: p.ageYears } }} · {{ p.weightKg }} kg · {{ p.species | translate }}</p>
+                  <h3>{{ p.name }} @if (p.breed) { <span class="chip info">{{ p.breed }}</span> }</h3>
+                  <p>
+                    @if (p.ageYears !== null) { {{ 'common.years' | translate: { count: p.ageYears } }} · }
+                    @if (p.weightKg) { {{ p.weightKg }} kg · }
+                    {{ p.species | translate }}
+                  </p>
                 </div>
                 <span class="owner">
                   <app-icon name="user" [size]="14" /> {{ p.ownerName }}
@@ -71,10 +75,12 @@
                 </span>
               </div>
 
-              <div class="note">
-                <small>{{ p.noteTitle }}</small>
-                <p>{{ p.note }}</p>
-              </div>
+              @if (p.note) {
+                <div class="note">
+                  <small>{{ p.noteTitle }}</small>
+                  <p>{{ p.note }}</p>
+                </div>
+              }
 
               <div class="patient-actions">
                 <button class="btn btn-outline btn-sm" type="button"><app-icon name="eye" [size]="16" /> {{ 'dashboard.vet.viewRecord' | translate }}</button>
@@ -109,7 +115,7 @@
               </li>
             }
           </ul>
-          <a class="link center" routerLink="/laboratory">{{ 'dashboard.vet.allExams' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
+          <a class="link center" routerLink="/clinical-exams">{{ 'dashboard.vet.allExams' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
         </article>
 
         <article class="card reveal" style="--i: 7">
