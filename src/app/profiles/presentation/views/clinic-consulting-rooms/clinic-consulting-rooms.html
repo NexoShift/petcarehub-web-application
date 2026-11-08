@@ -13,6 +13,12 @@
         @if (clinic(); as c) { · <strong>{{ c.name }}</strong> }
       </p>
     </div>
+
+    <a mat-stroked-button class="history-button" routerLink="/profiles/clinic/consulting-room-assignments">
+      <app-icon name="history" [size]="17" />
+      {{ 'profiles.assignmentHistory.viewAll' | translate }}
+    </a>
+
     <button id="new-room-button" class="btn-accent" mat-flat-button type="button" (click)="openCreate()">
       <app-icon name="plus" [size]="16" /> {{ 'profiles.consultingRooms.new' | translate }}
     </button>
@@ -163,6 +169,10 @@
 
             <!-- Acciones -->
             <div class="room-actions">
+              <a mat-stroked-button [routerLink]="['/profiles/clinic/consulting-rooms',view.room.id,'assignments']">
+                <app-icon name="history" [size]="16" />
+                {{ 'profiles.assignmentHistory.viewRoom' | translate }}
+              </a>
               @if (confirmDeleteId() === view.room.id) {
                 <span class="confirm-text">{{ 'profiles.consultingRooms.confirmDelete' | translate }}</span>
                 <button mat-button type="button" (click)="cancelDelete()">{{ 'profiles.consultingRooms.cancel' | translate }}</button>
@@ -171,15 +181,15 @@
                   {{ 'profiles.consultingRooms.delete' | translate }}
                 </button>
               } @else {
-                <button mat-button type="button" [id]="'edit-' + view.room.id" (click)="openEdit(view.room)">
+                <button mat-stroked-button type="button" [id]="'edit-' + view.room.id" (click)="openEdit(view.room)">
                   <app-icon name="pencil" [size]="14" /> {{ 'profiles.consultingRooms.edit' | translate }}
                 </button>
-                <button mat-button type="button" [id]="'toggle-' + view.room.id" [disabled]="roomStore.saving()"
+                <button mat-stroked-button type="button" [id]="'toggle-' + view.room.id" [disabled]="roomStore.saving()"
                         (click)="toggleActive(view)">
                   <app-icon [name]="view.room.active ? 'x' : 'check'" [size]="14" />
                   {{ (view.room.active ? 'profiles.consultingRooms.deactivate' : 'profiles.consultingRooms.activate') | translate }}
                 </button>
-                <button mat-button type="button" class="link-danger" [id]="'delete-' + view.room.id"
+                <button mat-stroked-button type="button" class="link-danger" [id]="'delete-' + view.room.id"
                         (click)="askDelete(view.room.id)">
                   {{ 'profiles.consultingRooms.delete' | translate }}
                 </button>
