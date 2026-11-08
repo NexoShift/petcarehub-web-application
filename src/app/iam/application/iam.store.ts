@@ -7,6 +7,8 @@ import { TokenStorage } from '../infrastructure/token.storage';
 import { UserAssembler } from '../infrastructure/user.assembler';
 import { CreateMemberUserCommand } from '../domain/model/create-member-user.command';
 import { CreateMemberUserRequest } from '../infrastructure/resources/create-member-user.request';
+import { finalize } from 'rxjs';
+import { AccountUser } from '../domain/model/account-user.entity';
 
 /** Estado de la sesión y casos de uso de IAM. Las vistas solo hablan con esta clase. */
 @Injectable({ providedIn: 'root' })
@@ -19,6 +21,41 @@ export class IamStore {
   readonly isSignedIn = computed(
     () => this.tokens.token() !== null && this._currentUser() !== null,
   );
+
+  // Account user directory state
+  private readonly accountUsersSignal = signal<AccountUser[]>([]);
+  private readonly loadingAccountUsersSignal = signal(false);
+  private readonly accountUsersErrorSignal = signal(false);
+
+  readonly accountUsers = this.accountUsersSignal.asReadonly();
+  readonly loadingAccountUsers = this.loadingAccountUsersSignal.asReadonly();
+  readonly accountUsersError = this.accountUsersErrorSignal.asReadonly();
+
+  /**
+   * Loads the IAM users belonging to a clinic account.
+   *
+   * @param accountId the clinic IAM account identifier.
+   */
+  loadAccountUsers(accountId: number): void {
+    this.loadingAccountUsersSignal.set(true);
+    this.accountUsersErrorSignal.set(false);
+    this.accountUsersSignal.set([]);
+
+    this.api.getAccountUsers(accountId)
+      .pipe(finalize(() => this.loadingAccountUsersSignal.set(false)))
+      .subscribe({
+        next: resources => {
+          this.accountUsersSignal.set(
+            resources.map(resource =>
+              UserAssembler.fromAccountUserResponse(resource)
+            )
+          );
+        },
+        error: () => {
+          this.accountUsersErrorSignal.set(true);
+        }
+      });
+  }
 
   signIn(email: string, password: string): Observable<User> {
     return this.api.signIn({ email, password }).pipe(
@@ -83,6 +120,9 @@ export class IamStore {
   signOut(): void {
     this.tokens.clear();
     this._currentUser.set(null);
+    this.accountUsersSignal.set([]);
+    this.accountUsersErrorSignal.set(false);
+    this.loadingAccountUsersSignal.set(false);
   }
 
   /**

@@ -50,4 +50,15 @@ export class IamApi {
   createMember(accountId: number, request: CreateMemberUserRequest): Observable<UserResponse> {
     return this.http.post<UserResponse>(`${this.baseUrl}/accounts/${accountId}/users`, request);
   }
+
+  /**
+   * Retrieves the users belonging to an IAM account.
+   *
+   * @param accountId the IAM account identifier.
+   * @returns The account user resources.
+   */
+  getAccountUsers(accountId: number): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>(`${this.baseUrl}/accounts/${accountId}/users`);
+  }
+
 }
