@@ -464,7 +464,15 @@
       "profileNotAuthorized": "No tienes permisos para registrar este perfil en la clínica.",
       "pendingProfileTitle": "Perfil profesional pendiente",
       "pendingProfileHint": "La cuenta de acceso ya fue creada, pero todavía falta registrar la información profesional.",
-      "continueRegistration": "Completar perfil"
+      "continueRegistration": "Completar perfil",
+      "loadingMembers": "Cargando usuarios de la clínica...",
+      "membersError": "No se pudo cargar el directorio de usuarios.",
+      "retry": "Reintentar",
+      "noMembers": "No se encontraron usuarios vinculados a esta cuenta.",
+      "holder": "Administrador de clínica",
+      "member": "Veterinario miembro",
+      "active": "Activo",
+      "inactive": "Inactivo"
     },
     "veterinarianForm": {
       "personalTitle": "Información personal",
@@ -641,6 +649,33 @@
         "assign": "No se pudo asignar al veterinario.",
         "unassign": "No se pudo quitar al veterinario."
       }
+    },
+    "assignmentHistory": {
+      "back": "Volver a consultorios",
+      "title": "Historial de asignaciones",
+      "roomTitle": "Historial del consultorio",
+      "room": "Consultorio",
+      "subtitle": "Consulta las asignaciones actuales y anteriores de los veterinarios.",
+      "viewAll": "Ver historial general",
+      "viewRoom": "Ver historial",
+      "refresh": "Actualizar",
+      "total": "Asignaciones totales",
+      "activeCount": "Asignaciones activas",
+      "endedCount": "Asignaciones finalizadas",
+      "records": "Registro de asignaciones",
+      "recordsHint": "Historial de los profesionales asignados a los consultorios.",
+      "status": "Estado",
+      "all": "Todos",
+      "active": "Activa",
+      "ended": "Finalizada",
+      "consultingRoom": "Consultorio",
+      "assignedAt": "Fecha de asignación",
+      "unassignedAt": "Fecha de finalización",
+      "current": "Actualmente asignado",
+      "empty": "No hay asignaciones para mostrar",
+      "emptyHint": "Las asignaciones aparecerán aquí cuando se registren.",
+      "loadError": "No se pudo cargar el historial de asignaciones.",
+      "retry": "Reintentar"
     }
   },
 

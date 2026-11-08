@@ -855,7 +855,15 @@
       "profileNotAuthorized": "You are not authorized to register this profile in the clinic.",
       "pendingProfileTitle": "Professional profile pending",
       "pendingProfileHint": "The access account has been created, but the professional information is still missing.",
-      "continueRegistration": "Complete profile"
+      "continueRegistration": "Complete profile",
+      "loadingMembers": "Loading clinic users...",
+      "membersError": "Unable to load the user directory.",
+      "retry": "Retry",
+      "noMembers": "No users were found for this account.",
+      "holder": "Clinic administrator",
+      "member": "Veterinarian member",
+      "active": "Active",
+      "inactive": "Inactive"
     },
     "veterinarianForm": {
       "personalTitle": "Personal information",
@@ -1032,6 +1040,33 @@
         "assign": "The veterinarian could not be assigned.",
         "unassign": "The veterinarian could not be removed."
       }
+    },
+    "assignmentHistory": {
+      "back": "Back to consulting rooms",
+      "title": "Assignment history",
+      "roomTitle": "Consulting room history",
+      "room": "Consulting room",
+      "subtitle": "View current and previous veterinarian assignments.",
+      "viewAll": "View all history",
+      "viewRoom": "View history",
+      "refresh": "Refresh",
+      "total": "Total assignments",
+      "activeCount": "Active assignments",
+      "endedCount": "Ended assignments",
+      "records": "Assignment records",
+      "recordsHint": "History of professionals assigned to consulting rooms.",
+      "status": "Status",
+      "all": "All",
+      "active": "Active",
+      "ended": "Ended",
+      "consultingRoom": "Consulting room",
+      "assignedAt": "Assignment date",
+      "unassignedAt": "End date",
+      "current": "Currently assigned",
+      "empty": "No assignments to display",
+      "emptyHint": "Assignments will appear here when they are registered.",
+      "loadError": "Unable to load assignment history.",
+      "retry": "Retry"
     }
   },
 
