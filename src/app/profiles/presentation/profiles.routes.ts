@@ -46,6 +46,12 @@ const clinicPatients = () =>
   import('./views/clinic-patients/clinic-patients').then((m) => m.ClinicPatients);
 
 /**
+ * Loads clinic-wide or room-specific assignment history.
+ */
+const clinicAssignmentHistory = () =>
+  import('./views/clinic-assignment-history/clinic-assignment-history').then((m) => m.ClinicAssignmentHistory);
+
+/**
  * Temporary view for features not yet implemented.
  *
  * @remarks
@@ -140,8 +146,14 @@ export const profileRoutes: Routes = [
     loadComponent: clinicConsultingRooms,
   },
   {
+    path: 'clinic/consulting-room-assignments',
+    canActivate: [roleGuard('ROLE_CLINIC_ADMIN')],
+    loadComponent: clinicAssignmentHistory,
+  },
+  {
     path: 'clinic/consulting-rooms/:roomId/assignments',
-    redirectTo: '/profiles/clinic/consulting-rooms',
+    canActivate: [roleGuard('ROLE_CLINIC_ADMIN')],
+    loadComponent: clinicAssignmentHistory,
   },
 
   // --------------------------------------------------
