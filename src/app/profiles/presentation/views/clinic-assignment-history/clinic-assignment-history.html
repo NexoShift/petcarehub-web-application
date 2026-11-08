@@ -1,0 +1,210 @@
+
+<section class="history-page">
+
+  <a
+    class="back-link"
+    routerLink="/profiles/clinic/consulting-rooms"
+  >
+    <app-icon name="arrow-right" [size]="17" />
+    {{ 'profiles.assignmentHistory.back' | translate }}
+  </a>
+
+  <header class="page-header">
+    <div class="page-heading">
+      <span class="heading-icon">
+        <app-icon name="history" [size]="27" />
+      </span>
+
+      <div>
+        <h1>
+          @if (roomId() === null) {
+            {{ 'profiles.assignmentHistory.title' | translate }}
+          } @else {
+            {{ 'profiles.assignmentHistory.roomTitle' | translate }}
+          }
+        </h1>
+
+        <p>
+          @if (roomId() !== null) {
+            {{ selectedRoom()?.name || ('profiles.assignmentHistory.room' | translate) }}
+          } @else {
+            {{ 'profiles.assignmentHistory.subtitle' | translate }}
+          }
+        </p>
+      </div>
+    </div>
+
+    <button
+      mat-stroked-button
+      type="button"
+      [disabled]="loading()"
+      (click)="refresh()"
+    >
+      {{ 'profiles.assignmentHistory.refresh' | translate }}
+    </button>
+  </header>
+
+  @if (clinicStore.loading() && !clinic()) {
+    <div class="loading-state">
+      <mat-spinner diameter="36" />
+    </div>
+  } @else if (clinicStore.profileNotFound()) {
+    <mat-card class="state-card">
+      <h2>{{ 'profiles.clinic.noProfileTitle' | translate }}</h2>
+      <p>{{ 'profiles.clinic.noProfileHint' | translate }}</p>
+    </mat-card>
+  } @else if (clinic()) {
+
+    <div class="statistics">
+      <mat-card class="stat-card">
+        <span>{{ 'profiles.assignmentHistory.total' | translate }}</span>
+        <strong>{{ assignments().length }}</strong>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <span>{{ 'profiles.assignmentHistory.activeCount' | translate }}</span>
+        <strong>{{ activeCount() }}</strong>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <span>{{ 'profiles.assignmentHistory.endedCount' | translate }}</span>
+        <strong>{{ assignments().length - activeCount() }}</strong>
+      </mat-card>
+    </div>
+
+    <mat-card class="history-card">
+
+      <div class="history-toolbar">
+        <div>
+          <h2>{{ 'profiles.assignmentHistory.records' | translate }}</h2>
+          <p>{{ 'profiles.assignmentHistory.recordsHint' | translate }}</p>
+        </div>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>
+            {{ 'profiles.assignmentHistory.status' | translate }}
+          </mat-label>
+
+          <mat-select
+            [value]="statusFilter()"
+            (selectionChange)="changeFilter($event.value)"
+          >
+            <mat-option value="ALL">
+              {{ 'profiles.assignmentHistory.all' | translate }}
+            </mat-option>
+            <mat-option value="ACTIVE">
+              {{ 'profiles.assignmentHistory.active' | translate }}
+            </mat-option>
+            <mat-option value="ENDED">
+              {{ 'profiles.assignmentHistory.ended' | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (loading()) {
+        <div class="loading-state">
+          <mat-spinner diameter="35" />
+        </div>
+      } @else if (assignmentStore.error()) {
+        <div class="empty-state">
+          <app-icon name="alert" [size]="30" />
+          <p>{{ 'profiles.assignmentHistory.loadError' | translate }}</p>
+          <button mat-stroked-button type="button" (click)="refresh()">
+            {{ 'profiles.assignmentHistory.retry' | translate }}
+          </button>
+        </div>
+      } @else if (filteredAssignments().length === 0) {
+        <div class="empty-state">
+          <app-icon name="history" [size]="32" />
+          <h3>{{ 'profiles.assignmentHistory.empty' | translate }}</h3>
+          <p>{{ 'profiles.assignmentHistory.emptyHint' | translate }}</p>
+        </div>
+      } @else {
+
+        <div class="assignment-list">
+          @for (assignment of filteredAssignments(); track assignment.id) {
+
+            <article class="assignment-item">
+
+              <div class="assignment-main">
+                <span class="avatar">
+                  <app-icon name="stethoscope" [size]="21" />
+                </span>
+
+                <div class="assignment-details">
+                  <h3>
+                    {{ veterinarianName(assignment.veterinarianId) }}
+                  </h3>
+
+                  <p>
+                    {{ 'profiles.assignmentHistory.consultingRoom' | translate }}:
+                    <strong>{{ roomName(assignment.consultingRoomId) }}</strong>
+                  </p>
+                </div>
+
+                <span
+                  class="status"
+                  [class.is-active]="assignment.active"
+                >
+                  {{
+                    (assignment.active
+                      ? 'profiles.assignmentHistory.active'
+                      : 'profiles.assignmentHistory.ended') | translate
+                  }}
+                </span>
+              </div>
+
+              <div class="assignment-dates">
+                <div>
+                  <span>
+                    {{ 'profiles.assignmentHistory.assignedAt' | translate }}
+                  </span>
+                  <strong>{{ assignment.assignedAt | date:'medium' }}</strong>
+                </div>
+
+                <div>
+                  <span>
+                    {{ 'profiles.assignmentHistory.unassignedAt' | translate }}
+                  </span>
+
+                  <strong>
+                    @if (assignment.unassignedAt) {
+                      {{ assignment.unassignedAt | date:'medium' }}
+                    } @else {
+                      {{ 'profiles.assignmentHistory.current' | translate }}
+                    }
+                  </strong>
+                </div>
+              </div>
+
+              @if (roomId() === null) {
+                <a
+                  class="room-history-link"
+                  [routerLink]="[
+                    '/profiles/clinic/consulting-rooms',
+                    assignment.consultingRoomId,
+                    'assignments'
+                  ]"
+                >
+                  {{ 'profiles.assignmentHistory.viewRoom' | translate }}
+                  <app-icon name="chevron-right" [size]="16" />
+                </a>
+              }
+
+            </article>
+
+          }
+        </div>
+
+      }
+
+    </mat-card>
+
+  } @else {
+    <mat-card class="state-card">
+      <p>{{ 'profiles.clinic.loadError' | translate }}</p>
+    </mat-card>
+  }
+
+</section>
