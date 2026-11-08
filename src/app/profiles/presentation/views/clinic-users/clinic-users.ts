@@ -106,6 +106,7 @@ export class ClinicUsers {
 
       if (currentUser && currentUser.hasRole('ROLE_CLINIC_ADMIN')) {
         this.clinicStore.loadByAccountId(currentUser.accountId);
+        this.iamStore.loadAccountUsers(currentUser.accountId);
       }
     });
   }
@@ -120,6 +121,7 @@ export class ClinicUsers {
     this.lastCreatedMember.set(user);
     this.pendingMember.set(user);
 
+    this.iamStore.loadAccountUsers(user.accountId);
     this.registrationStep.set('profile');
     this.profileError.set(null);
 
@@ -201,6 +203,7 @@ export class ClinicUsers {
     this.veterinarianStore.create(command, values.image).subscribe({
       next: () => {
         this.creatingProfile.set(false);
+        this.iamStore.loadAccountUsers(clinic.accountId);
 
         this.pendingMember.set(null);
         this.registrationStep.set('account');
