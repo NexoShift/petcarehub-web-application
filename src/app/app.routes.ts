@@ -32,6 +32,21 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./profiles/presentation/profiles.routes').then((m) => m.profileRoutes),
       },
+      // AI Assistance (visión): dueño /visual-analysis, vet /imaging
+      {
+        path: 'visual-analysis',
+        canActivate: [roleGuard('ROLE_PET_OWNER')],
+        loadChildren: () =>
+          import('./ai-assistance/ai-assistance.routes').then(
+            (m) => m.OWNER_VISUAL_ANALYSIS_ROUTES,
+          ),
+      },
+      {
+        path: 'imaging',
+        canActivate: [roleGuard('ROLE_VETERINARIAN')],
+        loadChildren: () =>
+          import('./ai-assistance/ai-assistance.routes').then((m) => m.VET_IMAGING_ROUTES),
+      },
       { path: '', pathMatch: 'full', redirectTo: 'home' },
       // Enlaces del menú que aún no tienen pantalla
       {
