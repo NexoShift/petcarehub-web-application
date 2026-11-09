@@ -8,7 +8,6 @@ import { DomSanitizer } from '@angular/platform-browser';
  */
 const ICONS = {
   home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
-  pencil: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4 10.5-10.5z"/>',
   paw: '<circle cx="7" cy="9" r="1.8"/><circle cx="11" cy="5.5" r="1.8"/><circle cx="15.5" cy="6.5" r="1.8"/><circle cx="18.5" cy="10.5" r="1.8"/><path d="M8.5 15.5c0-2.3 1.9-4.5 4.2-4.5s4.3 2.2 4.3 4.5c0 2.2-1.6 3.5-4.3 3.5s-4.2-1.3-4.2-3.5z"/>',
   history:
     '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/>',
@@ -76,37 +75,17 @@ const ICONS = {
   crosshair:
     '<circle cx="12" cy="12" r="8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="1.2"/>',
   refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/>',
-  'thumb-up':
-    '<path d="M7 10v11H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z"/><path d="M7 10l4-7a2.5 2.5 0 0 1 2.5 2.8L13 10h5.6a2 2 0 0 1 2 2.4l-1.4 7A2 2 0 0 1 17.2 21H7"/>',
-  'thumb-down':
-    '<path d="M17 14V3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1z"/><path d="M17 14l-4 7a2.5 2.5 0 0 1-2.5-2.8L11 14H5.4a2 2 0 0 1-2-2.4l1.4-7A2 2 0 0 1 6.8 3H17"/>',
-  copy: '<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',
   xray: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 6v12M8.5 8.5c1.2.8 2.3 1 3.5 1s2.3-.2 3.5-1M8 12c1.3.8 2.6 1.2 4 1.2s2.7-.4 4-1.2M8.5 15.5c1.2.7 2.3 1 3.5 1s2.3-.3 3.5-1"/>',
+  pencil: '<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"/><path d="m14.5 5.5 3 3"/>',
 } as const;
 
 export type IconName = keyof typeof ICONS;
 
 @Component({
   selector: 'app-icon',
-  template: `<svg
-    [attr.width]="size()"
-    [attr.height]="size()"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-    [innerHTML]="paths()"
-  ></svg>`,
-  styles: `
-    :host {
-      display: inline-flex;
-      flex: none;
-      line-height: 0;
-    }
-  `,
+  template: `<svg [attr.width]="size()" [attr.height]="size()" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" [innerHTML]="paths()"></svg>`,
+  styles: `:host { display: inline-flex; flex: none; line-height: 0; }`,
 })
 export class Icon {
   readonly name = input.required<IconName>();
@@ -116,7 +95,5 @@ export class Icon {
 
   // Angular limpia el HTML de [innerHTML] y borraría los <path>. Aquí lo marcamos como confiable
   // porque el texto sale de la constante ICONS, nunca de lo que escribe el usuario.
-  protected readonly paths = computed(() =>
-    this.sanitizer.bypassSecurityTrustHtml(ICONS[this.name()]),
-  );
+  protected readonly paths = computed(() => this.sanitizer.bypassSecurityTrustHtml(ICONS[this.name()]));
 }

@@ -1,0 +1,203 @@
+<section class="page">
+  <header class="page-header reveal">
+    <div class="intro">
+      <span class="eyebrow"><app-icon name="scan" [size]="14" />{{ 'aiVision.owner.eyebrow' | translate }}</span>
+      <h1>{{ 'aiVision.owner.title' | translate }}</h1>
+      <p>{{ 'aiVision.owner.subtitle' | translate }}</p>
+    </div>
+
+    @if (store.selectedPet(); as pet) {
+      <div class="pet-chip">
+        <app-pet-avatar [name]="pet.name" [size]="40" [online]="true" />
+        <span class="who">
+          <strong>{{ pet.name }} <span class="status">• {{ 'aiVision.owner.connected' | translate }}</span></strong>
+          <small>{{ 'enums.species.' + pet.species | translate }} · {{ pet.breed }} ({{ 'aiVision.years' | translate: { n: pet.ageYears } }})</small>
+        </span>
+        @if (store.pets().length > 1) {
+          <button type="button" class="icon-btn" [matMenuTriggerFor]="petMenu" [matTooltip]="'aiVision.changePet' | translate"
+                  [attr.aria-label]="'aiVision.changePet' | translate">
+            <app-icon name="swap" [size]="16" />
+          </button>
+          <mat-menu #petMenu="matMenu" xPosition="before">
+            @for (p of store.pets(); track p.id) {
+              <button mat-menu-item type="button" (click)="selectPet(p.id)">
+                <span class="menu-pet"><app-pet-avatar [name]="p.name" [size]="28" /> {{ p.name }}</span>
+              </button>
+            }
+          </mat-menu>
+        }
+      </div>
+    }
+  </header>
+
+  @if (store.petsLoaded() && store.pets().length === 0) {
+    <div class="error-banner" role="status" data-testid="no-pets"><app-icon name="info" [size]="16" />{{ 'aiVision.owner.noPets' | translate }}</div>
+  }
+
+  <div class="layout">
+    <!-- Izquierda: captura de la foto -->
+    <div class="col">
+      <article class="card reveal" style="--i: 1">
+        <div class="card-header">
+          <div class="title">
+            <span class="title-icon"><app-icon name="camera" [size]="18" /></span>
+            <div>
+              <h2>{{ 'aiVision.owner.captureTitle' | translate }}</h2>
+              <small>{{ 'aiVision.owner.captureSubtitle' | translate }}</small>
+            </div>
+          </div>
+          <span class="chip success"><app-icon name="check-circle" [size]="12" />{{ 'aiVision.formats' | translate }}</span>
+        </div>
+
+        <div class="tip"><app-icon name="crosshair" [size]="18" />{{ 'aiVision.owner.tip' | translate }}</div>
+
+        <app-vision-viewer
+          [src]="viewerSrc()" [analysis]="store.current()" [imageType]="skin" [caption]="caption()"
+          [processing]="store.processing() === 'main'"
+          (fileDropped)="onFile($event)" (pickRequested)="gallery.click()" />
+
+        <input #gallery type="file" accept="image/jpeg,image/png" class="visually-hidden" (change)="fromInput($event)"
+               [attr.aria-label]="'aiVision.gallery' | translate" data-testid="gallery-input">
+
+
+        <div class="btn-row">
+          <button type="button" class="btn btn-outline" (click)="gallery.click()" [disabled]="!!store.processing()">
+            <app-icon name="image" [size]="16" />{{ 'aiVision.gallery' | translate }}
+          </button>
+
+
+          @if (store.current()) {
+            <button type="button" class="btn btn-navy grow" (click)="newPhoto()">
+              <app-icon name="refresh" [size]="16" />{{ 'aiVision.newPhoto' | translate }}
+            </button>
+          } @else {
+            <button type="button" class="btn btn-accent grow" (click)="analyze()" [disabled]="!canAnalyze()" data-testid="analyze">
+              @if (store.processing() === 'main') { <span class="spin"></span>{{ 'aiVision.analyzing' | translate }} }
+              @else { <app-icon name="sparkles" [size]="16" />{{ 'aiVision.analyze' | translate }} }
+            </button>
+          }
+        </div>
+
+        @if (store.error(); as error) {
+          <div class="error-banner" role="alert"><app-icon name="alert" [size]="16" />{{ error | translate }}</div>
+        }
+      </article>
+
+      <!-- Foto comparativa: solo tiene sentido después de un análisis de piel -->
+      @if (store.current()?.isCompleted) {
+        <article class="card compare reveal" style="--i: 2">
+          @if (comparisonSrc()) {
+            <div class="card-header">
+              <div class="title">
+                <span class="title-icon"><app-icon name="columns" [size]="18" /></span>
+                <div>
+                  <h2>{{ 'aiVision.owner.compareTitleDone' | translate }}</h2>
+                  <small>{{ 'aiVision.owner.compareSubtitleDone' | translate }}</small>
+                </div>
+              </div>
+              <button type="button" class="btn btn-ghost btn-sm" (click)="removeComparison()">
+                <app-icon name="x" [size]="14" />{{ 'aiVision.remove' | translate }}
+              </button>
+            </div>
+            <div class="compare-grid">
+              <app-vision-viewer [compact]="true" [src]="viewerSrc()" [analysis]="store.current()" [imageType]="skin" />
+              <app-vision-viewer [compact]="true" [src]="comparisonSrc()" [analysis]="store.comparison()" [imageType]="skin"
+                                 [processing]="store.processing() === 'comparison'" />
+            </div>
+            @if (store.comparison(); as c) {
+              <p class="compare-result">
+                <app-icon [name]="c.hasFindings ? 'alert' : 'check-circle'" [size]="16" />
+                {{ (c.hasFindings ? 'aiVision.owner.compareFindings' : 'aiVision.owner.compareClean') | translate: { n: c.findings.length } }}
+              </p>
+            }
+          } @else {
+            <div class="compare-ask">
+              <span class="title-icon"><app-icon name="columns" [size]="18" /></span>
+              <div>
+                <h2>{{ 'aiVision.owner.compareTitle' | translate }}</h2>
+                <small>{{ 'aiVision.owner.compareSubtitle' | translate }}</small>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" (click)="compareInput.click()" [disabled]="!!store.processing()">
+                <app-icon name="camera" [size]="16" />{{ 'aiVision.owner.compareAction' | translate }}
+              </button>
+            </div>
+          }
+          <input #compareInput type="file" accept="image/jpeg,image/png" class="visually-hidden"
+                 (change)="fromInput($event, 'comparison')" [attr.aria-label]="'aiVision.owner.compareAction' | translate">
+        </article>
+      }
+    </div>
+
+    <!-- Derecha: estado y resultado -->
+    <aside class="card status reveal" style="--i: 2">
+      <div class="card-header">
+        <h2>{{ 'aiVision.statusTitle' | translate }}</h2>
+        @if (usage(); as usage) {
+          <span class="chip info"><app-icon name="sparkles" [size]="12" />{{ 'aiVision.owner.usage' | translate: usage }}</span>
+        }
+      </div>
+      <app-analysis-steps [phase]="store.phase()" />
+      <div class="divider"></div>
+
+      @if (store.current(); as current) {
+        @if (store.triage(); as triage) {
+          <div class="triage-head">
+            <span class="section-label">{{ 'aiVision.owner.classification' | translate }}</span>
+            <span class="chip" [class.success]="triage.level === 'NONE'" [class.info]="triage.level === 'ROUTINE'"
+                  [class.warning]="triage.level === 'PRIORITY'">
+              <app-icon name="clock" [size]="12" />{{ 'aiVision.triage.' + triage.level + '.chip' | translate }}
+            </span>
+          </div>
+          <div class="triage" [attr.data-level]="triage.level">
+            <app-icon name="calendar" [size]="20" />
+            <div>
+              <strong>{{ 'aiVision.owner.suggestedTitle' | translate }}</strong>
+              <p>{{ 'aiVision.triage.' + triage.level + '.text' | translate: { hours: triage.withinHours } }}</p>
+            </div>
+          </div>
+        }
+        <app-findings-panel [analysis]="current" audience="owner" />
+      } @else {
+        <div class="waiting">
+          <span class="waiting-icon"><app-icon [name]="store.processing() ? 'scan' : 'image'" [size]="22" /></span>
+          <strong>{{ (store.processing() ? 'aiVision.owner.processingTitle' : 'aiVision.owner.waitingTitle') | translate }}</strong>
+          <p>{{ (store.processing() ? 'aiVision.owner.processingText' : 'aiVision.owner.waitingText') | translate }}</p>
+        </div>
+      }
+
+      <div class="notice">
+        <span class="notice-icon"><app-icon name="shield" [size]="16" /></span>
+        <div>
+          <strong>{{ 'aiVision.owner.disclaimerTitle' | translate }}</strong>
+          <p>{{ 'aiVision.owner.disclaimer' | translate }}</p>
+        </div>
+      </div>
+
+      <a class="btn btn-navy btn-block" routerLink="/appointments">
+        <app-icon name="calendar" [size]="16" />{{ 'aiVision.owner.book' | translate }}
+      </a>
+      @if (dashboard.owner()?.assignedVet; as vet) {
+        <small class="vet-line">{{ vet.name }} · {{ vet.clinic }}</small>
+      }
+      <button type="button" class="btn btn-outline btn-block btn-sm" (click)="share()" [disabled]="!store.current()">
+        <app-icon name="share" [size]="15" />{{ 'aiVision.owner.share' | translate }}
+      </button>
+    </aside>
+  </div>
+
+  <!-- Historial -->
+  <section class="history reveal" style="--i: 3">
+    <div class="history-head">
+      <h2>{{ 'aiVision.history.title' | translate: { pet: store.selectedPet()?.name ?? '' } }}</h2>
+      <small>{{ 'aiVision.history.subtitle' | translate }}</small>
+    </div>
+    @if (store.historyLoading()) {
+      <div class="skeleton-row"><span></span><span></span><span></span></div>
+    } @else if (store.history().length) {
+      <app-analysis-history [analyses]="store.history()" [selectedId]="store.current()?.id ?? null"
+                            (selected)="openFromHistory($event)" />
+    } @else {
+      <p class="empty-history">{{ 'aiVision.history.empty' | translate }}</p>
+    }
+  </section>
+</section>
