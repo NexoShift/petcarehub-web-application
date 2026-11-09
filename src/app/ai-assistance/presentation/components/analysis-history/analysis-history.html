@@ -1,0 +1,28 @@
+<ul>
+  @for (a of analyses().slice(0, 12); track a.id) {
+    <li>
+      <button type="button" [class.active]="a.id === selectedId()" (click)="selected.emit(a)">
+        <span class="thumb" [class.xray]="a.isRadiograph">
+          @if (store.images()[a.id]; as url) { <img [src]="url" alt=""> }
+          @else { <app-icon [name]="a.isRadiograph ? 'xray' : 'image'" [size]="20" /> }
+        </span>
+        <span class="info">
+          <span class="top">
+            <span class="type">{{ (a.isRadiograph ? 'aiVision.imageTypeShort.RADIOGRAPH' : 'aiVision.imageTypeShort.SKIN') | translate }}</span>
+            <time>{{ a.createdAt | localDate: language.locale() }}</time>
+          </span>
+          <strong>
+            @if (!a.isCompleted) { {{ 'aiVision.history.failed' | translate }} }
+            @else if (a.topFinding; as top) { {{ top.label | findingLabel }} · {{ top.confidencePercentage }}% }
+            @else { {{ 'aiVision.history.noFindings' | translate }} }
+          </strong>
+          @if (showRequester()) {
+            <span class="who" [class.owner]="a.requestedByRole === 'PET_OWNER'">
+              {{ ('aiVision.history.by.' + a.requestedByRole) | translate }}
+            </span>
+          }
+        </span>
+      </button>
+    </li>
+  }
+</ul>

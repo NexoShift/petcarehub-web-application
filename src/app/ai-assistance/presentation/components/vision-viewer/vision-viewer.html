@@ -1,0 +1,56 @@
+<div class="frame" [class.compact]="compact()" [class.xray]="isRadiograph()">
+  @if (src()) {
+    <div class="chips top">
+      <span class="chip-dark"><span class="dot" [class.busy]="processing()"></span>{{ 'aiVision.viewer.active' | translate }}</span>
+      <span class="chip-dark">
+        <app-icon [name]="isRadiograph() ? 'xray' : 'camera'" [size]="13" />
+        {{ (isRadiograph() ? 'aiVision.imageType.RADIOGRAPH' : 'aiVision.imageType.SKIN') | translate }}
+      </span>
+    </div>
+
+    <div class="stage">
+      <div class="image-wrap" (pointermove)="onPointerMove($event)" (pointerleave)="pointerAt.set(null)"
+           [class.pointing]="pointer()">
+        <img [src]="src()" [alt]="'aiVision.viewer.alt' | translate" draggable="false">
+
+        @for (b of boxes(); track b.finding.id; let i = $index) {
+          <div class="box" [class.medium]="b.finding.confidenceLevel !== 'high'"
+               [style.left.%]="b.pos.left" [style.top.%]="b.pos.top"
+               [style.width.%]="b.pos.width" [style.height.%]="b.pos.height" [style.--i]="i">
+            <span class="corner tl"></span><span class="corner tr"></span>
+            <span class="corner bl"></span><span class="corner br"></span>
+            <span class="tag" [class.below]="b.pos.top < 9">
+              <app-icon name="crosshair" [size]="12" />
+              {{ b.finding.label | findingLabel }}
+              <strong>{{ b.finding.confidencePercentage }}%</strong>
+            </span>
+          </div>
+        }
+
+        @if (pointer() && pointerAt(); as p) {
+          <span class="laser" [style.left.%]="p.x" [style.top.%]="p.y"></span>
+        }
+
+        @if (processing()) {
+          <div class="scan"><span></span></div>
+        }
+      </div>
+    </div>
+
+    <div class="chips bottom">
+      @if (caption()) { <span class="chip-dark mono">{{ caption() }}</span> } @else { <span></span> }
+      <button type="button" class="chip-light" (click)="expanded.set(!expanded())">
+        <app-icon [name]="expanded() ? 'x' : 'maximize'" [size]="13" />
+        {{ (expanded() ? 'aiVision.viewer.close' : 'aiVision.viewer.expand') | translate }}
+      </button>
+    </div>
+  } @else {
+    <button type="button" class="dropzone" [class.dragging]="dragging()"
+            (click)="pickRequested.emit()" (dragover)="onDragOver($event)"
+            (dragleave)="dragging.set(false)" (drop)="onDrop($event)">
+      <span class="drop-icon"><app-icon [name]="isRadiograph() ? 'xray' : 'upload'" [size]="26" /></span>
+      <strong>{{ 'aiVision.viewer.dropTitle' | translate }}</strong>
+      <small>{{ 'aiVision.viewer.dropHint' | translate }}</small>
+    </button>
+  }
+</div>

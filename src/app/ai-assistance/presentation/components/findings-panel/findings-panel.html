@@ -1,0 +1,59 @@
+<div class="head">
+  <span class="eyebrow">{{ (analysis().isRadiograph ? 'aiVision.findings.titleXray' : 'aiVision.findings.title') | translate }}</span>
+  @if (analysis().modelId) { <span class="model" [title]="analysis().modelId">{{ analysis().modelId }}</span> }
+</div>
+
+@if (!analysis().isCompleted) {
+  <div class="empty failed">
+    <app-icon name="alert" [size]="18" />
+    <div>
+      <strong>{{ 'aiVision.findings.failedTitle' | translate }}</strong>
+      <p>{{ 'aiVision.findings.failedText' | translate }}</p>
+    </div>
+  </div>
+} @else if (findings().length === 0) {
+  <div class="empty">
+    <app-icon name="check-circle" [size]="18" />
+    <div>
+      <strong>{{ 'aiVision.findings.noneTitle' | translate }}</strong>
+      <p>{{ (analysis().isRadiograph ? 'aiVision.findings.noneXray' : 'aiVision.findings.noneSkin') | translate }}</p>
+    </div>
+  </div>
+} @else if (analysis().isRadiograph) {
+  <ul class="bars">
+    @for (f of findings(); track f.id; let i = $index) {
+      <li [class.probable]="f.probable" [style.--i]="i">
+        <div class="bar-head">
+          <span class="name">{{ f.label | findingLabel }}</span>
+          @if (f.probable) { <span class="pill strong">{{ 'aiVision.findings.probable' | translate }}</span> }
+          <span class="pct">{{ f.confidencePercentage }}%</span>
+        </div>
+        <div class="track"><span [style.width.%]="f.confidencePercentage"></span></div>
+      </li>
+    }
+  </ul>
+  <p class="foot"><app-icon name="crosshair" [size]="14" />{{ 'aiVision.findings.xrayHint' | translate }}</p>
+} @else {
+  <ul class="list">
+    @for (f of findings(); track f.id; let i = $index) {
+      <li [style.--i]="i">
+        <span [class]="'badge ' + f.confidenceLevel"><app-icon name="scan" [size]="16" /></span>
+        <div class="body">
+          <div class="row">
+            <strong>{{ f.label | findingLabel }}</strong>
+            <span class="pill" [class.strong]="f.confidenceLevel === 'high'">
+              {{ 'aiVision.findings.confidence' | translate: { value: f.confidencePercentage } }}
+            </span>
+          </div>
+          @if (audience() === 'owner') {
+            @if (f.label | findingLabel: 'descriptions'; as text) { <p>{{ text }}</p> }
+          } @else {
+            <p class="meta">
+              {{ (f.hasLocation ? 'aiVision.findings.located' : 'aiVision.findings.notLocated') | translate }}
+            </p>
+          }
+        </div>
+      </li>
+    }
+  </ul>
+}
