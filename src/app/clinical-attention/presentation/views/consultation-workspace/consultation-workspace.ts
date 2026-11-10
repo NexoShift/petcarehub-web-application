@@ -153,13 +153,11 @@ export class ConsultationWorkspace {
       },
       error: () => undefined,
     });
-    // La consulta guarda el usuario de IAM del vet; si no, se prueba como id del perfil
-    const vetName = (v: { firstName: string; lastName: string }) =>
-      set({ veterinarian: `${v.firstName} ${v.lastName}` });
-    this.profiles.getVeterinarianByUserId(c.veterinarianId).subscribe({
-      next: vetName,
-      error: () =>
-        this.profiles.getVeterinarianById(c.veterinarianId).subscribe({ next: vetName, error: () => undefined }),
+
+    // veterinarianId es el id del PERFIL del veterinario (Profiles), no el usuario de IAM
+    this.profiles.getVeterinarianById(c.veterinarianId).subscribe({
+      next: v => set({ veterinarian: `${v.firstName} ${v.lastName}` }),
+      error: () => undefined,
     });
     this.profiles.getClinicById(c.clinicId).subscribe({
       next: clinic => set({ clinic: clinic.name }),
