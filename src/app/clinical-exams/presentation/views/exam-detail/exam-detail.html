@@ -1,120 +1,114 @@
-<section class="page">
-  <div class="page-header">
-    @if (exam(); as exam) {
-      <a
-        id="back-button"
-        mat-icon-button
-        routerLink="/clinical-exams"
-        [queryParams]="{ consultationId: exam.consultationId }"
-        [attr.aria-label]="'clinicalExams.detail.back' | translate"
-      >
-        <mat-icon>arrow_back</mat-icon>
-      </a>
-    }
-    <h1 class="page-title">{{ 'clinicalExams.detail.title' | translate }}</h1>
-  </div>
+<section class="list-page">
+  <a id="back-button" class="back-link" routerLink="/clinical-exams">
+    <app-icon name="arrow-right" [size]="14" class="flip" /> {{ 'clinicalExams.detail.back' | translate }}
+  </a>
 
   @if (store.error(); as error) {
-    <p id="exam-error" class="error-message">{{ error | translate }}</p>
+    <p id="exam-error" class="error-message" role="alert">
+      <app-icon name="alert" [size]="16" /> {{ error | translate }}
+    </p>
   }
 
   @if (exam(); as exam) {
-    <mat-card id="exam-card" appearance="outlined">
-      <mat-card-header>
-        <mat-card-title>
-          {{
-            'clinicalExams.detail.examTitle'
-              | translate: { type: 'clinicalExams.types.' + exam.type | translate, id: exam.id }
-          }}
-        </mat-card-title>
-        <mat-card-subtitle>
-          {{
-            'clinicalExams.detail.subtitle'
-              | translate: { consultationId: exam.consultationId, petId: exam.petId }
-          }}
-        </mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <app-exam-status-chip [status]="exam.status" />
-        <dl class="details">
-          <div>
-            <dt>{{ 'clinicalExams.detail.requestedAt' | translate }}</dt>
-            <dd>{{ exam.requestedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+    <!-- ===== Encabezado del examen ===== -->
+    <section id="exam-card" class="hero">
+      <div class="hero-main">
+        <span class="hero-icon"><app-icon [name]="typeIcons[exam.type]" [size]="30" /></span>
+        <div class="hero-title">
+          <div class="title-line">
+            <h1>
+              {{ 'clinicalExams.detail.examTitle'
+                   | translate: { type: 'clinicalExams.types.' + exam.type | translate, id: exam.id } }}
+            </h1>
+            <app-exam-status-chip [status]="exam.status" />
           </div>
-          @if (exam.startedAt) {
-            <div>
-              <dt>{{ 'clinicalExams.detail.startedAt' | translate }}</dt>
-              <dd>{{ exam.startedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
-            </div>
-          }
-          @if (exam.completedAt) {
-            <div>
-              <dt>{{ 'clinicalExams.detail.completedAt' | translate }}</dt>
-              <dd>{{ exam.completedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
-            </div>
-          }
-          <div>
-            <dt>{{ 'clinicalExams.detail.indication' | translate }}</dt>
-            <dd>{{ exam.indication ?? ('clinicalExams.detail.noIndication' | translate) }}</dd>
-          </div>
-          @if (exam.cancellationReason) {
-            <div>
-              <dt>{{ 'clinicalExams.detail.cancellationReason' | translate }}</dt>
-              <dd id="cancellation-reason">{{ exam.cancellationReason }}</dd>
-            </div>
-          }
-        </dl>
-      </mat-card-content>
-      @if (exam.canStart || exam.canCancel || exam.canComplete) {
-        <mat-card-actions class="actions">
-          @if (exam.canCancel) {
-            <button
-              id="cancel-exam-button"
-              mat-button
-              type="button"
-              [disabled]="store.isSaving()"
-              (click)="cancel(exam)"
-            >
-              {{ 'clinicalExams.detail.cancel' | translate }}
-            </button>
-          }
-          @if (exam.canStart) {
-            <button
-              id="start-exam-button"
-              mat-flat-button
-              type="button"
-              [disabled]="store.isSaving()"
-              (click)="start(exam)"
-            >
-              {{ 'clinicalExams.detail.start' | translate }}
-            </button>
-          }
-          @if (exam.canComplete) {
-            <button
-              id="complete-exam-button"
-              mat-flat-button
-              type="button"
-              [disabled]="store.isSaving()"
-              (click)="complete(exam)"
-            >
-              {{ 'clinicalExams.detail.complete' | translate }}
-            </button>
-          }
-        </mat-card-actions>
-      }
-    </mat-card>
+          <p class="pet-line">
+            <app-icon name="paw" [size]="15" />
+            <strong>{{ petName() ?? '#' + exam.petId }}</strong>
+            ·
+            <a [routerLink]="['/consultations', exam.consultationId]">
+              {{ 'clinicalExams.worklist.consultation' | translate }} N.° {{ exam.consultationId }}
+            </a>
+          </p>
+        </div>
 
-    <mat-card id="result-card" appearance="outlined">
-      <mat-card-header>
-        <mat-card-title>{{ 'clinicalExams.detail.resultTitle' | translate }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
+        @if (exam.canStart || exam.canCancel || exam.canComplete) {
+          <div class="hero-actions">
+            @if (exam.canCancel) {
+              <button id="cancel-exam-button" class="btn-danger" mat-stroked-button type="button"
+                      [disabled]="store.isSaving()" (click)="cancel(exam)">
+                <app-icon name="x" [size]="15" /> {{ 'clinicalExams.detail.cancel' | translate }}
+              </button>
+            }
+            @if (exam.canStart) {
+              <button id="start-exam-button" class="btn-accent" mat-flat-button type="button"
+                      [disabled]="store.isSaving()" (click)="start(exam)">
+                <app-icon name="play" [size]="15" /> {{ 'clinicalExams.detail.start' | translate }}
+              </button>
+            }
+            @if (exam.canComplete) {
+              <button id="complete-exam-button" class="btn-accent" mat-flat-button type="button"
+                      [disabled]="store.isSaving()" (click)="complete(exam)">
+                <app-icon name="check-circle" [size]="15" /> {{ 'clinicalExams.detail.complete' | translate }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="indication">
+        <app-icon name="chat" [size]="16" />
+        <div>
+          <small>{{ 'clinicalExams.detail.indication' | translate }}</small>
+          <p>{{ exam.indication ?? ('clinicalExams.detail.noIndication' | translate) }}</p>
+        </div>
+      </div>
+
+      @if (exam.cancellationReason) {
+        <div class="cancelled-box">
+          <app-icon name="x" [size]="16" />
+          <div>
+            <small>
+              {{ 'clinicalExams.detail.cancellationReason' | translate }}
+              @if (exam.cancelledAt) { · {{ exam.cancelledAt | date: 'dd/MM/yyyy HH:mm' }} }
+            </small>
+            <p id="cancellation-reason">{{ exam.cancellationReason }}</p>
+          </div>
+        </div>
+      } @else {
+        <ol class="timeline" [attr.aria-label]="'clinicalExams.detail.progress' | translate">
+          @for (step of steps(); track step.key; let i = $index) {
+            <li class="step" [class.done]="step.done" [class.current]="step.current">
+              <span class="step-dot">
+                @if (step.done) { <app-icon name="check" [size]="14" /> } @else { {{ i + 1 }} }
+              </span>
+              <span class="step-text">
+                <strong>{{ 'clinicalExams.detail.steps.' + step.key | translate }}</strong>
+                <small>{{ step.date ? (step.date | date: 'dd/MM/yyyy HH:mm') : '—' }}</small>
+              </span>
+            </li>
+          }
+        </ol>
+      }
+    </section>
+
+    <div class="detail-layout">
+      <!-- ===== Resultado ===== -->
+      <section id="result-card" class="card card-body">
+        <div class="section-head">
+          <span class="section-icon"><app-icon name="activity" [size]="20" /></span>
+          <div>
+            <h2>{{ 'clinicalExams.detail.resultTitle' | translate }}</h2>
+            <p>{{ 'clinicalExams.detail.resultSubtitle' | translate }}</p>
+          </div>
+        </div>
+
         @if (exam.result; as result) {
-          <dl class="details">
-            <div>
-              <dt>{{ 'clinicalExams.detail.summary' | translate }}</dt>
-              <dd id="result-summary-text">{{ result.summary }}</dd>
-            </div>
+          <div class="summary">
+            <small>{{ 'clinicalExams.detail.summary' | translate }}</small>
+            <p id="result-summary-text">{{ result.summary }}</p>
+          </div>
+          <dl class="facts">
             <div>
               <dt>{{ 'clinicalExams.detail.values' | translate }}</dt>
               <dd>{{ result.values ?? '—' }}</dd>
@@ -127,49 +121,43 @@
               <dt>{{ 'clinicalExams.detail.resultDate' | translate }}</dt>
               <dd>{{ result.resultDate | date: 'dd/MM/yyyy' : 'UTC' }}</dd>
             </div>
-            <div>
-              <dt>{{ 'clinicalExams.detail.validation' | translate }}</dt>
-              <dd id="result-validation">
-                @if (result.validated) {
-                  {{
-                    'clinicalExams.detail.validatedOn'
-                      | translate: { date: result.validatedAt | date: 'dd/MM/yyyy HH:mm' }
-                  }}
-                } @else {
-                  {{ 'clinicalExams.detail.pendingValidation' | translate }}
-                }
-              </dd>
-            </div>
           </dl>
-        } @else if (exam.canRegisterResult) {
-          <app-exam-result-form
-            [saving]="store.isSaving()"
-            (submitted)="registerResult(exam, $event)"
-          />
-        } @else {
-          <p class="empty">{{ 'clinicalExams.detail.resultLater' | translate }}</p>
-        }
-      </mat-card-content>
-      @if (exam.canValidateResult) {
-        <mat-card-actions class="actions">
-          <button
-            id="validate-result-button"
-            mat-flat-button
-            type="button"
-            [disabled]="store.isSaving()"
-            (click)="validateResult(exam)"
-          >
-            {{ 'clinicalExams.detail.validate' | translate }}
-          </button>
-        </mat-card-actions>
-      }
-    </mat-card>
 
-    <mat-card id="files-card" appearance="outlined">
-      <mat-card-header>
-        <mat-card-title>{{ 'clinicalExams.detail.filesTitle' | translate }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
+          <div id="result-validation" class="validation" [class.ok]="result.validated">
+            <app-icon [name]="result.validated ? 'check-circle' : 'clock'" [size]="20" />
+            <div>
+              @if (result.validated) {
+                <strong>{{ 'clinicalExams.detail.validatedOn' | translate: { date: result.validatedAt | date: 'dd/MM/yyyy HH:mm' } }}</strong>
+                <small>{{ 'clinicalExams.detail.validatedText' | translate }}</small>
+              } @else {
+                <strong>{{ 'clinicalExams.detail.pendingValidation' | translate }}</strong>
+                <small>{{ 'clinicalExams.detail.pendingValidationText' | translate }}</small>
+              }
+            </div>
+            @if (exam.canValidateResult) {
+              <button id="validate-result-button" class="btn-accent" mat-flat-button type="button"
+                      [disabled]="store.isSaving()" (click)="validateResult(exam)">
+                {{ 'clinicalExams.detail.validate' | translate }}
+              </button>
+            }
+          </div>
+        } @else if (exam.canRegisterResult) {
+          <app-exam-result-form [saving]="store.isSaving()" (submitted)="registerResult(exam, $event)" />
+        } @else {
+          <p class="soft-empty">{{ 'clinicalExams.detail.resultLater' | translate }}</p>
+        }
+      </section>
+
+      <!-- ===== Archivos ===== -->
+      <section id="files-card" class="card card-body">
+        <div class="section-head">
+          <span class="section-icon"><app-icon name="image" [size]="20" /></span>
+          <div>
+            <h2>{{ 'clinicalExams.detail.filesTitle' | translate }}</h2>
+            <p>{{ 'clinicalExams.detail.filesSubtitle' | translate }}</p>
+          </div>
+          <span class="count">{{ exam.files.length }}</span>
+        </div>
         <app-clinical-file-list
           [files]="exam.files"
           [canUpload]="exam.canAttachFiles"
@@ -177,8 +165,8 @@
           (fileSelected)="upload(exam, $event)"
           (downloadRequested)="download(exam, $event)"
         />
-      </mat-card-content>
-    </mat-card>
+      </section>
+    </div>
   } @else if (store.isLoading()) {
     <div class="loading"><mat-spinner diameter="40" /></div>
   }

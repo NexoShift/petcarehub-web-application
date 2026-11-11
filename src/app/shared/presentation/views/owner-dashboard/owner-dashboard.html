@@ -10,10 +10,13 @@
         <h1>{{ 'dashboard.owner.hello' | translate: { name: d.ownerFirstName } }} <span class="wave">👋</span></h1>
         <p>{{ 'dashboard.owner.subtitle' | translate }}</p>
       </div>
-      <span class="verified">
-        <app-icon name="check-circle" [size]="16" />
-        {{ 'dashboard.owner.verified' | translate }} <strong>{{ d.verifiedBy }}</strong>
-      </span>
+      @if (d.assignedVet; as vet) {
+        <span class="verified">
+          <app-icon name="check-circle" [size]="16" />
+          {{ 'dashboard.owner.verified' | translate }}
+          <strong>{{ vet.name }}@if (vet.license) { · {{ vet.license }} }</strong>
+        </span>
+      }
     </header>
 
     <!-- ===== Mis mascotas ===== -->
@@ -40,12 +43,12 @@
                   @if (pet.weightKg) { {{ pet.weightKg }} kg }
                 </p>
               </div>
-              @if (pet.active) { <span class="chip success">{{ 'common.active' | translate }}</span> }
+              @if (pet.active) { <span class="chip success">{{ 'dashboard.owner.tags.inConsultation' | translate }}</span> }
             </div>
             <div class="pet-tags">
               @for (tag of pet.tags; track tag.label) {
                 <span class="chip" [class.success]="tag.tone === 'success'" [class.danger]="tag.tone === 'danger'">
-                  {{ tag.label }}
+                  {{ tag.label | translate: (tag.params ?? {}) }}
                 </span>
               }
             </div>
@@ -160,51 +163,82 @@
         <article class="card reveal" style="--i: 3">
           <div class="card-header">
             <h2><app-icon name="calendar" [size]="18" /> {{ 'dashboard.owner.upcoming' | translate }}</h2>
-            <a class="link" routerLink="/medical-history">{{ 'dashboard.owner.calendar' | translate }}</a>
+            <a class="link" routerLink="/my-consultations">{{ 'dashboard.owner.seeConsultations' | translate }}</a>
           </div>
           <ul class="events">
-            @for (event of d.events; track event.title) {
+            @for (event of d.events; track $index) {
               <li>
-                <span class="date"><small>{{ event.month }}</small><strong>{{ event.day }}</strong></span>
-                <div>
-                  <p class="event-title">{{ event.title }} @if (event.badge) { <span class="chip solid">{{ event.badge }}</span> }</p>
-                  <p>{{ event.detail }}</p>
-                  <small>{{ event.meta }}</small>
-                </div>
+                <span class="date"><small>{{ event.date | date: 'MMM' }}</small><strong>{{ event.date | date: 'dd' }}</strong></span>
+                <a class="event-link" [routerLink]="event.link" [queryParams]="event.query ?? {}">
+                  <p class="event-title">
+                    {{ event.title | translate: { type: ('clinicalExams.types.' + (event.examType ?? 'OTHER')) | translate } }}
+                    <span class="chip solid">{{ event.badge | translate }}</span>
+                  </p>
+                  @if (event.detail) { <p>{{ event.detail }}</p> }
+                  <small>{{ event.pet }}</small>
+                </a>
               </li>
+            } @empty {
+              <li class="empty-row">{{ 'dashboard.owner.noEvents' | translate }}</li>
             }
           </ul>
         </article>
 
-        <article class="card ai-card reveal" style="--i: 4">
+        <article class="card reveal" style="--i: 4">
+          <div class="card-header">
+            <h2><app-icon name="flask" [size]="18" /> {{ 'dashboard.owner.results' | translate }}</h2>
+            <a class="link" routerLink="/exams">{{ 'dashboard.owner.seeAll' | translate }}</a>
+          </div>
+          <ul class="events">
+            @for (r of d.results; track r.examId) {
+              <li>
+                <span class="date result"><app-icon name="check-circle" [size]="18" /></span>
+                <a class="event-link" routerLink="/exams" [queryParams]="{ petId: r.petId }">
+                  <p class="event-title">{{ 'clinicalExams.types.' + r.type | translate }} · {{ r.pet }}</p>
+                  <p>{{ r.summary }}</p>
+                  <small>{{ r.date | date: 'dd/MM/yyyy' : 'UTC' }}</small>
+                </a>
+              </li>
+            } @empty {
+              <li class="empty-row">{{ 'dashboard.owner.noResults' | translate }}</li>
+            }
+          </ul>
+        </article>
+
+        <article class="card ai-card reveal" style="--i: 5">
           <div class="card-header">
             <h2><app-icon name="sparkles" [size]="18" /> {{ 'dashboard.owner.aiQuota' | translate }}</h2>
-            <span class="chip success">{{ d.aiQuota.plan }}</span>
+            @if (d.aiQuota; as quota) {
+              <span class="chip success">{{ quota.plan }}</span>
+            } @else {
+              <span class="chip info">{{ 'dashboard.vet.comingSoon' | translate }}</span>
+            }
           </div>
-          <small class="muted">{{ 'dashboard.owner.cycle' | translate: { cycle: d.aiQuota.cycle } }}</small>
-          @for (usage of d.aiQuota.usages; track usage.label) {
-            <div class="usage">
-              <div class="usage-row"><span>{{ usage.label }}</span><strong>{{ 'dashboard.owner.used' | translate: { used: usage.used, limit: usage.limit } }}</strong></div>
-              <app-progress-bar [value]="usagePercent(usage)" />
-              <small class="muted">{{ usage.hint }}</small>
-            </div>
+          @if (d.aiQuota; as quota) {
+            <small class="muted">{{ 'dashboard.owner.cycle' | translate: { cycle: quota.cycle } }}</small>
+            @for (usage of quota.usages; track usage.label) {
+              <div class="usage">
+                <div class="usage-row"><span>{{ usage.label }}</span><strong>{{ 'dashboard.owner.used' | translate: { used: usage.used, limit: usage.limit } }}</strong></div>
+                <app-progress-bar [value]="usagePercent(usage)" />
+                <small class="muted">{{ usage.hint }}</small>
+              </div>
+            }
+          } @else {
+            <p class="muted">{{ 'dashboard.owner.aiQuotaSoon' | translate }}</p>
           }
-          <div class="usage-row">
-            <a class="link" routerLink="/plan">{{ 'dashboard.owner.buyMore' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
-            <small class="muted">{{ 'dashboard.owner.renewsIn' | translate: { days: d.aiQuota.renewsInDays } }}</small>
-          </div>
           <p class="ai-note">{{ 'dashboard.owner.aiNote' | translate }}</p>
         </article>
 
-        <article class="card vet-card reveal" style="--i: 5">
-          <span class="vet-avatar"><app-icon name="stethoscope" /></span>
-          <div>
-            <strong>{{ d.assignedVet.name }}</strong>
-            <small>{{ d.assignedVet.role }}</small>
-            <small class="clinic">{{ d.assignedVet.clinic }}</small>
-          </div>
-          <button class="icon-round" type="button" [attr.aria-label]="'dashboard.owner.writeVet' | translate"><app-icon name="chat" [size]="18" /></button>
-        </article>
+        @if (d.assignedVet; as vet) {
+          <article class="card vet-card reveal" style="--i: 6">
+            <span class="vet-avatar"><app-icon name="stethoscope" /></span>
+            <div>
+              <strong>{{ vet.name }}</strong>
+              <small>{{ 'dashboard.owner.vetRole' | translate }}@if (vet.license) { · {{ vet.license }} }</small>
+              <small class="clinic">{{ vet.clinic }}</small>
+            </div>
+          </article>
+        }
       </aside>
     </div>
   } @else if (store.loading()) {

@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageStore } from '../../../application/language.store';
@@ -12,13 +13,13 @@ import { PetAvatar } from '../../components/pet-avatar/pet-avatar';
 type SpeciesFilter = 'Todos' | 'Canino' | 'Felino';
 
 /**
- * MW-05 · Panel del veterinario de guardia.
- * Indicadores del día, pacientes de hoy con filtro por especie, exámenes por revisar,
- * consultas recientes y la sugerencia del asistente clínico IA.
+ * MW-05 · Panel del veterinario.
+ * Indicadores reales del día, pacientes de la clínica con su consulta abierta o la última,
+ * exámenes por revisar, consultas recientes y acceso al asistente clínico.
  */
 @Component({
   selector: 'app-vet-dashboard',
-  imports: [RouterLink, Icon, KpiCard, PetAvatar, TranslatePipe],
+  imports: [DatePipe, RouterLink, Icon, KpiCard, PetAvatar, TranslatePipe],
   templateUrl: './vet-dashboard.html',
   styleUrls: ['../dashboard.css', './vet-dashboard.css'],
 })
@@ -72,6 +73,6 @@ export class VetDashboard implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.loadVet();
+    void this.store.loadVet();
   }
 }

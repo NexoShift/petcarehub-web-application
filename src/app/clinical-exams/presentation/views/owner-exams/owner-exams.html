@@ -1,0 +1,135 @@
+<section class="list-page">
+  <header class="page-head">
+    <span class="head-icon"><app-icon name="flask" [size]="28" /></span>
+    <div class="head-text">
+      <h1>{{ 'clinicalExams.owner.title' | translate }}</h1>
+      <p>{{ 'clinicalExams.owner.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <p class="banner">
+    <app-icon name="shield" [size]="18" /> {{ 'clinicalExams.owner.hint' | translate }}
+  </p>
+
+  <div class="owner-layout">
+    <!-- ===== Mascotas ===== -->
+    <aside id="pet-selector" class="card pets-card">
+      <div class="section-head small">
+        <h2><app-icon name="paw" [size]="18" /> {{ 'clinicalExams.owner.pets' | translate }}</h2>
+        <span class="count">{{ pets().length }}</span>
+      </div>
+      @if (petsLoading()) {
+        <div class="loading"><mat-spinner diameter="32" /></div>
+      } @else {
+        <ul class="pets">
+          @for (pet of pets(); track pet.id) {
+            <li>
+              <button type="button" class="pet" [id]="'pet-' + pet.id"
+                      [class.active]="selectedPetId() === pet.id" (click)="select(pet.id)">
+                <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="40" />
+                <span class="pet-text">
+                  <strong>{{ pet.name }}</strong>
+                  <small>{{ 'enums.species.' + pet.species | translate }}@if (pet.breed) { · {{ pet.breed }} }</small>
+                </span>
+                <app-icon name="chevron-right" [size]="16" />
+              </button>
+            </li>
+          } @empty {
+            <li id="no-pets" class="no-pets">
+              <p>{{ 'clinicalExams.owner.noPets' | translate }}</p>
+              <a routerLink="/profiles/pets/new">
+                <app-icon name="plus" [size]="15" /> {{ 'clinicalExams.owner.addPet' | translate }}
+              </a>
+            </li>
+          }
+        </ul>
+      }
+    </aside>
+
+    <!-- ===== Exámenes de la mascota ===== -->
+    <div class="card card-body exams-card">
+      @if (selectedPet(); as pet) {
+        <div class="pet-head">
+          <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="52" />
+          <div>
+            <h2>{{ pet.name }}</h2>
+            <span class="code">{{ pet.petCode }}</span>
+          </div>
+        </div>
+
+        @if (store.error(); as error) {
+          <p id="owner-exams-error" class="error-message" role="alert">
+            <app-icon name="alert" [size]="16" /> {{ error | translate }}
+          </p>
+        }
+
+        @if (store.isLoading()) {
+          <div class="loading"><mat-spinner diameter="40" /></div>
+        } @else if (store.petExams().length === 0) {
+          <div id="no-exams" class="placeholder">
+            <span class="placeholder-icon"><app-icon name="flask" [size]="30" /></span>
+            <p>{{ 'clinicalExams.owner.empty' | translate: { name: pet.name } }}</p>
+          </div>
+        } @else {
+          <ul class="owner-exams">
+            @for (exam of store.petExams(); track exam.id) {
+              <li class="owner-exam" [id]="'owner-exam-' + exam.id">
+                <div class="exam-head">
+                  <span class="type-icon"><app-icon [name]="typeIcons[exam.type]" [size]="22" /></span>
+                  <div class="row-text">
+                    <strong>{{ 'clinicalExams.types.' + exam.type | translate }}</strong>
+                    <small>
+                      {{ 'clinicalExams.owner.requestedOn' | translate: { date: (exam.requestedAt | date: 'dd/MM/yyyy') } }}
+                      · <a [routerLink]="['/my-consultations', exam.consultationId]">
+                        {{ 'clinicalExams.worklist.consultation' | translate }} N.° {{ exam.consultationId }}
+                      </a>
+                    </small>
+                  </div>
+                  <app-exam-status-chip [status]="exam.status" />
+                </div>
+
+                @if (exam.indication) {
+                  <p class="indication"><strong>{{ 'clinicalExams.detail.indication' | translate }}:</strong> {{ exam.indication }}</p>
+                }
+
+                @if (exam.cancellationReason) {
+                  <p class="note muted">
+                    <app-icon name="x" [size]="16" />
+                    {{ 'clinicalExams.detail.cancellationReason' | translate }}: {{ exam.cancellationReason }}
+                  </p>
+                } @else if (exam.result; as result) {
+                  <div class="result">
+                    <div class="result-title">
+                      <app-icon name="check-circle" [size]="16" /> {{ 'clinicalExams.owner.resultTitle' | translate }}
+                      <span>{{ result.resultDate | date: 'dd/MM/yyyy' : 'UTC' }}</span>
+                    </div>
+                    <p class="result-summary">{{ result.summary }}</p>
+                    @if (result.interpretation) {
+                      <p><strong>{{ 'clinicalExams.detail.interpretation' | translate }}:</strong> {{ result.interpretation }}</p>
+                    }
+                    @if (result.values) {
+                      <p><strong>{{ 'clinicalExams.detail.values' | translate }}:</strong> {{ result.values }}</p>
+                    }
+                  </div>
+                } @else {
+                  <p class="note pending">
+                    <app-icon name="clock" [size]="16" /> {{ 'clinicalExams.owner.noResultYet' | translate }}
+                  </p>
+                }
+
+                @if (exam.files.length > 0) {
+                  <app-clinical-file-list [files]="exam.files" (downloadRequested)="download(exam, $event)" />
+                }
+              </li>
+            }
+          </ul>
+        }
+      } @else if (!petsLoading()) {
+        <div class="placeholder">
+          <span class="placeholder-icon"><app-icon name="paw" [size]="30" /></span>
+          <h2>{{ 'clinicalAttention.owner.pickTitle' | translate }}</h2>
+        </div>
+      }
+    </div>
+  </div>
+</section>

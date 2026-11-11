@@ -9,11 +9,11 @@
       <div>
         <h1>{{ 'dashboard.vet.greeting' | translate: { greeting: greeting() | translate, name: d.vetLastName } }}</h1>
         <p class="date-line"><app-icon name="calendar" [size]="14" /> {{ today() }} · {{ d.clinic }}</p>
-        <p>{{ 'dashboard.vet.summary' | translate: { scheduled: d.scheduledToday, waiting: d.waitingNow } }}</p>
+        <p>{{ 'dashboard.vet.summary' | translate: { patients: d.patientCount, waiting: d.waitingNow } }}</p>
       </div>
       <div class="actions">
-        <button class="btn btn-outline btn-sm" type="button"><app-icon name="user-plus" [size]="16" /> {{ 'dashboard.vet.registerPatient' | translate }}</button>
-        <button class="btn btn-accent btn-sm" type="button"><app-icon name="plus" [size]="16" /> {{ 'dashboard.vet.newConsultation' | translate }}</button>
+        <a class="btn btn-outline btn-sm" routerLink="/profiles/clinic/patients"><app-icon name="user-plus" [size]="16" /> {{ 'dashboard.vet.registerPatient' | translate }}</a>
+        <a class="btn btn-accent btn-sm" routerLink="/consultations/new"><app-icon name="plus" [size]="16" /> {{ 'dashboard.vet.newConsultation' | translate }}</a>
       </div>
     </header>
 
@@ -31,7 +31,7 @@
           <span class="header-icon"><app-icon name="list" [size]="18" /></span>
           <div>
             <h2>{{ 'dashboard.vet.todayPatients' | translate }}</h2>
-            <small>{{ 'dashboard.vet.scheduledSynced' | translate: { count: d.scheduledToday, time: d.syncedAt } }}</small>
+            <small>{{ 'dashboard.vet.scheduledSynced' | translate: { count: d.patientCount, time: d.syncedAt } }}</small>
           </div>
           <!-- Pestañas: al hacer clic cambian la señal "filter" y la lista se actualiza -->
           <div class="tabs" role="tablist">
@@ -44,16 +44,16 @@
           </div>
         </div>
 
-        @for (p of visiblePatients(); track p.code) {
+        @for (p of visiblePatients(); track p.petId) {
           <article class="patient" [class]="'patient ' + p.status">
             <div class="strip">
               <span>
                 @switch (p.status) {
                   @case ('waiting') { <app-icon name="clock" [size]="14" /> }
-                  @case ('alert') { <app-icon name="alert" [size]="14" /> }
+                  @case ('in-progress') { <app-icon name="stethoscope" [size]="14" /> }
                   @default { <app-icon name="check-circle" [size]="14" /> }
                 }
-                {{ p.statusText }}
+                {{ p.statusText | translate: (p.statusParams ?? {}) }}
               </span>
               <strong>{{ p.code }}</strong>
             </div>
@@ -77,21 +77,23 @@
 
               @if (p.note) {
                 <div class="note">
-                  <small>{{ p.noteTitle }}</small>
+                  <small>{{ p.noteTitle | translate }}@if (p.noteDate) { · {{ p.noteDate | date: 'dd MMM yyyy' }} }</small>
                   <p>{{ p.note }}</p>
                 </div>
               }
 
               <div class="patient-actions">
-                <button class="btn btn-outline btn-sm" type="button"><app-icon name="eye" [size]="16" /> {{ 'dashboard.vet.viewRecord' | translate }}</button>
-                <button class="btn btn-primary btn-sm" type="button">
-                  <app-icon [name]="p.status === 'waiting' ? 'play' : 'plus'" [size]="15" /> {{ p.primaryAction }}
-                </button>
+                <a class="btn btn-outline btn-sm" routerLink="/consultations" [queryParams]="{ petId: p.petId }">
+                  <app-icon name="eye" [size]="16" /> {{ 'dashboard.vet.viewRecord' | translate }}
+                </a>
+                <a class="btn btn-primary btn-sm" [routerLink]="p.primaryLink" [queryParams]="p.primaryQuery ?? {}">
+                  <app-icon [name]="p.status === 'ok' ? 'plus' : 'play'" [size]="15" /> {{ p.primaryAction | translate }}
+                </a>
               </div>
             </div>
           </article>
         } @empty {
-          <p class="empty">{{ 'dashboard.vet.noPatients' | translate }}</p>
+          <p class="empty">{{ (counts().Todos === 0 ? 'dashboard.vet.noPatientsYet' : 'dashboard.vet.noPatients') | translate }}</p>
         }
       </section>
 
@@ -103,16 +105,25 @@
             <span class="count">{{ d.exams.length }}</span>
           </div>
           <ul class="list">
-            @for (exam of d.exams; track exam.name) {
+            @for (exam of d.exams; track exam.id) {
               <li>
-                <div>
-                  <strong>{{ exam.name }}</strong>
-                  <small>{{ 'dashboard.vet.patient' | translate: { name: exam.patient } }} · {{ exam.lab }}</small>
-                </div>
-                <span class="chip" [class.warning]="exam.status === 'En proceso'" [class.info]="exam.status === 'Solicitado'">
-                  {{ exam.status }}
-                </span>
+                <a class="row-link" [routerLink]="['/clinical-exams', exam.id]">
+                  <strong>{{ 'clinicalExams.types.' + exam.type | translate }}</strong>
+                  <small>
+                    {{ 'dashboard.vet.patient' | translate: { name: exam.patient } }}
+                    · {{ 'clinicalExams.worklist.consultation' | translate }} N.° {{ exam.consultationId }}
+                  </small>
+                </a>
+                @if (exam.needsValidation) {
+                  <span class="chip warning">{{ 'dashboard.vet.toValidate' | translate }}</span>
+                } @else {
+                  <span class="chip" [class.warning]="exam.status === 'IN_PROCESS'" [class.info]="exam.status === 'REQUESTED'">
+                    {{ 'clinicalExams.status.' + exam.status | translate }}
+                  </span>
+                }
               </li>
+            } @empty {
+              <li class="empty-row">{{ 'dashboard.vet.noPendingExams' | translate }}</li>
             }
           </ul>
           <a class="link center" routerLink="/clinical-exams">{{ 'dashboard.vet.allExams' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
@@ -123,14 +134,16 @@
             <h2><app-icon name="history" [size]="18" /> {{ 'dashboard.vet.recent' | translate }}</h2>
           </div>
           <ul class="list">
-            @for (c of d.recent; track c.patient + c.date) {
+            @for (c of d.recent; track c.id) {
               <li>
-                <div>
+                <a class="row-link" [routerLink]="['/consultations', c.id]">
                   <strong>{{ c.patient }} <span class="reason">· {{ c.reason }}</span></strong>
-                  <small>{{ c.date }}</small>
-                </div>
+                  <small>{{ c.date | date: 'dd MMM yyyy · HH:mm' }}</small>
+                </a>
                 <span class="chip success">{{ 'dashboard.vet.finished' | translate }}</span>
               </li>
+            } @empty {
+              <li class="empty-row">{{ 'dashboard.vet.noRecent' | translate }}</li>
             }
           </ul>
           <a class="link center" routerLink="/consultations">{{ 'dashboard.vet.allConsultations' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
@@ -139,12 +152,18 @@
         <article class="card ai reveal" style="--i: 8">
           <div class="card-header">
             <h2><span class="ai-icon"><app-icon name="sparkles" [size]="16" /></span> {{ 'dashboard.vet.aiAssistant' | translate }}</h2>
-            <span class="chip success"><span class="live"></span> {{ 'common.active' | translate }}</span>
+            <span class="chip info">{{ 'dashboard.vet.comingSoon' | translate }}</span>
           </div>
-          <p class="ai-text">{{ d.aiSuggestion.text }}</p>
+          @if (d.ongoing; as o) {
+            <p class="ai-text">{{ 'dashboard.vet.aiOngoing' | translate: { pet: o.patient, id: o.id } }}</p>
+          } @else {
+            <p class="ai-text">{{ 'dashboard.vet.aiIdle' | translate }}</p>
+          }
           <div class="ai-footer">
             <small>{{ 'dashboard.vet.aiNote' | translate }}</small>
-            <a class="link" routerLink="/ai-assistant">{{ 'dashboard.vet.review' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
+            @if (d.ongoing; as o) {
+              <a class="link" [routerLink]="['/consultations', o.id]">{{ 'dashboard.vet.openConsultation' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
+            }
           </div>
         </article>
       </aside>

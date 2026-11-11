@@ -1,0 +1,144 @@
+<!-- En una consulta cerrada sin imágenes no se muestra nada: no todas las consultas las necesitan -->
+@if (!readonly() || studies().length > 0) {
+  <div class="panel">
+    <div class="layout">
+      <!-- ===== Imagen ===== -->
+      <article class="card" id="consultation-imaging">
+        <div class="card-header">
+          <div class="title">
+            <span class="title-icon"><app-icon [name]="viewerType() === ImageType.Radiograph ? 'xray' : 'camera'" [size]="18" /></span>
+            <div>
+              <h2>{{ (viewerType() === ImageType.Radiograph ? 'aiVision.vet.xrayTitle' : 'aiVision.vet.skinTitle') | translate }}</h2>
+              <small>{{ (viewerType() === ImageType.Radiograph ? 'aiVision.vet.xraySubtitle' : 'aiVision.vet.skinSubtitle') | translate }}</small>
+            </div>
+          </div>
+          @if (viewerType() === ImageType.Radiograph) {
+            <mat-slide-toggle [checked]="pointer()" (change)="pointer.set($event.checked)" class="pointer-toggle">
+              {{ 'aiVision.vet.pointer' | translate }}
+            </mat-slide-toggle>
+          }
+        </div>
+
+        @if (!readonly()) {
+          <div class="type-row">
+            <span class="type-label">{{ 'aiVision.vet.imageType' | translate }}</span>
+            <mat-button-toggle-group [value]="imageType()" (change)="setType($event.value)" hideSingleSelectionIndicator
+                                     [attr.aria-label]="'aiVision.vet.imageType' | translate">
+              <mat-button-toggle [value]="ImageType.Skin" id="imaging-type-skin">
+                <span class="toggle"><app-icon name="camera" [size]="16" />{{ 'aiVision.imageType.SKIN' | translate }}</span>
+              </mat-button-toggle>
+              <mat-button-toggle [value]="ImageType.Radiograph" id="imaging-type-xray">
+                <span class="toggle"><app-icon name="xray" [size]="16" />{{ 'aiVision.imageType.RADIOGRAPH' | translate }}</span>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+          <div class="tip">
+            <app-icon [name]="viewerType() === ImageType.Radiograph ? 'info' : 'crosshair'" [size]="18" />
+            {{ (viewerType() === ImageType.Radiograph ? 'aiVision.vet.xrayTip' : 'aiVision.vet.skinTip') | translate }}
+          </div>
+        }
+
+        <app-vision-viewer
+          [src]="viewerSrc()" [analysis]="store.current()" [imageType]="viewerType()" [caption]="caption()"
+          [processing]="store.processing() === 'main'" [pointer]="viewerType() === ImageType.Radiograph && pointer()"
+          (fileDropped)="onFile($event)" (pickRequested)="gallery.click()" />
+
+        <input #gallery type="file" accept="image/jpeg,image/png" class="visually-hidden" (change)="fromInput($event)"
+               [attr.aria-label]="'aiVision.vet.chooseFile' | translate" id="imaging-file-input">
+        <input #camera type="file" accept="image/jpeg,image/png" capture="environment" class="visually-hidden"
+               (change)="fromInput($event)" [attr.aria-label]="'aiVision.camera' | translate">
+
+        @if (!readonly()) {
+          <div class="btn-row">
+            <button type="button" class="btn btn-outline" (click)="gallery.click()" [disabled]="!!store.processing()">
+              <app-icon name="upload" [size]="16" />{{ 'aiVision.vet.chooseFile' | translate }}
+            </button>
+            <button type="button" class="btn btn-outline" (click)="camera.click()" [disabled]="!!store.processing()">
+              <app-icon name="camera" [size]="16" />{{ 'aiVision.camera' | translate }}
+            </button>
+            @if (store.current()) {
+              <button type="button" class="btn btn-navy grow" (click)="newStudy()" id="imaging-new-study">
+                <app-icon name="plus" [size]="16" />{{ 'aiVision.vet.newStudy' | translate }}
+              </button>
+            } @else {
+              <button type="button" class="btn btn-accent grow" (click)="analyze()" [disabled]="!canAnalyze()" id="imaging-analyze">
+                @if (store.processing() === 'main') { <span class="spin"></span>{{ 'aiVision.analyzing' | translate }} }
+                @else { <app-icon name="sparkles" [size]="16" />{{ 'aiVision.analyze' | translate }} }
+              </button>
+            }
+          </div>
+        }
+
+        @if (store.error(); as error) {
+          <div class="error-banner" role="alert"><app-icon name="alert" [size]="16" />{{ error | translate }}</div>
+        }
+      </article>
+
+      <!-- ===== Resultado ===== -->
+      <aside class="card status">
+        <div class="card-header">
+          <h2>{{ 'aiVision.vet.resultTitle' | translate }}</h2>
+          @if (store.current(); as c) {
+            <span class="chip" [class.warning]="c.requestedByRole === 'PET_OWNER'" [class.info]="c.requestedByRole !== 'PET_OWNER'">
+              {{ ('aiVision.history.by.' + c.requestedByRole) | translate }}
+            </span>
+          }
+        </div>
+        <app-analysis-steps [phase]="store.phase()" />
+        <div class="divider"></div>
+
+        @if (store.current(); as current) {
+          @if (current.topFinding; as top) {
+            @if (top.probable) {
+              <div class="lead">
+                <span class="section-label">{{ 'aiVision.vet.mostLikely' | translate }}</span>
+                <strong>{{ top.label | findingLabel }}</strong>
+              </div>
+            }
+          }
+          <app-findings-panel [analysis]="current" audience="vet" />
+          <div class="notice">
+            <span class="notice-icon"><app-icon name="sparkles" [size]="16" /></span>
+            <div>
+              <strong>{{ 'aiVision.vet.backgroundTitle' | translate }}</strong>
+              <p>{{ 'aiVision.consultation.backgroundText' | translate }}</p>
+            </div>
+          </div>
+        } @else {
+          <div class="waiting">
+            <span class="waiting-icon"><app-icon [name]="store.processing() ? 'scan' : (imageType() === ImageType.Radiograph ? 'xray' : 'image')" [size]="22" /></span>
+            <strong>{{ (store.processing() ? 'aiVision.vet.processingTitle' : 'aiVision.vet.waitingTitle') | translate }}</strong>
+            <p>{{ (store.processing() ? 'aiVision.vet.processingText' : 'aiVision.consultation.waitingText') | translate }}</p>
+          </div>
+        }
+        <p class="legal"><app-icon name="shield" [size]="14" />{{ 'aiVision.vet.legal' | translate }}</p>
+      </aside>
+    </div>
+
+    <!-- ===== Estudios de esta consulta ===== -->
+    <section class="history" id="consultation-studies">
+      <div class="history-head">
+        <div>
+          <h2>{{ 'aiVision.consultation.studiesTitle' | translate }}</h2>
+          <small>
+            {{ 'aiVision.consultation.studiesSubtitle' | translate }}
+            @if (otherStudies()) { · {{ 'aiVision.consultation.otherStudies' | translate: { n: otherStudies() } }} }
+          </small>
+        </div>
+        <a class="btn btn-ghost btn-sm" routerLink="/imaging" [queryParams]="{ petId: petId(), consultationId: consultationId() }"
+           id="open-imaging-link">
+          <app-icon name="scan" [size]="15" />{{ 'aiVision.consultation.openImaging' | translate }}
+        </a>
+      </div>
+      @if (store.historyLoading()) {
+        <div class="skeleton-row"><span></span><span></span><span></span></div>
+      } @else if (studies().length) {
+        <app-analysis-history [analyses]="studies()" [selectedId]="store.current()?.id ?? null" [showRequester]="true"
+                              (selected)="open($event)" />
+      } @else {
+        <p class="empty-history" id="imaging-optional">{{ 'aiVision.consultation.optional' | translate }}</p>
+      }
+    </section>
+  </div>
+}
