@@ -1,0 +1,162 @@
+<section class="detail-page">
+  <a id="back-to-list" class="back-link" routerLink="/my-consultations"
+     [queryParams]="store.consultation() ? { petId: store.consultation()!.petId } : {}">
+    <app-icon name="arrow-right" [size]="14" class="flip" /> {{ 'clinicalAttention.owner.back' | translate }}
+  </a>
+
+  @if (store.error(); as error) {
+    <p id="detail-error" class="error-message" role="alert">
+      <app-icon name="alert" [size]="16" /> {{ error | translate }}
+    </p>
+  }
+
+  @if (store.isLoading() && !store.consultation()) {
+    <div class="loading"><mat-spinner diameter="40" /></div>
+  } @else if (store.consultation(); as c) {
+    <!-- ===== Encabezado ===== -->
+    <section class="hero">
+      <div class="hero-main">
+        @if (names().pet; as pet) {
+          <app-pet-avatar [name]="pet" [size]="64" />
+        } @else {
+          <span class="hero-icon"><app-icon name="stethoscope" [size]="28" /></span>
+        }
+        <div>
+          <div class="title-line">
+            <h1>{{ 'clinicalAttention.workspace.title' | translate: { id: c.id } }}</h1>
+            <app-consultation-status-chip [status]="c.status" />
+          </div>
+          <p class="pet-line"><strong>{{ names().pet ?? '—' }}</strong></p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <app-icon name="chat" [size]="16" />
+        <div>
+          <small>{{ 'clinicalAttention.workspace.reason' | translate }}</small>
+          <p>{{ c.reason }}</p>
+        </div>
+      </div>
+
+      <dl class="facts">
+        <div>
+          <dt><app-icon name="stethoscope" [size]="14" /> {{ 'clinicalAttention.owner.veterinarian' | translate }}</dt>
+          <dd>{{ names().veterinarian ?? '—' }}</dd>
+        </div>
+        <div>
+          <dt><app-icon name="building" [size]="14" /> {{ 'clinicalAttention.owner.clinic' | translate }}</dt>
+          <dd>{{ names().clinic ?? '—' }}</dd>
+        </div>
+        <div>
+          <dt><app-icon name="calendar" [size]="14" /> {{ 'clinicalAttention.owner.date' | translate }}</dt>
+          <dd>{{ (c.startedAt ?? c.createdAt) | date: 'dd/MM/yyyy HH:mm' }}</dd>
+        </div>
+      </dl>
+
+      @if (c.cancellationReason) {
+        <p class="note muted">
+          <app-icon name="x" [size]="16" />
+          <span><strong>{{ 'clinicalAttention.owner.cancelled' | translate }}:</strong> {{ c.cancellationReason }}</span>
+        </p>
+      }
+    </section>
+
+    <div class="grid">
+      @if (c.anamnesis; as a) {
+        <section class="card">
+          <div class="section-head">
+            <span class="section-icon"><app-icon name="chat" [size]="20" /></span>
+            <h2>{{ 'clinicalAttention.phases.anamnesis.title' | translate }}</h2>
+          </div>
+          <dl class="facts">
+            <div class="wide"><dt>{{ 'clinicalAttention.owner.chiefComplaint' | translate }}</dt><dd>{{ a.chiefComplaint }}</dd></div>
+            <div><dt>{{ 'clinicalAttention.owner.evolutionTime' | translate }}</dt><dd>{{ a.evolutionTime }}</dd></div>
+            @if (a.symptoms.length) {
+              <div><dt>{{ 'clinicalAttention.owner.symptoms' | translate }}</dt><dd>{{ a.symptoms.join(', ') }}</dd></div>
+            }
+          </dl>
+        </section>
+      }
+
+      @if (c.latestAssessment; as v) {
+        <section class="card">
+          <div class="section-head">
+            <span class="section-icon"><app-icon name="activity" [size]="20" /></span>
+            <h2>{{ 'clinicalAttention.phases.assessment.title' | translate }}</h2>
+          </div>
+          <dl class="vitals">
+            <div><dt>{{ 'clinicalAttention.owner.weight' | translate }}</dt><dd>{{ v.weightKg }} <small>kg</small></dd></div>
+            <div><dt>{{ 'clinicalAttention.owner.temperature' | translate }}</dt><dd>{{ v.temperatureCelsius }} <small>°C</small></dd></div>
+            <div><dt>{{ 'clinicalAttention.owner.heartRate' | translate }}</dt><dd>{{ v.heartRateBpm }} <small>lpm</small></dd></div>
+            <div><dt>{{ 'clinicalAttention.owner.respiratoryRate' | translate }}</dt><dd>{{ v.respiratoryRateBpm }} <small>rpm</small></dd></div>
+          </dl>
+        </section>
+      }
+
+      @if (c.findings.length) {
+        <section class="card">
+          <div class="section-head">
+            <span class="section-icon"><app-icon name="eye" [size]="20" /></span>
+            <h2>{{ 'clinicalAttention.findings.title' | translate }}</h2>
+          </div>
+          <ul class="items">
+            @for (f of c.findings; track f.id) {
+              <li>
+                <strong>{{ 'clinicalAttention.bodySystems.' + f.bodySystem | translate }}</strong>
+                <span>{{ f.description }}</span>
+                @if (f.severity) { <em class="tag">{{ 'clinicalAttention.severity.' + f.severity | translate }}</em> }
+              </li>
+            }
+          </ul>
+        </section>
+      }
+
+      @if (c.currentDiagnoses.length) {
+        <section class="card">
+          <div class="section-head">
+            <span class="section-icon"><app-icon name="check-circle" [size]="20" /></span>
+            <h2>{{ 'clinicalAttention.phases.diagnosis.title' | translate }}</h2>
+          </div>
+          <ul class="items" id="owner-diagnoses">
+            @for (d of c.currentDiagnoses; track d.id) {
+              <li>
+                <strong>{{ d.description }}</strong>
+                <span>{{ 'clinicalAttention.diagnosisType.' + d.type | translate }}</span>
+                @if (d.primary) { <em class="tag strong">{{ 'clinicalAttention.owner.primary' | translate }}</em> }
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </div>
+
+    <section class="card" id="owner-consultation-exams">
+      <div class="section-head">
+        <span class="section-icon"><app-icon name="flask" [size]="20" /></span>
+        <h2>{{ 'clinicalAttention.exams.title' | translate }}</h2>
+        @if (exams.consultationExams().length > 0) {
+          <a id="see-exams" class="see-link" routerLink="/exams" [queryParams]="{ petId: c.petId }">
+            {{ 'clinicalAttention.owner.seeExams' | translate }} <app-icon name="arrow-right" [size]="14" />
+          </a>
+        }
+      </div>
+      @if (exams.consultationExams().length === 0) {
+        <p class="soft-empty">{{ 'clinicalAttention.owner.noExams' | translate }}</p>
+      } @else {
+        <ul class="exam-rows">
+          @for (exam of exams.consultationExams(); track exam.id) {
+            <li class="exam-row">
+              <div class="exam-text">
+                <strong>{{ 'clinicalExams.types.' + exam.type | translate }}</strong>
+                <small>
+                  @if (exam.result) { {{ exam.result.summary }} } @else { {{ 'clinicalExams.owner.noResultYet' | translate }} }
+                </small>
+              </div>
+              <app-exam-status-chip [status]="exam.status" />
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+</section>

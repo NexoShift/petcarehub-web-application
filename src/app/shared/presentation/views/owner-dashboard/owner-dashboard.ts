@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Icon, IconName } from '../../components/icon/icon';
@@ -20,12 +21,13 @@ interface QuickAction {
 
 /**
  * MW-04 · Panel del dueño de mascota.
- * Muestra sus mascotas, la alerta clínica, el tratamiento en curso, próximos eventos,
- * la cuota de IA del plan y el veterinario asignado.
+ * Muestra sus mascotas con su estado real, lo pendiente (consultas y exámenes),
+ * los últimos resultados validados y el veterinario de la última consulta.
+ * Tratamiento, alerta clínica y cuota de IA aparecen cuando existan sus módulos.
  */
 @Component({
   selector: 'app-owner-dashboard',
-  imports: [RouterLink, Icon, PetAvatar, ProgressBar, TranslatePipe],
+  imports: [DatePipe, RouterLink, Icon, PetAvatar, ProgressBar, TranslatePipe],
   templateUrl: './owner-dashboard.html',
   styleUrls: ['../dashboard.css', './owner-dashboard.css'],
 })
@@ -57,6 +59,6 @@ export class OwnerDashboard implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.store.loadOwner();
+    void this.store.loadOwner();
   }
 }

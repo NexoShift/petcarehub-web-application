@@ -147,8 +147,8 @@
   "dashboard": {
     "owner": {
       "hello": "¡Hola, {{name}}!",
-      "subtitle": "Resumen clínico y seguimiento en tiempo real para tus pacientes registrados.",
-      "verified": "Atención verificada:",
+      "subtitle": "Lo que pasa con tus mascotas: consultas, exámenes y resultados.",
+      "verified": "Tu veterinario:",
       "myPets": "Mis mascotas",
       "registered": "{{count}} registradas",
       "managePets": "Gestionar perfiles",
@@ -178,7 +178,7 @@
         "historyLink": "Ver expediente",
         "treatmentsTitle": "Tratamientos",
         "treatmentsText": "Recetas activas y archivo de dispensación",
-        "treatmentsLink": "1 activo · Explorar",
+        "treatmentsLink": "Próximamente",
         "aiTitle": "Explicar con IA",
         "aiText": "Aclarar diagnósticos y recetas complejas",
         "aiLink": "Consultar asistente",
@@ -200,38 +200,63 @@
       "buyMore": "Adquirir paquete adicional",
       "renewsIn": "Renueva en {{days}} d",
       "aiNote": "Sugerencia de la IA: siempre requiere validación del veterinario colegiado.",
-      "writeVet": "Escribir al veterinario"
+      "writeVet": "Escribir al veterinario",
+      "seeConsultations": "Ver consultas",
+      "results": "Últimos resultados",
+      "seeAll": "Ver todos",
+      "noEvents": "No tienes consultas ni exámenes pendientes.",
+      "noResults": "Todavía no hay resultados validados.",
+      "aiQuotaSoon": "Tu plan y la cuota de IA aparecerán aquí cuando se active Suscripciones.",
+      "vetRole": "Médico veterinario",
+      "events": {
+        "consultationScheduled": "Consulta programada",
+        "consultationOngoing": "Consulta en curso",
+        "examPending": "Examen: {{type}}"
+      },
+      "tags": {
+        "inConsultation": "En consulta",
+        "results": "Resultados: {{count}}",
+        "pendingExams": "Exámenes pendientes: {{count}}",
+        "visits": "Consultas: {{count}}",
+        "noVisits": "Sin consultas"
+      }
     },
     "vet": {
       "morning": "Buenos días",
       "afternoon": "Buenas tardes",
       "evening": "Buenas noches",
       "greeting": "{{greeting}}, Dr. {{name}}",
-      "summary": "Panel clínico de guardia · {{scheduled}} pacientes agendados y {{waiting}} en sala de espera inmediata",
+      "summary": "Pacientes en la clínica: {{patients}} · Consultas por iniciar: {{waiting}}",
       "registerPatient": "Registrar paciente",
       "newConsultation": "Nueva consulta",
       "kpi": {
         "attended": "Atendidos hoy",
         "patients": "pacientes",
         "vsYesterday": "+2 vs ayer",
-        "waiting": "En sala de espera",
+        "waiting": "Por iniciar",
         "inTriage": "en triaje",
         "priority": "Atención prioritaria",
         "ongoing": "Consultas en curso",
         "inCare": "En atención",
         "pendingExams": "Exámenes pendientes",
         "orders": "órdenes",
-        "labImaging": "Lab & Imagen"
+        "labImaging": "Lab & Imagen",
+        "consultations": "consultas",
+        "thisWeek": "{{count}} en los últimos 7 días",
+        "toStart": "Esperando al veterinario",
+        "toValidate": "{{count}} por validar",
+        "consultation": "consulta",
+        "order": "orden"
       },
-      "todayPatients": "Pacientes de hoy",
-      "scheduledSynced": "{{count}} pacientes agendados · Sincronizado {{time}}",
+      "todayPatients": "Pacientes de la clínica",
+      "scheduledSynced": "{{count}} pacientes · Actualizado {{time}}",
       "filters": {
         "all": "Todos",
         "dogs": "Caninos",
         "cats": "Felinos"
       },
-      "viewRecord": "Ver ficha médica",
-      "noPatients": "No hay pacientes de esta especie hoy.",
+      "viewRecord": "Ver consultas",
+      "noPatients": "No hay pacientes de esta especie.",
       "examsToReview": "Exámenes por revisar",
       "patient": "Paciente: {{name}}",
       "allExams": "Ver todos los exámenes clínicos",
@@ -240,7 +265,30 @@
       "allConsultations": "Ir al historial general de consultas",
       "aiAssistant": "Asistente clínico IA",
       "aiNote": "Sugerencia: requiere validación del veterinario",
-      "review": "Revisar"
+      "review": "Revisar",
+      "toValidate": "Por validar",
+      "noPendingExams": "No hay exámenes pendientes.",
+      "noRecent": "Todavía no hay consultas completadas.",
+      "comingSoon": "Próximamente",
+      "aiOngoing": "{{pet}} tiene la consulta N.° {{id}} en curso. Cuando el asistente esté disponible, podrás generar ahí el borrador SOAP.",
+      "aiIdle": "Cuando tengas una consulta en curso, el asistente te ayudará a redactar el borrador SOAP.",
+      "openConsultation": "Abrir consulta",
+      "patientStatus": {
+        "inProgress": "En consulta · N.° {{id}}",
+        "waiting": "Consulta por iniciar · N.° {{id}}",
+        "lastVisit": "Al día · {{count}} consultas registradas",
+        "noVisits": "Sin consultas todavía"
+      },
+      "note": {
+        "reason": "Motivo",
+        "lastVisit": "Última consulta"
+      },
+      "actions": {
+        "continue": "Continuar consulta",
+        "start": "Iniciar consulta",
+        "newConsultation": "Nueva consulta"
+      },
+      "noPatientsYet": "Todavía no hay pacientes registrados en la clínica."
     }
   },
   "enums": {
@@ -300,7 +348,6 @@
       "subscription": "Suscripción",
       "subscriptionPending": "La información de tu plan estará disponible cuando se integre el módulo de suscripciones."
     },
-
     "pets": {
       "title": "Mis mascotas",
       "subtitle": "Administra los perfiles de tus mascotas registradas.",
@@ -355,9 +402,10 @@
       "clinicsTitle": "Clínicas donde se atiende",
       "clinicsHint": "Clínicas que registraron a tu mascota como paciente",
       "noClinics": "Aún no está registrada en ninguna clínica",
-      "noClinicsHint": "Comparte el código de tu mascota con la clínica para que la registre como paciente."
+      "noClinicsHint": "Comparte el código de tu mascota con la clínica para que la registre como paciente.",
+      "seeConsultations": "Ver consultas",
+      "seeExams": "Ver exámenes"
     },
-
     "clinic": {
       "title": "Mi clínica",
       "subtitle": "Administra la información institucional de tu clínica veterinaria.",
@@ -678,7 +726,6 @@
       "retry": "Reintentar"
     }
   },
-
   "clinicalExams": {
     "close": "Cerrar",
     "status": {
@@ -708,13 +755,19 @@
       "number": "N°",
       "statusColumn": "Estado",
       "requestedAt": "Solicitado",
-      "open": "Abrir"
+      "open": "Abrir",
+      "backToConsultation": "Volver a la consulta",
+      "subtitle": "elige el examen y escribe qué se debe buscar.",
+      "typeQuestion": "¿Qué examen necesitas?",
+      "typeHelp": "Elige uno; luego podrás pedir otro.",
+      "indicationPlaceholder": "Ej.: Tórax lateral, descartar fracturas",
+      "fromConsultationTitle": "Los exámenes se piden desde la consulta"
     },
     "detail": {
-      "back": "Volver a exámenes",
+      "back": "Volver al laboratorio",
       "title": "Detalle del examen",
-      "examTitle": "{{type}} #{{id}}",
-      "subtitle": "Consulta #{{consultationId}} · Mascota #{{petId}}",
+      "examTitle": "{{type}} N.° {{id}}",
+      "subtitle": "Consulta N.° {{consultationId}} · {{pet}}",
       "indication": "Indicación",
       "noIndication": "Sin indicación",
       "requestedAt": "Solicitado",
@@ -740,7 +793,18 @@
       "resultRegistered": "Resultado registrado",
       "resultValidated": "Resultado validado",
       "filesTitle": "Archivos clínicos",
-      "fileUploaded": "Archivo subido"
+      "fileUploaded": "Archivo subido",
+      "resultSubtitle": "Lo que encontró el examen",
+      "filesSubtitle": "Imágenes, videos o PDF del examen",
+      "validatedText": "El dueño ya puede ver este resultado.",
+      "pendingValidationText": "Revísalo y valídalo para que el dueño pueda verlo.",
+      "progress": "Progreso del examen",
+      "steps": {
+        "requested": "Solicitado",
+        "inProcess": "En proceso",
+        "validated": "Resultado validado",
+        "completed": "Completado"
+      }
     },
     "resultForm": {
       "summary": "Resumen del resultado",
@@ -756,7 +820,7 @@
     "files": {
       "empty": "Todavía no hay archivos.",
       "upload": "Subir archivo",
-      "hint": "Imágenes, videos o PDF",
+      "hint": "Imágenes, videos o PDF · hasta 10 MB",
       "download": "Descargar"
     },
     "cancelDialog": {
@@ -778,6 +842,37 @@
       "notAllowed": "No tienes permiso para esta acción.",
       "sessionExpired": "Tu sesión expiró. Vuelve a iniciar sesión.",
       "unexpected": "Ocurrió un error inesperado. Intenta de nuevo."
+    },
+    "worklist": {
+      "title": "Laboratorio",
+      "hint": "Los exámenes se solicitan desde una consulta en curso (botón \"Solicitar examen\").",
+      "goToConsultations": "Ir a consultas",
+      "filter": "Filtrar por estado",
+      "all": "Todos",
+      "empty": "No hay exámenes con este estado.",
+      "pet": "Paciente",
+      "consultation": "Consulta",
+      "subtitle": "Sigue los exámenes de tu clínica desde la solicitud hasta el resultado.",
+      "emptyTitle": "Nada por aquí"
+    },
+    "owner": {
+      "title": "Exámenes y resultados",
+      "hint": "Solo ves los resultados que tu veterinario ya validó.",
+      "noPets": "Todavía no registraste mascotas.",
+      "addPet": "Registrar mascota",
+      "pet": "Mascota",
+      "empty": "{{name}} todavía no tiene exámenes.",
+      "requestedOn": "Solicitado el {{date}}",
+      "noResultYet": "Resultado pendiente de validación.",
+      "subtitle": "Resultados y archivos de los exámenes de tus mascotas.",
+      "pets": "Mis mascotas",
+      "resultTitle": "Resultado"
+    },
+    "typeHints": {
+      "RADIOGRAPHY": "Rayos X de huesos, tórax o abdomen",
+      "ULTRASOUND": "Imagen de órganos internos",
+      "LABORATORY": "Sangre, orina u otras muestras",
+      "OTHER": "Cualquier otro examen"
     }
   },
   "aiVision": {
@@ -944,6 +1039,15 @@
     "imageTypeShort": {
       "SKIN": "Piel",
       "RADIOGRAPH": "Radiografía"
+    },
+    "consultation": {
+      "studiesTitle": "Imágenes de esta consulta",
+      "studiesSubtitle": "Fotos y radiografías analizadas durante la atención",
+      "otherStudies": "{{n}} estudio(s) más en el historial de la mascota",
+      "openImaging": "Ver todo en Imagenología",
+      "waitingText": "Elige el tipo de imagen y sube el archivo. Se guardará en esta consulta.",
+      "backgroundText": "Quedó guardado en esta consulta. El Asistente clínico lo usará al generar el borrador SOAP.",
+      "optional": "Este paso es opcional. Úsalo solo si hay una lesión de piel o una radiografía que analizar; si no, pasa a Diagnóstico."
     }
   },
   "aiAssistant": {
@@ -1129,7 +1233,7 @@
       },
       "images": {
         "title": "Imágenes",
-        "subtitle": "Captura de imágenes"
+        "subtitle": "Opcional · piel o radiografía"
       },
       "assistant": {
         "title": "Asistente",
@@ -1362,6 +1466,30 @@
       "reasonRequired": "El motivo es obligatorio.",
       "back": "Volver",
       "confirm": "Cancelar consulta"
+    },
+    "owner": {
+      "title": "Consultas de mis mascotas",
+      "subtitle": "Revisa lo que registró el veterinario en cada consulta.",
+      "pets": "Mis mascotas",
+      "noPets": "Todavía no registraste mascotas.",
+      "addPet": "Registrar mascota",
+      "pickTitle": "Elige una mascota",
+      "back": "Volver a las consultas",
+      "pet": "Mascota",
+      "veterinarian": "Veterinario",
+      "clinic": "Clínica",
+      "date": "Fecha",
+      "cancelled": "Consulta cancelada",
+      "chiefComplaint": "Motivo principal",
+      "evolutionTime": "Tiempo de evolución",
+      "symptoms": "Síntomas",
+      "weight": "Peso",
+      "temperature": "Temperatura",
+      "heartRate": "Frecuencia cardiaca",
+      "respiratoryRate": "Frecuencia respiratoria",
+      "primary": "principal",
+      "noExams": "En esta consulta no se pidieron exámenes.",
+      "seeExams": "Ver resultados y archivos"
     }
   }
 }

@@ -1,5 +1,3 @@
-<mat-chip-set>
-  <mat-chip [class]="cssClass()" [disableRipple]="true" id="exam-status">{{
-      'clinicalExams.status.' + status() | translate
-    }}</mat-chip>
-</mat-chip-set>
+<span id="exam-status" [class]="cssClass()">
+  <span class="dot"></span>{{ 'clinicalExams.status.' + status() | translate }}
+</span>

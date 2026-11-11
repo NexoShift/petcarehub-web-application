@@ -27,3 +27,23 @@ export const CLINICAL_ATTENTION_ROUTES: Routes = [
       ),
   },
 ];
+
+/** Dueño: consultas de sus mascotas, solo lectura (menú "Consultas"). */
+export const OWNER_CONSULTATIONS_ROUTES: Routes = [
+  {
+    path: '',
+    title: 'Consultas de mis mascotas',
+    loadComponent: () =>
+      import('./presentation/views/owner-consultations/owner-consultations').then(
+        (m) => m.OwnerConsultations,
+      ),
+  },
+  {
+    path: ':consultationId',
+    title: 'Consulta clínica',
+    loadComponent: () =>
+      import('./presentation/views/owner-consultation-detail/owner-consultation-detail').then(
+        (m) => m.OwnerConsultationDetail,
+      ),
+  },
+];

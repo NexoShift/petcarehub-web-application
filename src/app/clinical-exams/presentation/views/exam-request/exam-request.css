@@ -1,0 +1,133 @@
+.request-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: start;
+  gap: 20px;
+}
+
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.type-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1.5px solid #e1e8f2;
+  border-radius: 14px;
+  background: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, box-shadow .15s;
+}
+
+.type-tile:hover {
+  border-color: #b9e9e5;
+  box-shadow: 0 4px 14px rgba(18, 40, 80, .06);
+}
+
+.type-tile.selected {
+  border-color: #0bc3bd;
+  background: #f0fbfa;
+}
+
+.type-tile.selected .type-icon {
+  background: #0bc3bd;
+  color: #fff;
+}
+
+.tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tile-text strong {
+  color: #10254b;
+}
+
+.tile-text small {
+  color: #65758d;
+  font-size: 12px;
+}
+
+.tick {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0bc3bd;
+  color: #fff;
+}
+
+.type-tile.selected .tick {
+  display: grid;
+}
+
+.field-error {
+  margin: 8px 0 0;
+  color: #d92d20;
+  font-size: 13px;
+}
+
+.indication {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.error-message {
+  margin-top: 8px;
+}
+
+.exam-row.compact {
+  gap: 12px;
+  padding: 10px 12px;
+}
+
+.exam-row.compact .type-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+}
+
+.soft-empty {
+  margin: 0;
+  padding: 18px;
+  border-radius: 12px;
+  background: #f7f9fc;
+  color: #65758d;
+  font-size: 14px;
+  text-align: center;
+}
+
+.card.placeholder {
+  min-height: 300px;
+}
+
+@media (max-width: 900px) {
+  .request-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .type-grid {
+    grid-template-columns: 1fr;
+  }
+}

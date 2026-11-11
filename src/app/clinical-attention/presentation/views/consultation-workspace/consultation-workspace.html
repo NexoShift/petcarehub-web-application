@@ -88,11 +88,11 @@
         <mat-card-header>
           <span mat-card-avatar class="card-icon"><app-icon name="play" [size]="20" /></span>
           <mat-card-title>{{
-            'clinicalAttention.workspace.startTitle' | translate
-          }}</mat-card-title>
+              'clinicalAttention.workspace.startTitle' | translate
+            }}</mat-card-title>
           <mat-card-subtitle>{{
-            'clinicalAttention.workspace.startText' | translate
-          }}</mat-card-subtitle>
+              'clinicalAttention.workspace.startText' | translate
+            }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="actions">
@@ -178,6 +178,9 @@
             />
           </div>
         }
+        @case ('images') {
+          <app-consultation-imaging [petId]="consultation.petId" [consultationId]="consultation.id" />
+        }
         @case ('diagnosis') {
           <div class="layout">
             <app-diagnosis-panel
@@ -191,15 +194,15 @@
                 <span mat-card-avatar class="card-icon"><app-icon name="flask" [size]="20" /></span>
                 <mat-card-title>{{ 'clinicalAttention.exams.title' | translate }}</mat-card-title>
                 <mat-card-subtitle>{{
-                  'clinicalAttention.exams.subtitle' | translate
-                }}</mat-card-subtitle>
+                    'clinicalAttention.exams.subtitle' | translate
+                  }}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 <div class="actions">
                   <a
                     id="request-exam-link"
                     mat-stroked-button
-                    routerLink="/clinical-exams"
+                    routerLink="/clinical-exams/request"
                     [queryParams]="{ consultationId: consultation.id }"
                   >
                     <mat-icon>science</mat-icon>
@@ -260,26 +263,26 @@
             <app-icon [name]="consultation.status === Status.Completed ? 'check-circle' : 'x'" [size]="20" />
           </span>
           <div>
-          @if (consultation.status === Status.Completed) {
-            <p class="banner-title">
-              {{
-                'clinicalAttention.workspace.closedCompleted'
-                  | translate: { date: (consultation.completedAt | date: 'dd/MM/yyyy HH:mm') }
-              }}
-            </p>
-          } @else {
-            <p class="banner-title">
-              {{
-                'clinicalAttention.workspace.closedCancelled'
-                  | translate: { date: (consultation.cancelledAt | date: 'dd/MM/yyyy HH:mm') }
-              }}
-            </p>
-            <p id="cancellation-reason">
-              <strong>{{ 'clinicalAttention.workspace.cancellationReason' | translate }}:</strong>
-              {{ consultation.cancellationReason }}
-            </p>
-          }
-          <p class="meta">{{ 'clinicalAttention.workspace.readOnly' | translate }}</p>
+            @if (consultation.status === Status.Completed) {
+              <p class="banner-title">
+                {{
+                  'clinicalAttention.workspace.closedCompleted'
+                    | translate: { date: (consultation.completedAt | date: 'dd/MM/yyyy HH:mm') }
+                }}
+              </p>
+            } @else {
+              <p class="banner-title">
+                {{
+                  'clinicalAttention.workspace.closedCancelled'
+                    | translate: { date: (consultation.cancelledAt | date: 'dd/MM/yyyy HH:mm') }
+                }}
+              </p>
+              <p id="cancellation-reason">
+                <strong>{{ 'clinicalAttention.workspace.cancellationReason' | translate }}:</strong>
+                {{ consultation.cancellationReason }}
+              </p>
+            }
+            <p class="meta">{{ 'clinicalAttention.workspace.readOnly' | translate }}</p>
           </div>
         </mat-card-content>
       </mat-card>
@@ -290,6 +293,11 @@
         <app-findings-panel [consultation]="consultation" />
       </div>
       <app-diagnosis-panel [consultation]="consultation" />
+      <app-consultation-imaging
+        [petId]="consultation.petId"
+        [consultationId]="consultation.id"
+        [readonly]="true"
+      />
     }
   } @else if (store.isLoading()) {
     <div class="loading"><mat-spinner diameter="40" /></div>

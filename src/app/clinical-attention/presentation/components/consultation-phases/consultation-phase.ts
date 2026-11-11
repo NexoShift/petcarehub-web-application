@@ -5,14 +5,14 @@ export type ConsultationPhaseId =
 export interface ConsultationPhase {
   id: ConsultationPhaseId;
   number: number;
-  /** Phases 3 and 4 belong to the computer vision and LLM contexts and are not built yet. */
+  /** Phase 3 (images) comes from AI Assistance (computer vision); phase 4 (LLM) is not built yet. */
   available: boolean;
 }
 
 export const CONSULTATION_PHASES: readonly ConsultationPhase[] = [
   { id: 'anamnesis', number: 1, available: true },
   { id: 'assessment', number: 2, available: true },
-  { id: 'images', number: 3, available: false },
+  { id: 'images', number: 3, available: true },
   { id: 'assistant', number: 4, available: false },
   { id: 'diagnosis', number: 5, available: true },
   { id: 'completion', number: 6, available: true },
