@@ -48,12 +48,22 @@
       </div>
 
       @if (!editing()) {
-        <button
-          mat-stroked-button
-          (click)="startEditing()"
-        >
-          {{ 'profiles.pets.edit' | translate }}
-        </button>
+        <div class="detail-actions">
+          <a id="pet-consultations-link" mat-stroked-button routerLink="/my-consultations"
+             [queryParams]="{ petId: pet()!.id }">
+            {{ 'profiles.pets.seeConsultations' | translate }}
+          </a>
+          <a id="pet-exams-link" mat-stroked-button routerLink="/exams"
+             [queryParams]="{ petId: pet()!.id }">
+            {{ 'profiles.pets.seeExams' | translate }}
+          </a>
+          <button
+            mat-stroked-button
+            (click)="startEditing()"
+          >
+            {{ 'profiles.pets.edit' | translate }}
+          </button>
+        </div>
       }
     </header>
 

@@ -312,3 +312,9 @@
   max-width: 420px;
   color: #69778b;
 }
+
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

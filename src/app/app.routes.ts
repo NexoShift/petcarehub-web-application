@@ -27,6 +27,21 @@ export const routes: Routes = [
             (m) => m.CLINICAL_ATTENTION_ROUTES,
           ),
       },
+      // Dueño: consultas de sus mascotas y exámenes con resultados validados (solo lectura)
+      {
+        path: 'my-consultations',
+        canActivate: [roleGuard('ROLE_PET_OWNER')],
+        loadChildren: () =>
+          import('./clinical-attention/clinical-attention.routes').then(
+            (m) => m.OWNER_CONSULTATIONS_ROUTES,
+          ),
+      },
+      {
+        path: 'exams',
+        canActivate: [roleGuard('ROLE_PET_OWNER')],
+        loadChildren: () =>
+          import('./clinical-exams/clinical-exams.routes').then((m) => m.OWNER_EXAMS_ROUTES),
+      },
       {
         path: 'profiles',
         loadChildren: () =>
