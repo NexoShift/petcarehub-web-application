@@ -7,6 +7,7 @@ function exam(status: ExamStatus, result: ExamResult | null = null): ClinicalExa
   return new ClinicalExam({
     id: 1,
     consultationId: 10,
+    clinicId: 3,
     petId: 20,
     requestedBy: 30,
     type: ExamType.Laboratory,

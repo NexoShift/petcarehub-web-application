@@ -44,6 +44,7 @@ export function toClinicalExam(response: ClinicalExamResponse): ClinicalExam {
   return new ClinicalExam({
     id: response.id,
     consultationId: response.consultationId,
+    clinicId: response.clinicId,
     petId: response.petId,
     requestedBy: response.requestedBy,
     type: response.type as ExamType,

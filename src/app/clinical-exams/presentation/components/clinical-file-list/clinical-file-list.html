@@ -1,27 +1,29 @@
 @if (files().length === 0) {
   <p id="no-files" class="empty">{{ 'clinicalExams.files.empty' | translate }}</p>
 } @else {
-  <mat-list id="clinical-files">
+  <ul id="clinical-files" class="files">
     @for (file of files(); track file.id) {
-      <mat-list-item [id]="'file-' + file.id">
-        <mat-icon matListItemIcon>{{ icons[file.type] }}</mat-icon>
-        <span matListItemTitle>{{ file.fileName }}</span>
-        <span matListItemLine>
-          {{ file.sizeInKilobytes }} KB · {{ file.uploadedAt | date: 'dd/MM/yyyy HH:mm' }}
+      <li class="file" [id]="'file-' + file.id">
+        <span class="file-icon" [class]="'file-icon ' + file.type.toLowerCase()">
+          <app-icon [name]="icons[file.type]" [size]="20" />
+        </span>
+        <span class="file-text">
+          <strong>{{ file.fileName }}</strong>
+          <small>{{ file.sizeInKilobytes }} KB · {{ file.uploadedAt | date: 'dd/MM/yyyy HH:mm' }}</small>
         </span>
         <button
-          matListItemMeta
-          mat-icon-button
           type="button"
+          class="download"
           [id]="'download-file-' + file.id"
           [attr.aria-label]="'clinicalExams.files.download' | translate"
+          [title]="'clinicalExams.files.download' | translate"
           (click)="downloadRequested.emit(file)"
         >
           <mat-icon>download</mat-icon>
         </button>
-      </mat-list-item>
+      </li>
     }
-  </mat-list>
+  </ul>
 }
 
 @if (canUpload()) {
@@ -35,13 +37,15 @@
   />
   <button
     id="upload-file-button"
-    mat-stroked-button
+    class="dropzone"
     type="button"
     [disabled]="saving()"
     (click)="fileInput.click()"
   >
-    <mat-icon>upload_file</mat-icon>
-    {{ 'clinicalExams.files.upload' | translate }}
+    <span class="drop-icon"><app-icon name="upload" [size]="20" /></span>
+    <span class="drop-text">
+      <strong>{{ 'clinicalExams.files.upload' | translate }}</strong>
+      <small>{{ 'clinicalExams.files.hint' | translate }}</small>
+    </span>
   </button>
-  <p class="hint">{{ 'clinicalExams.files.hint' | translate }}</p>
 }

@@ -6,6 +6,7 @@ import { ExamResult } from './exam-result.entity';
 export interface ClinicalExamProps {
   id: number;
   consultationId: number;
+  clinicId: number;
   petId: number;
   requestedBy: number;
   type: ExamType;
@@ -24,6 +25,7 @@ export interface ClinicalExamProps {
 export class ClinicalExam {
   readonly id: number;
   readonly consultationId: number;
+  readonly clinicId: number;
   readonly petId: number;
   readonly requestedBy: number;
   readonly type: ExamType;
@@ -40,6 +42,7 @@ export class ClinicalExam {
   constructor(props: ClinicalExamProps) {
     this.id = props.id;
     this.consultationId = props.consultationId;
+    this.clinicId = props.clinicId;
     this.petId = props.petId;
     this.requestedBy = props.requestedBy;
     this.type = props.type;

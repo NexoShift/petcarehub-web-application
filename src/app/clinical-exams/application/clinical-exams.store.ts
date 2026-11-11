@@ -1,4 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { ExamStatus } from '../domain/enums/exam-status.enum';
 import { CancelClinicalExamCommand } from '../domain/model/cancel-clinical-exam.command';
 import { ClinicalExam } from '../domain/model/clinical-exam.entity';
 import { ClinicalExamsError, ClinicalExamsErrorCode } from '../domain/model/clinical-exams-error';
@@ -14,11 +15,16 @@ export class ClinicalExamsStore {
   private readonly repository = inject(CLINICAL_EXAMS_REPOSITORY);
   private readonly consultationExamsState = signal<ClinicalExam[]>([]);
   private readonly selectedExamState = signal<ClinicalExam | null>(null);
+  private readonly clinicExamsState = signal<ClinicalExam[]>([]);
+  private readonly petExamsState = signal<ClinicalExam[]>([]);
   private readonly status = signal<Status>('idle');
   private readonly errorState = signal<ClinicalExamsErrorCode | null>(null);
 
   readonly consultationExams = this.consultationExamsState.asReadonly();
   readonly selectedExam = this.selectedExamState.asReadonly();
+  /** Worklist of the clinic (laboratory). */
+  readonly clinicExams = this.clinicExamsState.asReadonly();
+  readonly petExams = this.petExamsState.asReadonly();
   readonly error = this.errorState.asReadonly();
   readonly isLoading = computed(() => this.status() === 'loading');
   readonly isSaving = computed(() => this.status() === 'saving');
@@ -26,6 +32,18 @@ export class ClinicalExamsStore {
   loadByConsultation(consultationId: number): Promise<boolean> {
     return this.run('loading', async () => {
       this.consultationExamsState.set(await this.repository.findByConsultationId(consultationId));
+    });
+  }
+
+  loadClinicExams(status: ExamStatus | null): Promise<boolean> {
+    return this.run('loading', async () => {
+      this.clinicExamsState.set(await this.repository.findOfMyClinic(status));
+    });
+  }
+
+  loadByPet(petId: number): Promise<boolean> {
+    return this.run('loading', async () => {
+      this.petExamsState.set(await this.repository.findByPetId(petId));
     });
   }
 
@@ -39,7 +57,7 @@ export class ClinicalExamsStore {
   request(command: RequestClinicalExamCommand): Promise<boolean> {
     return this.run('saving', async () => {
       const exam = await this.repository.request(command);
-      this.consultationExamsState.update((exams) => [...exams, exam]);
+      this.consultationExamsState.update((exams) => [exam, ...exams]);
     });
   }
 
@@ -92,9 +110,10 @@ export class ClinicalExamsStore {
     return this.run('saving', async () => {
       const exam = await action();
       this.selectedExamState.set(exam);
-      this.consultationExamsState.update((exams) =>
-        exams.map((current) => (current.id === exam.id ? exam : current)),
-      );
+      const replace = (exams: ClinicalExam[]) =>
+        exams.map((current) => (current.id === exam.id ? exam : current));
+      this.consultationExamsState.update(replace);
+      this.clinicExamsState.update(replace);
     });
   }
 
