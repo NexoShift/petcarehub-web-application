@@ -56,6 +56,16 @@ describe('toClinicalConsultation', () => {
             diagnosedAt: '2026-10-30T15:10:00Z',
           },
         ],
+        treatments: [
+          {
+            id: 1,
+            description: 'Tratamiento de soporte para Gastroenteritis aguda',
+            instruction: 'Hidratación oral continua en pequeñas tomas y dieta blanda gastrointestinal por 5 días',
+            startDateTime: new Date('2026-11-13T08:00:00.000Z'),
+            endDateTime: new Date ('2026-11-18T08:00:00.000Z'),
+            treatmentStatus: 'ACTIVE',
+          },
+        ],
       }),
     );
 
@@ -67,6 +77,7 @@ describe('toClinicalConsultation', () => {
     );
     expect(consultation.findings[0].bodySystem).toBe('DIGESTIVE');
     expect(consultation.diagnoses[0].status).toBe(DiagnosisStatus.Current);
+
     expect(consultation.primaryDiagnosis?.description).toBe('Gastroenteritis');
   });
 

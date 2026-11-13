@@ -18,8 +18,11 @@ import {
   ClinicalConsultationResponse,
   ClinicalFindingResponse,
   DiagnosisResponse,
+  TreatmentResponse,
   PhysiologicalAssessmentResponse,
 } from './clinical-attention-responses';
+import { Treatment } from '../../domain/model/treatment.entity';
+import { TreatmentStatus } from '../../domain/enums/treatment-status.enum';
 
 const toDate = (value: string | null): Date | null => (value ? new Date(value) : null);
 
@@ -79,6 +82,17 @@ export function toDiagnosis(response: DiagnosisResponse): Diagnosis {
   });
 }
 
+export function toTreatment(response: TreatmentResponse): Treatment {
+  return new Treatment({
+    id: response.id,
+    description: response.description,
+    instruction: response.instruction,
+    startDateTime: response.startDateTime,
+    endDateTime: response.endDateTime,
+    treatmentStatus: response.treatmentStatus as TreatmentStatus,
+  });
+}
+
 export function toClinicalConsultation(
   response: ClinicalConsultationResponse,
 ): ClinicalConsultation {
@@ -100,6 +114,7 @@ export function toClinicalConsultation(
     ),
     findings: (response.findings ?? []).map(toClinicalFinding),
     diagnoses: (response.diagnoses ?? []).map(toDiagnosis),
+    treatment: (response.treatments ?? []).map(toTreatment),
     createdAt: new Date(response.createdAt),
     updatedAt: new Date(response.updatedAt),
   });

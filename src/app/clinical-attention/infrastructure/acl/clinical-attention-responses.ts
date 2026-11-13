@@ -45,6 +45,15 @@ export interface DiagnosisResponse {
   diagnosedAt: string;
 }
 
+export interface TreatmentResponse {
+  id: number;
+  description: string;
+  instruction: string;
+  startDateTime: Date;
+  endDateTime: Date;
+  treatmentStatus: string;
+}
+
 export interface ClinicalConsultationResponse {
   id: number;
   petId: number;
@@ -61,6 +70,7 @@ export interface ClinicalConsultationResponse {
   physiologicalAssessments: PhysiologicalAssessmentResponse[] | null;
   findings: ClinicalFindingResponse[] | null;
   diagnoses: DiagnosisResponse[] | null;
+  treatments: TreatmentResponse[] | null;
   createdAt: string;
   updatedAt: string;
 }
