@@ -19,6 +19,7 @@ import {
   toClinicalConsultation,
 } from '../acl/clinical-attention-assemblers';
 import { ClinicalConsultationResponse } from '../acl/clinical-attention-responses';
+import { RegisterTreatmentCommand } from '../../domain/model/register-treatment.command';
 
 export class HttpClinicalAttentionRepository implements ClinicalAttentionRepository {
   private readonly http = inject(HttpClient);
@@ -128,6 +129,22 @@ export class HttpClinicalAttentionRepository implements ClinicalAttentionReposit
     return this.read(this.http.post<ClinicalConsultationResponse>(url, body), {
       conflict: ClinicalAttentionErrorCode.DiagnosisConflict,
     });
+  }
+
+  registerTreatment(command:RegisterTreatmentCommand):Promise<ClinicalConsultation> {
+    const body = {
+      description: command.description,
+      instructions: command.instructions,
+      starDateTime: command.startDateTime,
+      endDateTime: command.endDateTime,
+    };
+    return this.read(
+      this.http.post<ClinicalConsultationResponse>(
+        this.url(command.consultationId, 'treatments'),
+        body,
+      ),
+      { conflict: ClinicalAttentionErrorCode.TreatmentConflict },
+    );
   }
 
   complete(consultationId: number): Promise<ClinicalConsultation> {

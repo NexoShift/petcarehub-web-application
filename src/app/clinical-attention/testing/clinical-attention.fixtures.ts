@@ -9,6 +9,8 @@ import {
 import { Diagnosis, DiagnosisProps } from '../domain/model/diagnosis.entity';
 import { PhysiologicalAssessment } from '../domain/model/physiological-assessment.entity';
 import { ClinicalConsultationResponse } from '../infrastructure/acl/clinical-attention-responses';
+import { Treatment, TreatmentProps } from '../domain/model/treatment.entity';
+import { TreatmentStatus } from '../domain/enums/treatment-status.enum';
 
 const NOW = new Date('2026-10-30T15:00:00Z');
 
@@ -57,6 +59,19 @@ export function diagnosis(overrides: Partial<DiagnosisProps> = {}): Diagnosis {
   });
 }
 
+export function treatment(overrides?: Partial<TreatmentProps>): Treatment {
+  return new Treatment({
+    id: 1,
+    description: 'Tratamiento de soporte para Gastroenteritis aguda',
+    instruction:
+      'Hidratación oral continua en pequeñas tomas y dieta blanda gastrointestinal por 5 días',
+    startDateTime: new Date('2026-11-13T09:00:00'),
+    endDateTime: new Date('2026-11-18T09:00:00'),
+    treatmentStatus: TreatmentStatus.Active,
+    ...overrides,
+  });
+}
+
 export function consultation(
   overrides: Partial<ClinicalConsultationProps> = {},
 ): ClinicalConsultation {
@@ -76,6 +91,7 @@ export function consultation(
     physiologicalAssessments: [],
     findings: [],
     diagnoses: [],
+    treatment: [],
     createdAt: NOW,
     updatedAt: NOW,
     ...overrides,
@@ -110,6 +126,7 @@ export function consultationResponse(
     physiologicalAssessments: [],
     findings: [],
     diagnoses: [],
+    treatments: [],
     createdAt: '2026-10-30T15:00:00Z',
     updatedAt: '2026-10-30T15:00:00Z',
     ...overrides,
