@@ -10,6 +10,8 @@ import { ReevaluateDiagnosisCommand } from './reevaluate-diagnosis.command';
 import { RegisterAnamnesisCommand } from './register-anamnesis.command';
 import { RegisterDiagnosisCommand } from './register-diagnosis.command';
 import { RegisterPhysiologicalAssessmentCommand } from './register-physiological-assessment.command';
+import { TreatmentStatus } from '../enums/treatment-status.enum';
+import { RegisterTreatmentCommand } from './register-treatment.command';
 
 function codeOf(action: () => unknown): ClinicalAttentionErrorCode | null {
   try {
@@ -252,6 +254,40 @@ describe('ReevaluateDiagnosisCommand', () => {
 
   it('rejects an invalid diagnosis id', () => {
     expect(codeOf(() => new ReevaluateDiagnosisCommand(10, 0, input))).toBe(
+      ClinicalAttentionErrorCode.InvalidRequest,
+    );
+  });
+});
+
+describe('RegisterTreatmentCommand', () => {
+  const validTreatmentInput = {
+    description: '  Hidratación oral continua  ',
+    instruction: '  Dar 5ml cada hora  ',
+    startDateTime: new Date('2026-11-13T08:00:00.000Z'),
+    endDateTime: new Date('2026-11-18T08:00:00.000Z'),
+    treatmentStatus: TreatmentStatus.Active,
+  };
+
+  it('trims description and instruction, keeping dates and status intact', () => {
+    const command = new RegisterTreatmentCommand(10, validTreatmentInput);
+
+    expect(command.description).toBe('Hidratación oral continua');
+    expect(command.instructions).toBe('Dar 5ml cada hora');
+    expect(command.startDateTime).toEqual(validTreatmentInput.startDateTime);
+    expect(command.endDateTime).toEqual(validTreatmentInput.endDateTime);
+  });
+
+  it.each([
+    ['a blank description', { ...validTreatmentInput, description: '   ' }],
+    ['a null description', { ...validTreatmentInput, description: null }],
+    ['a blank instruction', { ...validTreatmentInput, instruction: '' }],
+    ['a null instruction', { ...validTreatmentInput, instruction: null }],
+    [
+      'a description exceeding character limits',
+      { ...validTreatmentInput, description: 'x'.repeat(501) }, // Ajusta al límite real de tu CLINICAL_FIELD_LIMITS
+    ],
+  ])('rejects %s', (_name, input) => {
+    expect(codeOf(() => new RegisterTreatmentCommand(10, input as any))).toBe(
       ClinicalAttentionErrorCode.InvalidRequest,
     );
   });

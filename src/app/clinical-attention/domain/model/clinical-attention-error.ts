@@ -7,6 +7,7 @@ export enum ClinicalAttentionErrorCode {
   InvalidConsultationState = 'clinicalAttention.errors.invalidConsultationState',
   IncompleteConsultation = 'clinicalAttention.errors.incompleteConsultation',
   DiagnosisConflict = 'clinicalAttention.errors.diagnosisConflict',
+  TreatmentConflict = 'clinicalAttention.errors.treatmentConflict',
   NotAllowed = 'clinicalAttention.errors.notAllowed',
   SessionExpired = 'clinicalAttention.errors.sessionExpired',
   Unexpected = 'clinicalAttention.errors.unexpected',

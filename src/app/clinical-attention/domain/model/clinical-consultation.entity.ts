@@ -3,6 +3,7 @@ import { Anamnesis } from './anamnesis.entity';
 import { ClinicalFinding } from './clinical-finding.entity';
 import { Diagnosis } from './diagnosis.entity';
 import { PhysiologicalAssessment } from './physiological-assessment.entity';
+import { Treatment } from './treatment.entity';
 
 /** Data the backend still needs before a consultation can be completed. */
 export type PendingItem = 'anamnesis' | 'physiologicalAssessment' | 'primaryDiagnosis';
@@ -23,6 +24,7 @@ export interface ClinicalConsultationProps {
   physiologicalAssessments: readonly PhysiologicalAssessment[];
   findings: readonly ClinicalFinding[];
   diagnoses: readonly Diagnosis[];
+  treatment: readonly Treatment[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -44,6 +46,7 @@ export class ClinicalConsultation {
   readonly physiologicalAssessments: readonly PhysiologicalAssessment[];
   readonly findings: readonly ClinicalFinding[];
   readonly diagnoses: readonly Diagnosis[];
+  readonly treatment: readonly Treatment[];
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
@@ -63,6 +66,7 @@ export class ClinicalConsultation {
     this.physiologicalAssessments = props.physiologicalAssessments;
     this.findings = props.findings;
     this.diagnoses = props.diagnoses;
+    this.treatment = props.treatment;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
   }
@@ -106,6 +110,10 @@ export class ClinicalConsultation {
   /** Only one current primary diagnosis is allowed. */
   get canRegisterPrimaryDiagnosis(): boolean {
     return this.isInProgress && this.primaryDiagnosis === null;
+  }
+
+  get statusTreatment(): readonly Treatment[] {
+    return this.treatment.filter((treatment) => treatment.isCurrent);
   }
 
   get pendingItems(): PendingItem[] {

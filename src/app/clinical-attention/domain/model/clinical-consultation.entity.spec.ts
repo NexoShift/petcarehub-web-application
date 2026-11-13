@@ -6,7 +6,9 @@ import {
   completableConsultation,
   consultation,
   diagnosis,
+  treatment,
 } from '../../testing/clinical-attention.fixtures';
+import { TreatmentStatus } from '../enums/treatment-status.enum';
 
 describe('ClinicalConsultation', () => {
   it('can only be started while it is created', () => {
@@ -70,6 +72,19 @@ describe('ClinicalConsultation', () => {
     const replaced = diagnosis({ status: DiagnosisStatus.Superseded });
 
     expect(consultation({ diagnoses: [replaced] }).canRegisterPrimaryDiagnosis).toBe(true);
+  });
+
+  it('filters only current (active) treatments among active, completed, and suspended', () => {
+    const active = treatment({ id: 1, treatmentStatus: TreatmentStatus.Active });
+    const completed = treatment({ id: 2, treatmentStatus: TreatmentStatus.Completed });
+    const suspended = treatment({ id: 3, treatmentStatus: TreatmentStatus.Suspended });
+
+    const record = consultation({
+      treatment: [active, completed, suspended],
+    });
+
+    expect(record.statusTreatment.map((item) => item.id)).toEqual([1]);
+    expect(record.statusTreatment[0].isCurrent).toBe(true);
   });
 
   it('exposes the latest assessment', () => {
