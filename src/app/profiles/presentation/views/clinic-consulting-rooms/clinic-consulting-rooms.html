@@ -1,0 +1,203 @@
+<section class="rooms-page">
+  <a routerLink="/profiles/clinic" class="back-link">
+    <span class="flip"><app-icon name="arrow-right" [size]="16" /></span>
+    {{ 'profiles.consultingRooms.back' | translate }}
+  </a>
+
+  <header class="page-head">
+    <span class="head-icon"><app-icon name="map-pin" [size]="28" /></span>
+    <div class="head-text">
+      <h1>{{ 'profiles.consultingRooms.title' | translate }}</h1>
+      <p>
+        {{ 'profiles.consultingRooms.subtitle' | translate }}
+        @if (clinic(); as c) { · <strong>{{ c.name }}</strong> }
+      </p>
+    </div>
+
+    <a mat-stroked-button class="history-button" routerLink="/profiles/clinic/consulting-room-assignments">
+      <app-icon name="history" [size]="17" />
+      {{ 'profiles.assignmentHistory.viewAll' | translate }}
+    </a>
+
+    <button id="new-room-button" class="btn-accent" mat-flat-button type="button" (click)="openCreate()">
+      <app-icon name="plus" [size]="16" /> {{ 'profiles.consultingRooms.new' | translate }}
+    </button>
+  </header>
+
+  @if (clinicStore.profileNotFound()) {
+    <div class="card state">
+      <span class="state-icon"><app-icon name="building" [size]="30" /></span>
+      <h2>{{ 'profiles.clinic.noProfileTitle' | translate }}</h2>
+      <p>{{ 'profiles.clinic.noProfileHint' | translate }}</p>
+      <a mat-flat-button class="btn-accent" routerLink="/profiles/clinic/complete">
+        {{ 'profiles.clinic.completeProfile' | translate }}
+      </a>
+    </div>
+  } @else {
+    <!-- Resumen -->
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-icon"><app-icon name="map-pin" [size]="18" /></span>
+        <div><strong>{{ totalCount() }}</strong><small>{{ 'profiles.consultingRooms.stats.total' | translate }}</small></div>
+      </div>
+      <div class="stat">
+        <span class="stat-icon green"><app-icon name="check-circle" [size]="18" /></span>
+        <div><strong>{{ activeCount() }}</strong><small>{{ 'profiles.consultingRooms.stats.active' | translate }}</small></div>
+      </div>
+      <div class="stat">
+        <span class="stat-icon navy"><app-icon name="stethoscope" [size]="18" /></span>
+        <div><strong>{{ staffedCount() }}</strong><small>{{ 'profiles.consultingRooms.stats.staffed' | translate }}</small></div>
+      </div>
+    </div>
+
+    @if (errorKey(); as key) {
+      <p id="rooms-error" class="error-message" role="alert">
+        <app-icon name="alert" [size]="16" /> {{ key | translate }}
+      </p>
+    }
+
+    <!-- Formulario crear / editar -->
+    @if (editingId() !== null) {
+      <form id="room-form" class="card form-card" [formGroup]="form" (ngSubmit)="save()">
+        <div class="form-title">
+          <span class="stat-icon"><app-icon [name]="editingId() === 0 ? 'plus' : 'pencil'" [size]="18" /></span>
+          <h2>
+            {{ (editingId() === 0 ? 'profiles.consultingRooms.createTitle' : 'profiles.consultingRooms.editTitle') | translate }}
+          </h2>
+        </div>
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profiles.consultingRooms.name' | translate }}</mat-label>
+            <input id="room-name" matInput formControlName="name" maxlength="80"
+                   [placeholder]="'profiles.consultingRooms.namePlaceholder' | translate" />
+            @if (form.controls.name.invalid) {
+              <mat-error>{{ 'profiles.consultingRooms.nameRequired' | translate }}</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profiles.consultingRooms.description' | translate }}</mat-label>
+            <input id="room-description" matInput formControlName="description" maxlength="250"
+                   [placeholder]="'profiles.consultingRooms.descriptionPlaceholder' | translate" />
+          </mat-form-field>
+        </div>
+        <div class="form-actions">
+          <button mat-stroked-button type="button" class="btn-outline" (click)="closeForm()">
+            {{ 'profiles.consultingRooms.cancel' | translate }}
+          </button>
+          <button id="save-room-button" mat-flat-button class="btn-accent" type="submit" [disabled]="roomStore.saving()">
+            <app-icon name="check" [size]="15" /> {{ 'profiles.consultingRooms.save' | translate }}
+          </button>
+        </div>
+      </form>
+    }
+
+    <!-- Lista -->
+    @if (roomStore.loadingRooms() && rooms().length === 0) {
+      <div class="loading"><mat-spinner diameter="38" /></div>
+    } @else if (rooms().length === 0) {
+      <div id="no-rooms" class="card state">
+        <span class="state-icon"><app-icon name="map-pin" [size]="30" /></span>
+        <h2>{{ 'profiles.consultingRooms.emptyTitle' | translate }}</h2>
+        <p>{{ 'profiles.consultingRooms.emptyText' | translate }}</p>
+        <button mat-flat-button class="btn-accent" type="button" (click)="openCreate()">
+          <app-icon name="plus" [size]="16" /> {{ 'profiles.consultingRooms.new' | translate }}
+        </button>
+      </div>
+    } @else {
+      <ul id="rooms-list" class="rooms">
+        @for (view of rooms(); track view.room.id) {
+          <li class="card room" [class.inactive]="!view.room.active" [id]="'room-' + view.room.id">
+            <div class="room-head">
+              <span class="room-icon"><app-icon name="map-pin" [size]="20" /></span>
+              <div class="room-title">
+                <h3>{{ view.room.name }}</h3>
+                <p>{{ view.room.description || ('profiles.consultingRooms.noDescription' | translate) }}</p>
+              </div>
+              <span class="status" [class.on]="view.room.active">
+                <span class="dot"></span>
+                {{ (view.room.active ? 'profiles.consultingRooms.active' : 'profiles.consultingRooms.inactive') | translate }}
+              </span>
+            </div>
+
+            <!-- Veterinario a cargo -->
+            <div class="duty">
+              <span class="duty-label">{{ 'profiles.consultingRooms.onDuty' | translate }}</span>
+              @if (view.assignment) {
+                <div class="vet">
+                  <span class="vet-avatar">
+                    @if (view.veterinarian?.profileImageUrl) {
+                      <img [src]="view.veterinarian!.profileImageUrl" alt="" />
+                    } @else if (view.veterinarian) {
+                      {{ initials(view.veterinarian) }}
+                    } @else {
+                      VT
+                    }
+                  </span>
+                  <div class="vet-text">
+                    <strong>
+                      @if (view.veterinarian; as v) { {{ v.firstName }} {{ v.lastName }} } @else { #{{ view.assignment.veterinarianId }} }
+                    </strong>
+                    <small>{{ view.veterinarian?.specialty || ('profiles.consultingRooms.generalVet' | translate) }}</small>
+                  </div>
+                  <button mat-button type="button" class="link-danger" [id]="'unassign-' + view.room.id"
+                          [disabled]="assignmentStore.saving()" (click)="unassign(view.assignment)">
+                    {{ 'profiles.consultingRooms.unassign' | translate }}
+                  </button>
+                </div>
+              } @else if (view.room.active) {
+                <div class="assign">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="assign-field">
+                    <mat-label>{{ 'profiles.consultingRooms.pickVet' | translate }}</mat-label>
+                    <mat-select [id]="'vet-select-' + view.room.id" [value]="pickedVet()[view.room.id] ?? null"
+                                (selectionChange)="pick(view.room.id, $event.value)">
+                      @for (v of freeVeterinarians(); track v.id) {
+                        <mat-option [value]="v.id">{{ v.firstName }} {{ v.lastName }}</mat-option>
+                      } @empty {
+                        <mat-option disabled>{{ 'profiles.consultingRooms.noFreeVets' | translate }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                  <button mat-flat-button type="button" class="btn-accent" [id]="'assign-' + view.room.id"
+                          [disabled]="!pickedVet()[view.room.id] || assignmentStore.saving()" (click)="assign(view.room.id)">
+                    {{ 'profiles.consultingRooms.assign' | translate }}
+                  </button>
+                </div>
+              } @else {
+                <p class="muted">{{ 'profiles.consultingRooms.inactiveHint' | translate }}</p>
+              }
+            </div>
+
+            <!-- Acciones -->
+            <div class="room-actions">
+              <a mat-stroked-button [routerLink]="['/profiles/clinic/consulting-rooms',view.room.id,'assignments']">
+                <app-icon name="history" [size]="16" />
+                {{ 'profiles.assignmentHistory.viewRoom' | translate }}
+              </a>
+              @if (confirmDeleteId() === view.room.id) {
+                <span class="confirm-text">{{ 'profiles.consultingRooms.confirmDelete' | translate }}</span>
+                <button mat-button type="button" (click)="cancelDelete()">{{ 'profiles.consultingRooms.cancel' | translate }}</button>
+                <button mat-flat-button type="button" class="btn-danger" [id]="'confirm-delete-' + view.room.id"
+                        [disabled]="roomStore.deleting()" (click)="remove(view.room.id)">
+                  {{ 'profiles.consultingRooms.delete' | translate }}
+                </button>
+              } @else {
+                <button mat-stroked-button type="button" [id]="'edit-' + view.room.id" (click)="openEdit(view.room)">
+                  <app-icon name="pencil" [size]="14" /> {{ 'profiles.consultingRooms.edit' | translate }}
+                </button>
+                <button mat-stroked-button type="button" [id]="'toggle-' + view.room.id" [disabled]="roomStore.saving()"
+                        (click)="toggleActive(view)">
+                  <app-icon [name]="view.room.active ? 'x' : 'check'" [size]="14" />
+                  {{ (view.room.active ? 'profiles.consultingRooms.deactivate' : 'profiles.consultingRooms.activate') | translate }}
+                </button>
+                <button mat-stroked-button type="button" class="link-danger" [id]="'delete-' + view.room.id"
+                        (click)="askDelete(view.room.id)">
+                  {{ 'profiles.consultingRooms.delete' | translate }}
+                </button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>

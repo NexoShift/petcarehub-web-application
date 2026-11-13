@@ -21,6 +21,7 @@ export interface ExamResultResponse {
 export interface ClinicalExamResponse {
   id: number;
   consultationId: number;
+  clinicId: number;
   petId: number;
   requestedBy: number;
   type: string;

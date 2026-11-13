@@ -1,0 +1,280 @@
+/* Nueva consulta: mismo estilo que "Completar perfil institucional" */
+:host {
+  display: block;
+}
+
+.new-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 26px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  color: #007c86;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.flip {
+  transform: rotate(180deg);
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-bottom: 24px;
+}
+
+.head-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.page-head h1 {
+  margin: 0 0 6px;
+  color: #10254b;
+  font-size: 28px;
+}
+
+.page-head p {
+  margin: 0;
+  color: #65758d;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: start;
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid #e1e8f2;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(18, 40, 80, .06);
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 28px;
+}
+
+.clinic-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  background: #e8f8f6;
+  color: #116d71;
+  font-size: 14px;
+}
+
+.clinic-line strong {
+  color: #10254b;
+}
+
+.block h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 12px;
+  color: #10254b;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.step {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #032b59;
+  color: #fff;
+  font-size: 12px;
+}
+
+.optional {
+  color: #8a97aa;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.pet-preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 4px 0 10px;
+  padding: 12px 14px;
+  border: 1px solid #e1e8f2;
+  border-radius: 12px;
+  background: #f7f9fc;
+}
+
+.pet-preview div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pet-preview strong {
+  color: #10254b;
+}
+
+.pet-preview small {
+  color: #65758d;
+}
+
+.code {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e8eef7;
+  color: #032b59;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.empty-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  color: #007c86;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  padding: 11px 14px;
+  border: 1px solid #f7c8c4;
+  border-radius: 10px;
+  background: #fff3f2;
+  color: #b42318;
+  font-size: 14px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 18px;
+  border-top: 1px solid #eef2f7;
+}
+
+.btn-cancel {
+  border-radius: 999px;
+}
+
+.btn-submit {
+  border-radius: 999px;
+  background: #0bc3bd;
+  color: #062b55;
+  font-weight: 600;
+}
+
+.btn-submit app-icon {
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+
+.next-card {
+  padding: 22px;
+}
+
+.next-card h2 {
+  margin: 0 0 14px;
+  color: #10254b;
+  font-size: 15px;
+}
+
+.next-card ol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.next-card li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #344054;
+  font-size: 14px;
+}
+
+.next-card li app-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.hint {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid #eef2f7;
+  color: #65758d;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .new-page {
+    padding: 14px;
+  }
+
+  .page-head h1 {
+    font-size: 23px;
+  }
+
+  .form-card {
+    padding: 18px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+}

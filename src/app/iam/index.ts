@@ -4,3 +4,4 @@ export { User } from './domain/model/user.entity';
 export type { Role } from './domain/model/role';
 export { authGuard } from './presentation/guards/auth.guard';
 export { matchRole, roleGuard } from './presentation/guards/role.guard';
+export { passwordChangeGuard } from './presentation/guards/password-change.guard';

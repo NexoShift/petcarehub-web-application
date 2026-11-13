@@ -1,0 +1,77 @@
+<section class="list-page">
+  <header class="page-head">
+    <span class="head-icon"><app-icon name="flask" [size]="28" /></span>
+    <div class="head-text">
+      <h1>{{ 'clinicalExams.worklist.title' | translate }}</h1>
+      <p>{{ 'clinicalExams.worklist.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <p class="banner">
+    <app-icon name="info" [size]="18" />
+    {{ 'clinicalExams.worklist.hint' | translate }}
+    <a routerLink="/consultations">
+      {{ 'clinicalExams.worklist.goToConsultations' | translate }} <app-icon name="arrow-right" [size]="14" />
+    </a>
+  </p>
+
+  <div id="status-filter" class="tabs" role="tablist" [attr.aria-label]="'clinicalExams.worklist.filter' | translate">
+    @for (option of filters; track option) {
+      <button
+        type="button"
+        role="tab"
+        class="tab"
+        [id]="'filter-' + (option || 'ALL')"
+        [class.active]="filter() === option"
+        [attr.aria-selected]="filter() === option"
+        (click)="changeFilter(option)"
+      >
+        {{ (option ? 'clinicalExams.status.' + option : 'clinicalExams.worklist.all') | translate }}
+      </button>
+    }
+  </div>
+
+  @if (store.error(); as error) {
+    <p id="worklist-error" class="error-message" role="alert">
+      <app-icon name="alert" [size]="16" /> {{ error | translate }}
+    </p>
+  }
+
+  <div class="card card-body">
+    @if (store.isLoading()) {
+      <div class="loading"><mat-spinner diameter="40" /></div>
+    } @else if (rows().length === 0) {
+      <div id="no-exams" class="placeholder">
+        <span class="placeholder-icon"><app-icon name="flask" [size]="30" /></span>
+        <h2>{{ 'clinicalExams.worklist.emptyTitle' | translate }}</h2>
+        <p>{{ 'clinicalExams.worklist.empty' | translate }}</p>
+      </div>
+    } @else {
+      <ul id="worklist-table" class="exam-rows">
+        @for (row of rows(); track row.exam.id) {
+          <li class="exam-row" [id]="'exam-row-' + row.exam.id">
+            <span class="date">
+              <strong>{{ row.exam.requestedAt | date: 'dd' }}</strong>
+              <small>{{ row.exam.requestedAt | date: 'MMM yyyy' }}</small>
+            </span>
+            <span class="type-icon"><app-icon [name]="typeIcons[row.exam.type]" [size]="22" /></span>
+            <div class="row-text">
+              <strong>{{ 'clinicalExams.types.' + row.exam.type | translate }} · {{ row.petName }}</strong>
+              <small>
+                N.° {{ row.exam.id }} ·
+                <a [routerLink]="['/consultations', row.exam.consultationId]">
+                  {{ 'clinicalExams.worklist.consultation' | translate }} N.° {{ row.exam.consultationId }}
+                </a>
+                · {{ row.exam.requestedAt | date: 'HH:mm' }}
+              </small>
+            </div>
+            <app-exam-status-chip [status]="row.exam.status" />
+            <a [id]="'open-exam-' + row.exam.id" class="open-link" [routerLink]="['/clinical-exams', row.exam.id]">
+              {{ 'clinicalExams.request.open' | translate }} <app-icon name="arrow-right" [size]="14" />
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</section>

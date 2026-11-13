@@ -1,61 +1,72 @@
 <section class="page">
   @if (consultation(); as consultation) {
-    <header class="page-header">
-      <div class="title-row">
-        <a
-          id="back-to-list"
-          mat-icon-button
-          routerLink="/consultations"
-          [queryParams]="{ petId: consultation.petId }"
-          [attr.aria-label]="'clinicalAttention.workspace.back' | translate"
-        >
-          <mat-icon>arrow_back</mat-icon>
-        </a>
-        <h1 class="page-title">
-          {{ 'clinicalAttention.workspace.title' | translate: { id: consultation.id } }}
-        </h1>
-        <app-consultation-status-chip [status]="consultation.status" />
-      </div>
-    </header>
+    <a id="back-to-list" class="back-link" routerLink="/consultations"
+       [queryParams]="{ petId: consultation.petId }">
+      <app-icon name="arrow-right" [size]="14" class="flip" /> {{ 'clinicalAttention.workspace.back' | translate }}
+    </a>
 
-    <mat-card id="patient-card" appearance="outlined">
-      <mat-card-content>
-        <dl class="details patient">
-          <div>
-            <dt>{{ 'clinicalAttention.workspace.pet' | translate }}</dt>
-            <dd>#{{ consultation.petId }}</dd>
+    <!-- ===== Encabezado: paciente y datos de la consulta ===== -->
+    <section id="patient-card" class="hero">
+      <div class="hero-main">
+        @if (names().pet; as pet) {
+          <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="64" />
+        } @else {
+          <span class="hero-icon"><app-icon name="stethoscope" [size]="28" /></span>
+        }
+        <div class="hero-title">
+          <div class="title-line">
+            <h1>{{ 'clinicalAttention.workspace.title' | translate: { id: consultation.id } }}</h1>
+            <app-consultation-status-chip [status]="consultation.status" />
           </div>
-          <div>
-            <dt>{{ 'clinicalAttention.workspace.veterinarian' | translate }}</dt>
-            <dd>#{{ consultation.veterinarianId }}</dd>
-          </div>
-          <div>
-            <dt>{{ 'clinicalAttention.workspace.clinic' | translate }}</dt>
-            <dd>#{{ consultation.clinicId }}</dd>
-          </div>
-          @if (consultation.consultingRoomId) {
-            <div>
-              <dt>{{ 'clinicalAttention.workspace.consultingRoom' | translate }}</dt>
-              <dd>#{{ consultation.consultingRoomId }}</dd>
-            </div>
-          }
-          <div>
-            <dt>{{ 'clinicalAttention.workspace.startedAt' | translate }}</dt>
-            <dd>
-              {{
-                consultation.startedAt
-                  ? (consultation.startedAt | date: 'dd/MM/yyyy HH:mm')
-                  : ('clinicalAttention.workspace.notStarted' | translate)
-              }}
-            </dd>
-          </div>
-          <div class="wide">
-            <dt>{{ 'clinicalAttention.workspace.reason' | translate }}</dt>
-            <dd>{{ consultation.reason }}</dd>
-          </div>
-        </dl>
-      </mat-card-content>
-    </mat-card>
+          <p class="pet-line">
+            @if (names().pet; as pet) {
+              <strong>{{ pet.name }}</strong>
+              · {{ 'enums.species.' + pet.species | translate }}@if (pet.breed) { · {{ pet.breed }} }
+              <span class="code">{{ pet.petCode }}</span>
+            } @else {
+              {{ 'clinicalAttention.workspace.pet' | translate }} #{{ consultation.petId }}
+            }
+          </p>
+        </div>
+      </div>
+
+      <div class="reason">
+        <app-icon name="chat" [size]="16" />
+        <div>
+          <small>{{ 'clinicalAttention.workspace.reason' | translate }}</small>
+          <p>{{ consultation.reason }}</p>
+        </div>
+      </div>
+
+      <dl class="facts">
+        <div>
+          <dt><app-icon name="user" [size]="14" /> {{ 'clinicalAttention.workspace.owner' | translate }}</dt>
+          <dd>{{ names().owner ?? '—' }}@if (names().ownerPhone) { <small>{{ names().ownerPhone }}</small> }</dd>
+        </div>
+        <div>
+          <dt><app-icon name="stethoscope" [size]="14" /> {{ 'clinicalAttention.workspace.veterinarian' | translate }}</dt>
+          <dd>{{ names().veterinarian ?? '#' + consultation.veterinarianId }}</dd>
+        </div>
+        <div>
+          <dt><app-icon name="building" [size]="14" /> {{ 'clinicalAttention.workspace.clinic' | translate }}</dt>
+          <dd>{{ names().clinic ?? '#' + consultation.clinicId }}</dd>
+        </div>
+        <div>
+          <dt><app-icon name="map-pin" [size]="14" /> {{ 'clinicalAttention.workspace.consultingRoom' | translate }}</dt>
+          <dd>{{ consultation.consultingRoomId ? (names().room ?? '#' + consultation.consultingRoomId) : '—' }}</dd>
+        </div>
+        <div>
+          <dt><app-icon name="clock" [size]="14" /> {{ 'clinicalAttention.workspace.startedAt' | translate }}</dt>
+          <dd>
+            {{
+              consultation.startedAt
+                ? (consultation.startedAt | date: 'dd/MM/yyyy HH:mm')
+                : ('clinicalAttention.workspace.notStarted' | translate)
+            }}
+          </dd>
+        </div>
+      </dl>
+    </section>
 
     @if (store.error(); as error) {
       <mat-card id="consultation-error" appearance="outlined" class="error-card">
@@ -73,14 +84,15 @@
     }
 
     @if (consultation.canStart) {
-      <mat-card id="start-card" appearance="outlined">
+      <mat-card id="start-card" appearance="outlined" class="start-card">
         <mat-card-header>
+          <span mat-card-avatar class="card-icon"><app-icon name="play" [size]="20" /></span>
           <mat-card-title>{{
-            'clinicalAttention.workspace.startTitle' | translate
-          }}</mat-card-title>
+              'clinicalAttention.workspace.startTitle' | translate
+            }}</mat-card-title>
           <mat-card-subtitle>{{
-            'clinicalAttention.workspace.startText' | translate
-          }}</mat-card-subtitle>
+              'clinicalAttention.workspace.startText' | translate
+            }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="actions">
@@ -99,7 +111,7 @@
               [disabled]="store.isSaving()"
               (click)="start(consultation)"
             >
-              {{ 'clinicalAttention.workspace.start' | translate }}
+              <app-icon name="play" [size]="15" class="btn-icon" /> {{ 'clinicalAttention.workspace.start' | translate }}
             </button>
           </div>
         </mat-card-content>
@@ -121,9 +133,10 @@
             />
             <mat-card id="history-card" appearance="outlined">
               <mat-card-header>
+                <span mat-card-avatar class="card-icon"><app-icon name="history" [size]="20" /></span>
                 <mat-card-title>{{ 'clinicalAttention.history.title' | translate }}</mat-card-title>
                 <mat-card-subtitle>
-                  {{ 'clinicalAttention.history.subtitle' | translate: { id: consultation.petId } }}
+                  {{ 'clinicalAttention.history.subtitle' | translate: { id: names().pet?.name ?? consultation.petId } }}
                 </mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
@@ -165,6 +178,9 @@
             />
           </div>
         }
+        @case ('images') {
+          <app-consultation-imaging [petId]="consultation.petId" [consultationId]="consultation.id" />
+        }
         @case ('diagnosis') {
           <div class="layout">
             <app-diagnosis-panel
@@ -175,17 +191,18 @@
             />
             <mat-card id="exams-card" appearance="outlined">
               <mat-card-header>
+                <span mat-card-avatar class="card-icon"><app-icon name="flask" [size]="20" /></span>
                 <mat-card-title>{{ 'clinicalAttention.exams.title' | translate }}</mat-card-title>
                 <mat-card-subtitle>{{
-                  'clinicalAttention.exams.subtitle' | translate
-                }}</mat-card-subtitle>
+                    'clinicalAttention.exams.subtitle' | translate
+                  }}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 <div class="actions">
                   <a
                     id="request-exam-link"
                     mat-stroked-button
-                    routerLink="/clinical-exams"
+                    routerLink="/clinical-exams/request"
                     [queryParams]="{ consultationId: consultation.id }"
                   >
                     <mat-icon>science</mat-icon>
@@ -241,27 +258,32 @@
         appearance="outlined"
         [class.cancelled-banner]="consultation.status === Status.Cancelled"
       >
-        <mat-card-content>
-          @if (consultation.status === Status.Completed) {
-            <p class="banner-title">
-              {{
-                'clinicalAttention.workspace.closedCompleted'
-                  | translate: { date: (consultation.completedAt | date: 'dd/MM/yyyy HH:mm') }
-              }}
-            </p>
-          } @else {
-            <p class="banner-title">
-              {{
-                'clinicalAttention.workspace.closedCancelled'
-                  | translate: { date: (consultation.cancelledAt | date: 'dd/MM/yyyy HH:mm') }
-              }}
-            </p>
-            <p id="cancellation-reason">
-              <strong>{{ 'clinicalAttention.workspace.cancellationReason' | translate }}:</strong>
-              {{ consultation.cancellationReason }}
-            </p>
-          }
-          <p class="meta">{{ 'clinicalAttention.workspace.readOnly' | translate }}</p>
+        <mat-card-content class="banner-content">
+          <span class="card-icon" [class.danger]="consultation.status === Status.Cancelled">
+            <app-icon [name]="consultation.status === Status.Completed ? 'check-circle' : 'x'" [size]="20" />
+          </span>
+          <div>
+            @if (consultation.status === Status.Completed) {
+              <p class="banner-title">
+                {{
+                  'clinicalAttention.workspace.closedCompleted'
+                    | translate: { date: (consultation.completedAt | date: 'dd/MM/yyyy HH:mm') }
+                }}
+              </p>
+            } @else {
+              <p class="banner-title">
+                {{
+                  'clinicalAttention.workspace.closedCancelled'
+                    | translate: { date: (consultation.cancelledAt | date: 'dd/MM/yyyy HH:mm') }
+                }}
+              </p>
+              <p id="cancellation-reason">
+                <strong>{{ 'clinicalAttention.workspace.cancellationReason' | translate }}:</strong>
+                {{ consultation.cancellationReason }}
+              </p>
+            }
+            <p class="meta">{{ 'clinicalAttention.workspace.readOnly' | translate }}</p>
+          </div>
         </mat-card-content>
       </mat-card>
 
@@ -271,6 +293,11 @@
         <app-findings-panel [consultation]="consultation" />
       </div>
       <app-diagnosis-panel [consultation]="consultation" />
+      <app-consultation-imaging
+        [petId]="consultation.petId"
+        [consultationId]="consultation.id"
+        [readonly]="true"
+      />
     }
   } @else if (store.isLoading()) {
     <div class="loading"><mat-spinner diameter="40" /></div>

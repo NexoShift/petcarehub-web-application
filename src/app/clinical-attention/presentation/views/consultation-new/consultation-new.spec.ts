@@ -10,11 +10,30 @@ import { ClinicalAttentionRepository } from '../../../domain/repositories/clinic
 import { CLINICAL_ATTENTION_REPOSITORY } from '../../../infrastructure/repositories/clinical-attention.token';
 import { consultation } from '../../../testing/clinical-attention.fixtures';
 import { ConsultationNew } from './consultation-new';
+import { of } from 'rxjs';
+import { IamStore } from '../../../../iam/application/iam.store';
+import { ProfileApi } from '../../../../profiles/infrastructure/profile-api';
 
 describe('ConsultationNew', () => {
   let repository: { [K in keyof ClinicalAttentionRepository]: ReturnType<typeof vi.fn> };
   let fixture: ComponentFixture<ConsultationNew>;
   let navigate: ReturnType<typeof vi.spyOn>;
+
+  const profileApi = {
+    getClinicByAccountId: vi.fn(() => of({ id: 3, name: 'Veterinaria San Martín' })),
+    getPatientsByClinicId: vi.fn(() => of([{ id: 20, name: 'Rocky', petCode: 'PET-ROCKY001' }])),
+    getConsultingRoomsByClinicId: vi.fn(() => of([
+      { id: 7, name: 'Box 1', active: true },
+      { id: 8, name: 'Box 2', active: false },
+    ])),
+  };
+  const iamStore = { currentUser: () => ({ id: 1, accountId: 5 }) };
+
+  /** Los mat-select se prueban por el form: la vista solo enlaza los controles. */
+  const form = () => (fixture.componentInstance as unknown as {
+    form: { controls: Record<string, { value: unknown; setValue(v: unknown): void }> };
+  }).form;
+  const rooms = () => (fixture.componentInstance as unknown as { rooms(): { id: number }[] }).rooms();
 
   const html = (): HTMLElement => fixture.nativeElement as HTMLElement;
   const find = <T extends HTMLElement>(selector: string): T | null =>
@@ -54,6 +73,8 @@ describe('ConsultationNew', () => {
         provideRouter([]),
         provideTranslateService(),
         { provide: CLINICAL_ATTENTION_REPOSITORY, useValue: repository },
+        { provide: ProfileApi, useValue: profileApi },
+        { provide: IamStore, useValue: iamStore },
       ],
     });
     navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
@@ -66,7 +87,14 @@ describe('ConsultationNew', () => {
     fixture.componentRef.setInput('petId', '20');
     await settle();
 
-    expect(find<HTMLInputElement>('#pet-id')!.value).toBe('20');
+    expect(form().controls['petId'].value).toBe(20);
+  });
+
+  it('takes the clinic from the account and lists only active rooms', () => {
+    expect(profileApi.getClinicByAccountId).toHaveBeenCalledWith(5);
+    expect(form().controls['clinicId'].value).toBe(3);
+    expect(find('.clinic-line')!.textContent).toContain('Veterinaria San Martín');
+    expect(rooms().map(r => r.id)).toEqual([7]);
   });
 
   it('registers the consultation and opens it', async () => {
@@ -74,8 +102,7 @@ describe('ConsultationNew', () => {
       consultation({ id: 33, status: ConsultationStatus.Created, startedAt: null }),
     );
 
-    type('#pet-id', '20');
-    type('#clinic-id', '3');
+    form().controls['petId'].setValue(20);
     type('#consultation-reason', '  Control general  ');
     await settle();
     find<HTMLButtonElement>('#create-consultation-button')!.click();
@@ -105,8 +132,7 @@ describe('ConsultationNew', () => {
       new ClinicalAttentionError(ClinicalAttentionErrorCode.PetNotFound),
     );
 
-    type('#pet-id', '999');
-    type('#clinic-id', '3');
+    form().controls['petId'].setValue(999);
     type('#consultation-reason', 'Control');
     await settle();
     find<HTMLButtonElement>('#create-consultation-button')!.click();

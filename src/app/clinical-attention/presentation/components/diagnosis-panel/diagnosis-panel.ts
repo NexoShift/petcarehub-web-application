@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { Icon } from '../../../../shared/presentation/components/icon/icon';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ClinicalConsultation } from '../../../domain/model/clinical-consultation.entity';
 import { Diagnosis } from '../../../domain/model/diagnosis.entity';
@@ -23,7 +24,7 @@ export interface DiagnosisReevaluation {
 /** Phase 5 (MW-25): diagnoses of the consultation. A diagnosis is never edited, only reevaluated. */
 @Component({
   selector: 'app-diagnosis-panel',
-  imports: [DatePipe, MatButtonModule, MatCardModule, TranslatePipe, DiagnosisForm],
+  imports: [Icon, DatePipe, MatButtonModule, MatCardModule, TranslatePipe, DiagnosisForm],
   templateUrl: './diagnosis-panel.html',
   styleUrls: ['../../clinical-attention.css', './diagnosis-panel.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

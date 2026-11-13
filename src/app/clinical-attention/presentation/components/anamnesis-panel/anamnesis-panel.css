@@ -1,37 +1,236 @@
+/* Anamnesis: formulario en 3 bloques suaves, chips tipo píldora y campos rellenos */
+.anamnesis-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  /* Campos de Material: esquinas redondeadas y borde suave */
+  --mdc-outlined-text-field-container-shape: 12px;
+  --mat-form-field-outlined-container-shape: 12px;
+  --mdc-outlined-text-field-outline-color: #dbe3ee;
+  --mat-form-field-outlined-outline-color: #dbe3ee;
+  --mdc-outlined-text-field-hover-outline-color: #9fdcd8;
+  --mat-form-field-outlined-hover-outline-color: #9fdcd8;
+  --mdc-outlined-text-field-focus-outline-color: #0bc3bd;
+  --mat-form-field-outlined-focus-outline-color: #0bc3bd;
+  --mdc-outlined-text-field-focus-label-text-color: #027c80;
+  --mat-form-field-outlined-focus-label-text-color: #027c80;
+  --mdc-outlined-text-field-caret-color: #027c80;
+  --mat-form-field-outlined-caret-color: #027c80;
+}
+
+:host ::ng-deep .anamnesis-form .mat-mdc-text-field-wrapper {
+  border-radius: 12px;
+  background: #fff;
+}
+
+.form-section {
+  padding: 18px 18px 6px;
+  border: 1px solid #e8eef5;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.section-head > div {
+  flex: 1;
+}
+
+.section-head h3 {
+  margin: 0;
+  color: #10254b;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.section-head p {
+  margin: 2px 0 0;
+  color: #65758d;
+  font-size: 12.5px;
+}
+
+.section-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #032b59;
+  color: #fff;
+  font-size: 12px;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 10px;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.req {
+  color: #b42318;
+}
+
+/* Píldoras seleccionables */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border: 1px solid #dbe3ee;
+  border-radius: 999px;
+  background: #fff;
+  color: #344054;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+
+.pill:hover {
+  border-color: #9fdcd8;
+  background: #f0fbfa;
+  color: #027c80;
+}
+
+.pill.selected {
+  border-color: #0bc3bd;
+  background: #0bc3bd;
+  color: #062b55;
+  font-weight: 600;
+}
+
 .symptom-input {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
 }
 
 .symptom-field {
   flex: 1 1 auto;
 }
 
-.symptom-input button {
-  margin-top: 8px;
+.add-btn {
+  height: 52px;
+  margin-top: 2px;
+  border-radius: 12px !important;
+  background: #fff;
+}
+
+.add-btn app-icon {
+  margin-right: 4px;
+  vertical-align: -2px;
 }
 
 .selected-symptoms {
-  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
 }
 
 .symptom {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  padding: 5px 6px 5px 12px;
+  border-radius: 999px;
+  background: #d6f9f5;
+  color: #027c80;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .remove {
-  padding: 0 2px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
   border: 0;
-  background: transparent;
+  border-radius: 50%;
+  background: rgba(2, 124, 128, .12);
   color: inherit;
-  font-size: 16px;
-  line-height: 1;
   cursor: pointer;
+}
+
+.remove:hover {
+  background: rgba(2, 124, 128, .25);
+}
+
+.no-symptoms {
+  margin: 0 0 16px;
+  color: #8a97aa;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 6px;
+}
+
+.save-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #65758d;
+  font-size: 12.5px;
+}
+
+.save-hint app-icon {
+  flex: none;
+  color: #027c80;
+}
+
+.form-footer button app-icon {
+  margin-right: 4px;
+  vertical-align: -2px;
 }
 
 .locked {
   margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+  .form-section {
+    padding: 14px 12px 4px;
+  }
+
+  .form-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

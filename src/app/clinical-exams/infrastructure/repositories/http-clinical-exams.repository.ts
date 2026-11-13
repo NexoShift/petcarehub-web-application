@@ -4,6 +4,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ApiError } from '../../../shared/domain/api-error';
 import { CancelClinicalExamCommand } from '../../domain/model/cancel-clinical-exam.command';
+import { ExamStatus } from '../../domain/enums/exam-status.enum';
 import { ClinicalExam } from '../../domain/model/clinical-exam.entity';
 import { ClinicalExamsErrorCode } from '../../domain/model/clinical-exams-error';
 import { ClinicalFile } from '../../domain/model/clinical-file.entity';
@@ -24,6 +25,20 @@ export class HttpClinicalExamsRepository implements ClinicalExamsRepository {
 
   async findByConsultationId(consultationId: number): Promise<ClinicalExam[]> {
     const url = `${environment.apiBaseUrl}/clinical-consultations/${consultationId}/clinical-exams`;
+    const responses = await this.send(this.http.get<ClinicalExamResponse[]>(url));
+    return responses.map(toClinicalExam);
+  }
+
+  async findOfMyClinic(status: ExamStatus | null): Promise<ClinicalExam[]> {
+    const options = status ? { params: { status } } : {};
+    const responses = await this.send(
+      this.http.get<ClinicalExamResponse[]>(this.examsUrl, options),
+    );
+    return responses.map(toClinicalExam);
+  }
+
+  async findByPetId(petId: number): Promise<ClinicalExam[]> {
+    const url = `${environment.apiBaseUrl}/pets/${petId}/clinical-exams`;
     const responses = await this.send(this.http.get<ClinicalExamResponse[]>(url));
     return responses.map(toClinicalExam);
   }

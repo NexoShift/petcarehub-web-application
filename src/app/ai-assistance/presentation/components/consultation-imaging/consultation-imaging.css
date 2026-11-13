@@ -1,0 +1,17 @@
+/* Paso "Imágenes" de la consulta: reutiliza ai-page.css y vision-layout.css (mismo diseño que /imaging). */
+.panel { display: flex; flex-direction: column; gap: clamp(16px, 1.6vw, 24px); }
+
+.type-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.type-label { color: var(--color-text-muted); font-size: 12px; font-weight: 500; }
+.type-row mat-button-toggle-group { border-radius: 12px; }
+.toggle { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+
+.pointer-toggle { flex: none; font-size: 13px; }
+
+.lead { display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 14px; background: linear-gradient(135deg, #032B59, #023A65); color: #fff; }
+.lead .section-label { color: #9FE7E4; }
+.lead strong { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+
+.legal { display: flex; align-items: flex-start; gap: 6px; margin: 0; color: var(--color-text-muted); font-size: 12px; line-height: 1.5; }
+
+.history-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }

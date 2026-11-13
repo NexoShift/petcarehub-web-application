@@ -1,7 +1,12 @@
 .result-form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 14px;
+}
+
+.wide,
+.form-actions {
+  grid-column: 1 / -1;
 }
 
 .date-field {
@@ -11,4 +16,17 @@
 .form-actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.btn-accent {
+  border-radius: 999px;
+  background: #0bc3bd;
+  color: #062b55;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .result-form {
+    grid-template-columns: 1fr;
+  }
 }

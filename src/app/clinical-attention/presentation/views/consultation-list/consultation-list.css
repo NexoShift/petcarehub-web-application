@@ -1,0 +1,404 @@
+/* Consultas clínicas: pacientes a la izquierda, consultas del elegido a la derecha */
+:host {
+  display: block;
+}
+
+.list-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 26px;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-bottom: 24px;
+}
+
+.head-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.head-text {
+  flex: 1;
+}
+
+.page-head h1 {
+  margin: 0 0 6px;
+  color: #10254b;
+  font-size: 28px;
+}
+
+.page-head p {
+  margin: 0;
+  color: #65758d;
+}
+
+.page-head strong {
+  color: #10254b;
+}
+
+.btn-accent {
+  border-radius: 999px;
+  background: #0bc3bd;
+  color: #062b55;
+  font-weight: 600;
+}
+
+.btn-outline {
+  border-radius: 999px;
+}
+
+.btn-accent app-icon,
+.btn-outline app-icon {
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid #e1e8f2;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(18, 40, 80, .06);
+}
+
+/* ----- Pacientes ----- */
+.patients-card {
+  padding: 20px;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.card-title h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #10254b;
+  font-size: 16px;
+}
+
+.count {
+  display: grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #032b59;
+  color: #fff;
+  font-size: 12px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  color: #8a97aa;
+}
+
+.search:focus-within {
+  border-color: #0bc3bd;
+  box-shadow: 0 0 0 3px rgba(11, 195, 189, .15);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #1c2430;
+  font: inherit;
+  font-size: 14px;
+}
+
+.patients {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 520px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.patient {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: #8a97aa;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.patient:hover {
+  background: #f5f7fa;
+}
+
+.patient.active {
+  border-color: #0bc3bd;
+  background: #e8f8f6;
+  color: #027c80;
+}
+
+.patient-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.patient-text strong {
+  color: #10254b;
+}
+
+.patient-text small {
+  overflow: hidden;
+  color: #65758d;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-patients {
+  padding: 18px 6px;
+  color: #65758d;
+  font-size: 14px;
+  text-align: center;
+}
+
+.empty-patients p {
+  margin: 0 0 10px;
+}
+
+.empty-patients a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #007c86;
+  text-decoration: none;
+}
+
+/* ----- Consultas ----- */
+.consultations-card {
+  min-height: 360px;
+  padding: 24px;
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 310px;
+  color: #65758d;
+  text-align: center;
+}
+
+.placeholder.small {
+  min-height: 160px;
+}
+
+.placeholder h2 {
+  margin: 6px 0 0;
+  color: #10254b;
+  font-size: 18px;
+}
+
+.placeholder p {
+  max-width: 360px;
+  margin: 0;
+}
+
+.placeholder-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.pet-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.pet-head > div {
+  flex: 1;
+}
+
+.pet-head h2 {
+  margin: 0 0 4px;
+  color: #10254b;
+  font-size: 20px;
+}
+
+.code {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #e8eef7;
+  color: #032b59;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.consultations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.consultation {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid #e1e8f2;
+  border-radius: 14px;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.consultation:hover {
+  border-color: #b9e9e5;
+  box-shadow: 0 4px 14px rgba(18, 40, 80, .06);
+}
+
+.date {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  width: 58px;
+  padding: 6px 0;
+  border-radius: 10px;
+  background: #f5f7fa;
+  color: #10254b;
+  line-height: 1.1;
+}
+
+.date strong {
+  font-size: 20px;
+}
+
+.date small {
+  color: #65758d;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.consultation-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.consultation-text strong {
+  overflow: hidden;
+  color: #10254b;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.consultation-text small {
+  color: #65758d;
+}
+
+.open-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #007c86;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  padding: 30px;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 11px 14px;
+  border: 1px solid #f7c8c4;
+  border-radius: 10px;
+  background: #fff3f2;
+  color: #b42318;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .patients {
+    max-height: 260px;
+  }
+}
+
+@media (max-width: 600px) {
+  .list-page {
+    padding: 14px;
+  }
+
+  .page-head {
+    flex-wrap: wrap;
+  }
+
+  .page-head h1 {
+    font-size: 23px;
+  }
+
+  .consultation {
+    flex-wrap: wrap;
+  }
+}

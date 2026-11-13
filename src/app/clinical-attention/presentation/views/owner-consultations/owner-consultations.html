@@ -1,0 +1,97 @@
+<section class="list-page">
+  <header class="page-head">
+    <span class="head-icon"><app-icon name="stethoscope" [size]="28" /></span>
+    <div class="head-text">
+      <h1>{{ 'clinicalAttention.owner.title' | translate }}</h1>
+      <p>{{ 'clinicalAttention.owner.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="card patients-card">
+      <div class="card-title">
+        <h2><app-icon name="paw" [size]="18" /> {{ 'clinicalAttention.owner.pets' | translate }}</h2>
+        <span class="count">{{ pets().length }}</span>
+      </div>
+      @if (petsLoading()) {
+        <div class="loading"><mat-spinner diameter="32" /></div>
+      } @else {
+        <ul class="patients">
+          @for (pet of pets(); track pet.id) {
+            <li>
+              <button type="button" class="patient" [id]="'pet-' + pet.id"
+                      [class.active]="shownPetId() === pet.id" (click)="select(pet.id)">
+                <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="40" />
+                <span class="patient-text">
+                  <strong>{{ pet.name }}</strong>
+                  <small>{{ 'enums.species.' + pet.species | translate }}@if (pet.breed) { · {{ pet.breed }} }</small>
+                </span>
+                <app-icon name="chevron-right" [size]="16" />
+              </button>
+            </li>
+          } @empty {
+            <li class="empty-patients">
+              <p>{{ 'clinicalAttention.owner.noPets' | translate }}</p>
+              <a routerLink="/profiles/pets/new">
+                <app-icon name="plus" [size]="15" /> {{ 'clinicalAttention.owner.addPet' | translate }}
+              </a>
+            </li>
+          }
+        </ul>
+      }
+    </aside>
+
+    <div class="card consultations-card">
+      @if (shownPetId() === null) {
+        <div class="placeholder">
+          <span class="placeholder-icon"><app-icon name="history" [size]="30" /></span>
+          <h2>{{ 'clinicalAttention.owner.pickTitle' | translate }}</h2>
+        </div>
+      } @else {
+        <div class="pet-head">
+          @if (selectedPet(); as pet) {
+            <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="52" />
+            <div>
+              <h2>{{ pet.name }}</h2>
+              <span class="code">{{ pet.petCode }}</span>
+            </div>
+          }
+        </div>
+
+        @if (store.error(); as error) {
+          <p id="list-error" class="error-message" role="alert">
+            <app-icon name="alert" [size]="16" /> {{ error | translate }}
+          </p>
+        }
+
+        @if (store.isLoading()) {
+          <div class="loading"><mat-spinner diameter="40" /></div>
+        } @else if (store.petConsultations().length === 0) {
+          <div id="no-consultations" class="placeholder small">
+            <p>{{ 'clinicalAttention.list.empty' | translate }}</p>
+          </div>
+        } @else {
+          <ul id="consultations-list" class="consultations">
+            @for (consultation of store.petConsultations(); track consultation.id) {
+              <li class="consultation" [id]="'consultation-row-' + consultation.id">
+                <span class="date">
+                  <strong>{{ consultation.createdAt | date: 'dd' }}</strong>
+                  <small>{{ consultation.createdAt | date: 'MMM yyyy' }}</small>
+                </span>
+                <div class="consultation-text">
+                  <strong>{{ consultation.reason }}</strong>
+                  <small>{{ 'clinicalAttention.list.number' | translate }} {{ consultation.id }}</small>
+                </div>
+                <app-consultation-status-chip [status]="consultation.status" />
+                <a [id]="'open-consultation-' + consultation.id" class="open-link"
+                   [routerLink]="['/my-consultations', consultation.id]">
+                  {{ 'clinicalAttention.list.open' | translate }} <app-icon name="arrow-right" [size]="14" />
+                </a>
+              </li>
+            }
+          </ul>
+        }
+      }
+    </div>
+  </div>
+</section>

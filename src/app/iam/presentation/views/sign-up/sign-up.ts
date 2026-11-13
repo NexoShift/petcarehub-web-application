@@ -15,6 +15,12 @@ import { AuthLayout } from '../../components/auth-layout/auth-layout';
   styleUrls: ['../auth-form.css', './sign-up.css'],
 })
 export class SignUp {
+  /** Paso 2 del onboarding según el tipo de cuenta. Las pantallas viven en el BC de Profiles. */
+  static readonly ONBOARDING_ROUTES: Record<AccountType, string> = {
+    PET_OWNER: '/profiles/pet-owner/complete',
+    CLINIC: '/profiles/clinic/complete',
+  };
+
   private readonly store = inject(IamStore);
   private readonly router = inject(Router);
 
@@ -24,28 +30,40 @@ export class SignUp {
 
   // label y description son claves de public/i18n/*.json
   protected readonly accountTypes = [
-    { value: 'PET_OWNER' as AccountType, label: 'auth.signUp.owner', description: 'auth.signUp.ownerDescription' },
-    { value: 'CLINIC' as AccountType, label: 'auth.signUp.vet', description: 'auth.signUp.vetDescription' },
+    {
+      value: 'PET_OWNER' as AccountType,
+      label: 'auth.signUp.owner',
+      description: 'auth.signUp.ownerDescription',
+    },
+    {
+      value: 'CLINIC' as AccountType,
+      label: 'auth.signUp.vet',
+      description: 'auth.signUp.vetDescription',
+    },
   ];
 
   protected readonly form = inject(NonNullableFormBuilder).group({
     accountType: ['PET_OWNER' as AccountType, Validators.required],
-    // fullName y phone todavía no van a IAM: se enviarán a Profiles en el paso 2 (Parte 2)
-    fullName: ['', Validators.required],
+    // IAM solo guarda credenciales y tipo de cuenta. Los datos personales van en el paso 2 (Profiles).
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.pattern(/^9\d{8}$/)]],
     // Mismas reglas que SignUpResource en el backend: entre 8 y 72 caracteres
     password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(72)]],
     acceptTerms: [false, Validators.requiredTrue],
   });
 
   /** Fuerza de la contraseña de 0 a 4, para las 4 barras del diseño. */
-  private readonly password = toSignal(this.form.controls.password.valueChanges, { initialValue: '' });
+  private readonly password = toSignal(this.form.controls.password.valueChanges, {
+    initialValue: '',
+  });
   protected readonly strength = computed(() => {
     const p = this.password();
     if (!p) return 0;
-    return [p.length >= 8, /[a-z]/.test(p) && /[A-Z]/.test(p), /\d/.test(p), /[^A-Za-z0-9]/.test(p)]
-      .filter(Boolean).length;
+    return [
+      p.length >= 8,
+      /[a-z]/.test(p) && /[A-Z]/.test(p),
+      /\d/.test(p),
+      /[^A-Za-z0-9]/.test(p),
+    ].filter(Boolean).length;
   });
 
   protected selectAccountType(type: AccountType): void {
@@ -53,7 +71,7 @@ export class SignUp {
   }
 
   protected togglePassword(): void {
-    this.showPassword.update(visible => !visible);
+    this.showPassword.update((visible) => !visible);
   }
 
   protected submit(): void {
@@ -65,8 +83,9 @@ export class SignUp {
     this.errorMessage.set(null);
     const { email, password, accountType } = this.form.getRawValue();
 
-    this.store.signUp(email, password, accountType).subscribe({
-      next: () => this.router.navigate(['/sign-in'], { queryParams: { registered: true } }),
+    // Crea la cuenta, inicia sesión y pasa directo al paso 2: "Configura tu perfil"
+    this.store.signUpAndSignIn(email, password, accountType).subscribe({
+      next: () => this.router.navigateByUrl(SignUp.ONBOARDING_ROUTES[accountType]),
       error: (e: ApiError) => {
         this.errorMessage.set(e.message);
         this.loading.set(false);

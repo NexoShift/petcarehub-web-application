@@ -14,6 +14,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { IamStore } from '../../../../iam/application/iam.store';
 import { PetOwnerStore } from '../../../application/pet-owner.store';
 import { PetStore } from '../../../application/pet.store';
+import { ClinicPatientStore } from '../../../application/clinic-patient.store';
 
 import { PetForm } from '../../components/pet-form/pet-form';
 import type { PetFormSubmission } from '../../components/pet-form/pet-form';
@@ -50,6 +51,10 @@ export class PetDetail {
   protected readonly iamStore = inject(IamStore);
   protected readonly ownerStore = inject(PetOwnerStore);
   protected readonly petStore = inject(PetStore);
+  protected readonly clinicPatientStore = inject(ClinicPatientStore);
+
+  /** Clinics where this pet is registered as a patient. */
+  protected readonly clinics = this.clinicPatientStore.clinics;
 
   protected readonly editing = signal(false);
   protected readonly uploadingImage = signal(false);
@@ -85,6 +90,7 @@ export class PetDetail {
 
       this.invalidId.set(false);
       this.petStore.loadById(petId);
+      this.clinicPatientStore.loadClinicsByPetId(petId);
     });
   }
 

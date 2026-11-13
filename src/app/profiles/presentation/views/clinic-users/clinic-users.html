@@ -170,34 +170,48 @@
 
           }
 
-          <!-- Directory awaiting IAM GET -->
+        <!-- IAM account user directory -->
+        @if (iamStore.loadingAccountUsers()) {
           <div class="directory-empty">
-
-            <div class="empty-icon">
-              <app-icon name="users" [size]="38" />
-            </div>
-
-            <h3>
-              {{ 'profiles.clinicUsers.directoryPending' | translate }}
-            </h3>
-
-            <p>
-              {{ 'profiles.clinicUsers.directoryPendingHint' | translate }}
-            </p>
-
-            <button
-              mat-stroked-button
-              type="button" [disabled]="clinicStore.loading() || creatingProfile() || !!pendingMember()"
-              (click)="openMemberForm(memberDrawer)"
-            >
-              <app-icon name="user-plus" [size]="18" />
-
-              {{ 'profiles.clinicMembers.create' | translate }}
-            </button>
-
+            <mat-spinner diameter="34" />
+            <p>{{ 'profiles.clinicUsers.loadingMembers' | translate }}</p>
           </div>
-
-        </mat-card>
+        } @else if (iamStore.accountUsersError()) {
+          <div class="directory-empty">
+            <app-icon name="alert" [size]="32" />
+            <p>{{ 'profiles.clinicUsers.membersError' | translate }}</p>
+            @if (clinic(); as currentClinic) {
+              <button mat-stroked-button type="button" (click)="iamStore.loadAccountUsers(currentClinic.accountId)">
+                {{ 'profiles.clinicUsers.retry' | translate }}
+              </button>
+            }
+          </div>
+        } @else if (iamStore.accountUsers().length === 0) {
+          <div class="directory-empty">
+            <app-icon name="users" [size]="34" />
+            <p>{{ 'profiles.clinicUsers.noMembers' | translate }}</p>
+          </div>
+        } @else {
+          <div class="account-members-list">
+            @for (member of iamStore.accountUsers(); track member.id) {
+              <div class="account-member">
+                <div class="member-avatar">
+                  <app-icon name="user" [size]="23" />
+                </div>
+                <div class="member-information">
+                  <strong>{{ member.email }}</strong>
+                  <span class="member-role">
+                    {{(member.isHolder ? 'profiles.clinicUsers.holder' : 'profiles.clinicUsers.member') | translate }}
+                  </span>
+                </div>
+                <span class="account-member-status" [class.active]="member.isActive">
+                  {{(member.isActive ? 'profiles.clinicUsers.active' : 'profiles.clinicUsers.inactive') | translate }}
+                </span>
+              </div>
+            }
+          </div>
+        }
+      </mat-card>
 
         <!-- Information about professional profiles -->
         <mat-card class="information-card">

@@ -42,6 +42,7 @@ const OWNER_MENU: NavSection[] = [
     items: [
       { label: 'shell.menu.home', path: '/home', icon: 'home' },
       { label: 'shell.menu.pets', path: '/profiles/pets', icon: 'paw' },
+      { label: 'shell.menu.consultations', path: '/my-consultations', icon: 'stethoscope' },
       { label: 'shell.menu.medicalHistory', path: '/medical-history', icon: 'history' },
       { label: 'shell.menu.treatments', path: '/treatments', icon: 'pill' },
       { label: 'shell.menu.exams', path: '/exams', icon: 'flask' },
@@ -63,7 +64,7 @@ const VET_MENU: NavSection[] = [
       { label: 'shell.menu.patients', path: '/profiles/clinic/patients', icon: 'paw' },
       { label: 'shell.menu.consultations', path: '/consultations', icon: 'stethoscope' },
       { label: 'shell.menu.medicalHistory', path: '/medical-history', icon: 'history' },
-      { label: 'shell.menu.laboratory', path: '/laboratory', icon: 'microscope' },
+      { label: 'shell.menu.laboratory', path: '/clinical-exams', icon: 'microscope' },
       { label: 'shell.menu.imaging', path: '/imaging', icon: 'image' },
       { label: 'shell.menu.aiAssistant', path: '/ai-assistant', icon: 'sparkles' },
     ],
@@ -77,8 +78,8 @@ const CLINIC_ADMIN_FOOTER: NavItem[] = [
   {
     label: 'shell.menu.profile',
     path: '/profiles/clinic',
-    icon: 'building'
-  }
+    icon: 'building',
+  },
 ];
 
 /**
@@ -88,10 +89,9 @@ const VET_FOOTER: NavItem[] = [
   {
     label: 'shell.menu.profile',
     path: '/profiles/veterinarian',
-    icon: 'user'
-  }
+    icon: 'user',
+  },
 ];
-
 
 /**
  * Administration navigation available only to clinic administrators.
@@ -107,7 +107,7 @@ const CLINIC_ADMIN_MENU: NavItem = {
     },
     {
       label: 'shell.menu.offices',
-      path: '/offices',
+      path: '/profiles/clinic/consulting-rooms', // antes: '/offices'
       icon: 'list',
     },
     {

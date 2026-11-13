@@ -94,3 +94,4 @@
 @keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
 .error { padding: 14px 16px; border-radius: 12px; background: #FEF3F2; color: #B42318; font-size: 14px; }
+a.btn { text-decoration: none; }

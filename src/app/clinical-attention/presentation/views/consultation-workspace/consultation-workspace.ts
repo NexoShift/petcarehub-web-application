@@ -17,6 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ConsultationImaging } from '../../../../ai-assistance';
 import { ClinicalAttentionStore } from '../../../application/clinical-attention.store';
 import { ConsultationStatus } from '../../../domain/enums/consultation-status.enum';
 import { AddClinicalFindingCommand } from '../../../domain/model/add-clinical-finding.command';
@@ -52,6 +53,20 @@ import {
   DiagnosisReevaluation,
 } from '../../components/diagnosis-panel/diagnosis-panel';
 import { FindingFormValue, FindingsPanel } from '../../components/findings-panel/findings-panel';
+import { ProfileApi } from '../../../../profiles/infrastructure/profile-api';
+import { Pet } from '../../../../profiles/domain/model/pet.entity';
+import { Icon } from '../../../../shared/presentation/components/icon/icon';
+import { PetAvatar } from '../../../../shared/presentation/components/pet-avatar/pet-avatar';
+
+/** Nombres de Profiles para mostrar en vez de los ids. */
+interface ConsultationNames {
+  pet: Pet | null;
+  owner: string | null;
+  ownerPhone: string | null;
+  veterinarian: string | null;
+  clinic: string | null;
+  room: string | null;
+}
 
 /**
  * One consultation, phase by phase (MW-23 to MW-26). A consultation that was started shows the
@@ -70,10 +85,13 @@ import { FindingFormValue, FindingsPanel } from '../../components/findings-panel
     AnamnesisPanel,
     AssessmentPanel,
     CompletionPanel,
+    ConsultationImaging,
     ConsultationPhases,
     ConsultationStatusChip,
     DiagnosisPanel,
     FindingsPanel,
+    Icon,
+    PetAvatar,
   ],
   templateUrl: './consultation-workspace.html',
   styleUrls: ['../../clinical-attention.css', './consultation-workspace.css'],
@@ -86,6 +104,7 @@ export class ConsultationWorkspace {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly translate = inject(TranslateService);
+  private readonly profiles = inject(ProfileApi);
 
   protected readonly Status = ConsultationStatus;
   protected readonly consultation = this.store.consultation;
@@ -103,11 +122,67 @@ export class ConsultationWorkspace {
       .slice(0, 5),
   );
 
+  protected readonly names = signal<ConsultationNames>({
+    pet: null,
+    owner: null,
+    ownerPhone: null,
+    veterinarian: null,
+    clinic: null,
+    room: null,
+  });
+  private namesFor: number | null = null;
+
   constructor() {
     effect(() => {
       const consultationId = Number(this.consultationId());
       untracked(() => void this.open(consultationId));
     });
+    // Cuando llega la consulta, pide a Profiles los nombres (una vez por consulta)
+    effect(() => {
+      const consultation = this.consultation();
+      if (consultation && consultation.id !== this.namesFor) {
+        this.namesFor = consultation.id;
+        untracked(() => this.loadNames(consultation));
+      }
+    });
+  }
+
+  private loadNames(c: ClinicalConsultation): void {
+    const set = (patch: Partial<ConsultationNames>) =>
+      this.names.update((n) => ({ ...n, ...patch }));
+    this.names.set({
+      pet: null,
+      owner: null,
+      ownerPhone: null,
+      veterinarian: null,
+      clinic: null,
+      room: null,
+    });
+    this.profiles.getPetById(c.petId).subscribe({
+      next: (pet) => {
+        set({ pet });
+        this.profiles.getPetOwnerById(pet.ownerId).subscribe({
+          next: (o) => set({ owner: `${o.firstName} ${o.lastName}`, ownerPhone: o.phoneNumber }),
+          error: () => undefined,
+        });
+      },
+      error: () => undefined,
+    });
+    // La consulta guarda el id del perfil del veterinario (Profiles)
+    this.profiles.getVeterinarianById(c.veterinarianId).subscribe({
+      next: (v) => set({ veterinarian: `${v.firstName} ${v.lastName}` }),
+      error: () => undefined,
+    });
+    this.profiles.getClinicById(c.clinicId).subscribe({
+      next: (clinic) => set({ clinic: clinic.name }),
+      error: () => undefined,
+    });
+    if (c.consultingRoomId) {
+      this.profiles.getConsultingRoomById(c.clinicId, c.consultingRoomId).subscribe({
+        next: (r) => set({ room: r.name }),
+        error: () => undefined,
+      });
+    }
   }
 
   protected selectPhase(phase: ConsultationPhaseId): void {

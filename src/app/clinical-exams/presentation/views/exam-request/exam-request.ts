@@ -15,14 +15,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ClinicalExamsStore } from '../../../application/clinical-exams.store';
@@ -32,6 +28,8 @@ import {
   RequestClinicalExamCommand,
 } from '../../../domain/model/request-clinical-exam.command';
 import { ExamStatusChip } from '../../components/exam-status-chip/exam-status-chip';
+import { EXAM_TYPE_ICONS } from '../../exam-type-icon';
+import { Icon } from '../../../../shared/presentation/components/icon/icon';
 
 @Component({
   selector: 'app-exam-request',
@@ -40,18 +38,15 @@ import { ExamStatusChip } from '../../components/exam-status-chip/exam-status-ch
     ReactiveFormsModule,
     RouterLink,
     MatButtonModule,
-    MatCardModule,
     MatFormFieldModule,
-    MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MatSelectModule,
-    MatTableModule,
     TranslatePipe,
     ExamStatusChip,
+    Icon,
   ],
   templateUrl: './exam-request.html',
-  styleUrl: '../clinical-exams.css',
+  styleUrls: ['../clinical-exams.css', './exam-request.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExamRequest implements OnInit {
@@ -63,8 +58,10 @@ export class ExamRequest implements OnInit {
 
   protected readonly examTypes = Object.values(ExamType);
   protected readonly indicationMaxLength = INDICATION_MAX_LENGTH;
-  protected readonly columns = ['id', 'type', 'status', 'requestedAt', 'actions'];
+  protected readonly typeIcons = EXAM_TYPE_ICONS;
   protected readonly shownConsultationId = signal<number | null>(null);
+  /** Exams are requested from a consultation in progress (link "Solicitar examen"). */
+  protected readonly hasConsultation = signal(false);
 
   private readonly formDirective = viewChild.required(FormGroupDirective);
   protected readonly form = inject(NonNullableFormBuilder).group({
@@ -77,6 +74,7 @@ export class ExamRequest implements OnInit {
     this.store.clearError();
     const consultationId = Number(this.consultationId());
     if (Number.isInteger(consultationId) && consultationId > 0) {
+      this.hasConsultation.set(true);
       this.form.controls.consultationId.setValue(consultationId);
       void this.loadExams();
     }

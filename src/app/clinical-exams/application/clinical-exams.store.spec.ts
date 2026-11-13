@@ -12,6 +12,7 @@ function exam(id: number, status: ExamStatus): ClinicalExam {
   return new ClinicalExam({
     id,
     consultationId: 10,
+    clinicId: 3,
     petId: 20,
     requestedBy: 30,
     type: ExamType.Ultrasound,
@@ -34,6 +35,8 @@ describe('ClinicalExamsStore', () => {
   beforeEach(() => {
     repository = {
       findByConsultationId: vi.fn(),
+      findOfMyClinic: vi.fn(),
+      findByPetId: vi.fn(),
       findById: vi.fn(),
       request: vi.fn(),
       start: vi.fn(),
@@ -57,6 +60,34 @@ describe('ClinicalExamsStore', () => {
 
     expect(saved).toBe(true);
     expect(store.consultationExams().map((current) => current.id)).toEqual([1]);
+  });
+
+  it('loads the worklist of the clinic with the status filter', async () => {
+    repository.findOfMyClinic.mockResolvedValue([exam(2, ExamStatus.Requested)]);
+
+    await store.loadClinicExams(ExamStatus.Requested);
+
+    expect(repository.findOfMyClinic).toHaveBeenCalledWith(ExamStatus.Requested);
+    expect(store.clinicExams().map((current) => current.id)).toEqual([2]);
+  });
+
+  it('updates the worklist row after a transition', async () => {
+    repository.findOfMyClinic.mockResolvedValue([exam(2, ExamStatus.Requested)]);
+    repository.start.mockResolvedValue(exam(2, ExamStatus.InProcess));
+    await store.loadClinicExams(null);
+
+    await store.start(2);
+
+    expect(store.clinicExams()[0].status).toBe(ExamStatus.InProcess);
+  });
+
+  it('loads the exams of a pet', async () => {
+    repository.findByPetId.mockResolvedValue([exam(5, ExamStatus.Completed)]);
+
+    await store.loadByPet(20);
+
+    expect(repository.findByPetId).toHaveBeenCalledWith(20);
+    expect(store.petExams().map((current) => current.id)).toEqual([5]);
   });
 
   it('replaces the selected exam after a transition', async () => {

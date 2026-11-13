@@ -1,63 +1,77 @@
 /*
  * Modelo de lectura del panel del veterinario (o de la clínica).
- * Igual que el del dueño: solo datos para mostrar, armados desde Clinical Attention,
- * Clinical Exams, Profiles y AI Assistance.
+ * Solo datos para mostrar, armados con Profiles (clínica, pacientes, dueños),
+ * Clinical Attention (consultas) y Clinical Exams (exámenes de la clínica).
+ * Los textos son claves de i18n; la vista los traduce con sus parámetros.
  */
+import { IconName } from '../../../presentation/components/icon/icon';
 
 export interface Kpi {
-  label: string;              // "ATENDIDOS HOY"
+  label: string; // clave i18n: "dashboard.vet.kpi.attended"
   value: number;
-  unit: string;               // "pacientes"
-  hint: string;               // "+2 vs ayer"
-  icon: 'users' | 'clock' | 'stethoscope' | 'flask';
-  highlight?: boolean;        // la tarjeta que pide atención (sala de espera)
+  unit: string; // clave i18n
+  hint: string; // clave i18n
+  hintParams?: Record<string, unknown>;
+  icon: IconName;
+  highlight?: boolean; // la tarjeta que pide atención
 }
 
-export type PatientStatus = 'waiting' | 'alert' | 'ok';
+/** waiting = consulta por iniciar, in-progress = en atención, ok = sin consulta abierta. */
+export type PatientStatus = 'waiting' | 'in-progress' | 'ok';
 
 export interface TodayPatient {
-  code: string;               // "#PET-97420"
+  petId: number;
+  code: string; // "#PET-97420"
   name: string;
-  species: 'Canino' | 'Felino';
+  species: 'Canino' | 'Felino' | 'Otro';
+  ageYears: number | null;
+  weightKg?: number; // peso de la última evaluación fisiológica
   breed: string;
-  ageYears: number;
-  weightKg: number;
   photoUrl?: string;
   ownerName: string;
   ownerPhone: string;
   status: PatientStatus;
-  statusText: string;         // franja superior de la tarjeta
-  noteTitle: string;          // "MOTIVO DE INGRESO", "ÚLTIMA EVOLUCIÓN (12 SEP 2026)"
-  note: string;
-  primaryAction: string;      // "Iniciar consulta", "Nueva consulta"
+  statusText: string; // clave i18n de la franja superior
+  statusParams?: Record<string, unknown>;
+  noteTitle: string; // clave i18n
+  noteDate?: Date;
+  note: string; // motivo de la consulta (texto del backend)
+  primaryAction: string; // clave i18n del botón principal
+  primaryLink: (string | number)[]; // a dónde lleva el botón principal
+  primaryQuery?: Record<string, unknown>;
 }
 
 export interface PendingExam {
-  name: string;
+  id: number;
+  type: string; // ExamType: RADIOGRAPHY, LABORATORY...
   patient: string;
-  lab: string;
-  status: 'En proceso' | 'Solicitado';
+  consultationId: number;
+  status: string; // ExamStatus: REQUESTED o IN_PROCESS
+  needsValidation: boolean; // tiene resultado registrado sin validar
 }
 
 export interface RecentConsultation {
+  id: number;
   patient: string;
   reason: string;
-  date: string;
+  date: Date;
 }
 
-export interface AiSuggestion {
-  text: string;
+/** Consulta en curso que puede usar el asistente clínico (null si no hay ninguna). */
+export interface OngoingConsultation {
+  id: number;
+  patient: string;
 }
 
 export interface VetDashboard {
-  vetLastName: string;        // "Mendoza"
-  clinic: string;             // "VetSur · Sede Miraflores"
-  scheduledToday: number;
-  waitingNow: number;
-  syncedAt: string;           // "10:24 AM"
+  vetLastName: string;
+  clinic: string;
+  patientCount: number;
+  waitingNow: number; // consultas creadas, sin iniciar
+  syncedAt: string; // "10:24"
   kpis: Kpi[];
   patients: TodayPatient[];
   exams: PendingExam[];
   recent: RecentConsultation[];
-  aiSuggestion: AiSuggestion;
+  ongoing: OngoingConsultation | null;
 }

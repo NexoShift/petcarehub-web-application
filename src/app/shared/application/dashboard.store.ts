@@ -22,21 +22,27 @@ export class DashboardStore {
   readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
 
-  loadOwner(): void {
+  async loadOwner(): Promise<void> {
     this._loading.set(true);
     this._error.set(null);
-    this.api.getOwnerDashboard().subscribe({
-      next: data => { this._owner.set(data); this._loading.set(false); },
-      error: () => { this._error.set('errors.ownerDashboard'); this._loading.set(false); },
-    });
+    try {
+      this._owner.set(await this.api.getOwnerDashboard());
+    } catch {
+      this._error.set('errors.ownerDashboard');
+    } finally {
+      this._loading.set(false);
+    }
   }
 
-  loadVet(): void {
+  async loadVet(): Promise<void> {
     this._loading.set(true);
     this._error.set(null);
-    this.api.getVetDashboard().subscribe({
-      next: data => { this._vet.set(data); this._loading.set(false); },
-      error: () => { this._error.set('errors.vetDashboard'); this._loading.set(false); },
-    });
+    try {
+      this._vet.set(await this.api.getVetDashboard());
+    } catch {
+      this._error.set('errors.vetDashboard');
+    } finally {
+      this._loading.set(false);
+    }
   }
 }

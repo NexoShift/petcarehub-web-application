@@ -1,5 +1,5 @@
 <form id="exam-result-form" class="result-form" [formGroup]="form" (ngSubmit)="submit()">
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="wide">
     <mat-label>{{ 'clinicalExams.resultForm.summary' | translate }}</mat-label>
     <textarea
       id="result-summary"
@@ -59,7 +59,7 @@
   </mat-form-field>
 
   <div class="form-actions">
-    <button id="save-result-button" mat-flat-button type="submit" [disabled]="saving()">
+    <button id="save-result-button" class="btn-accent" mat-flat-button type="submit" [disabled]="saving()">
       {{ 'clinicalExams.resultForm.submit' | translate }}
     </button>
   </div>

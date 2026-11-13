@@ -1,5 +1,6 @@
 <mat-card appearance="outlined">
   <mat-card-header>
+    <span mat-card-avatar class="card-icon"><app-icon name="chat" [size]="20" /></span>
     <mat-card-title>{{ 'clinicalAttention.anamnesis.title' | translate }}</mat-card-title>
     <mat-card-subtitle>{{ 'clinicalAttention.anamnesis.subtitle' | translate }}</mat-card-subtitle>
   </mat-card-header>
@@ -51,154 +52,219 @@
       </dl>
       <p class="meta locked">{{ 'clinicalAttention.anamnesis.locked' | translate }}</p>
     } @else if (consultation().canRegisterAnamnesis) {
-      <form id="anamnesis-form" [formGroup]="form" (ngSubmit)="submit()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>{{ 'clinicalAttention.anamnesis.chiefComplaint' | translate }}</mat-label>
-          <textarea
-            id="chief-complaint"
-            matInput
-            rows="3"
-            formControlName="chiefComplaint"
-            [maxlength]="limits.chiefComplaint"
-          ></textarea>
-          <mat-hint>{{ 'clinicalAttention.anamnesis.chiefComplaintHint' | translate }}</mat-hint>
-          <mat-hint align="end">
-            {{ form.controls.chiefComplaint.value.length }} / {{ limits.chiefComplaint }}
-          </mat-hint>
-          @if (form.controls.chiefComplaint.invalid) {
-            <mat-error>{{
-              'clinicalAttention.anamnesis.chiefComplaintRequired' | translate
-            }}</mat-error>
-          }
-        </mat-form-field>
+      <form id="anamnesis-form" class="anamnesis-form" [formGroup]="form" (ngSubmit)="submit()">
+        <!-- 1. Motivo y evolución -->
+        <section class="form-section">
+          <header class="section-head">
+            <span class="section-icon"><app-icon name="chat" [size]="16" /></span>
+            <div>
+              <h3>{{ 'clinicalAttention.anamnesis.sectionReason' | translate }}</h3>
+              <p>{{ 'clinicalAttention.anamnesis.chiefComplaintHint' | translate }}</p>
+            </div>
+          </header>
 
-        <p class="section-label">{{ 'clinicalAttention.anamnesis.evolutionTime' | translate }} *</p>
-        <div class="chip-row" role="group">
-          @for (option of evolutionOptions; track option) {
-            <button
-              type="button"
-              mat-stroked-button
-              [id]="'evolution-' + option"
-              (click)="useEvolution(option)"
-            >
-              {{ 'clinicalAttention.anamnesis.evolutionOptions.' + option | translate }}
-            </button>
-          }
-        </div>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>{{ 'clinicalAttention.anamnesis.evolutionTime' | translate }}</mat-label>
-          <input
-            id="evolution-time"
-            matInput
-            formControlName="evolutionTime"
-            [maxlength]="limits.evolutionTime"
-          />
-          @if (form.controls.evolutionTime.invalid) {
-            <mat-error>{{
-              'clinicalAttention.anamnesis.evolutionTimeRequired' | translate
-            }}</mat-error>
-          }
-        </mat-form-field>
-
-        <p class="section-label">{{ 'clinicalAttention.anamnesis.symptoms' | translate }}</p>
-        <div class="chip-row" role="group">
-          @for (key of symptomSuggestions; track key) {
-            <button type="button" mat-stroked-button [id]="'suggest-' + key" (click)="suggest(key)">
-              + {{ 'clinicalAttention.anamnesis.suggestions.' + key | translate }}
-            </button>
-          }
-        </div>
-        <div class="symptom-input">
-          <mat-form-field appearance="outline" class="symptom-field">
-            <mat-label>{{
-              'clinicalAttention.anamnesis.symptomPlaceholder' | translate
-            }}</mat-label>
-            <input
-              id="symptom-draft"
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'clinicalAttention.anamnesis.chiefComplaint' | translate }}</mat-label>
+            <textarea
+              id="chief-complaint"
               matInput
-              [formControl]="symptomDraft"
-              [maxlength]="limits.symptom"
-              (keydown.enter)="$event.preventDefault(); addSymptom()"
-            />
+              rows="3"
+              formControlName="chiefComplaint"
+              [maxlength]="limits.chiefComplaint"
+            ></textarea>
+            <mat-hint align="end">
+              {{ form.controls.chiefComplaint.value.length }} / {{ limits.chiefComplaint }}
+            </mat-hint>
+            @if (form.controls.chiefComplaint.invalid) {
+              <mat-error>{{
+                'clinicalAttention.anamnesis.chiefComplaintRequired' | translate
+              }}</mat-error>
+            }
           </mat-form-field>
-          <button id="add-symptom-button" mat-stroked-button type="button" (click)="addSymptom()">
-            {{ 'clinicalAttention.anamnesis.addSymptom' | translate }}
-          </button>
-        </div>
-        @if (symptoms().length > 0) {
-          <div id="symptom-list" class="tags selected-symptoms">
-            @for (symptom of symptoms(); track symptom) {
-              <span class="tag strong symptom">
-                {{ symptom }}
-                <button
-                  type="button"
-                  class="remove"
-                  [attr.aria-label]="'clinicalAttention.anamnesis.removeSymptom' | translate"
-                  (click)="removeSymptom(symptom)"
-                >
-                  ×
-                </button>
-              </span>
+
+          <p class="field-label">
+            <app-icon name="clock" [size]="14" />
+            {{ 'clinicalAttention.anamnesis.evolutionTime' | translate }} <span class="req">*</span>
+          </p>
+          <div class="pills" role="group">
+            @for (option of evolutionOptions; track option) {
+              <button
+                type="button"
+                class="pill"
+                [id]="'evolution-' + option"
+                [class.selected]="
+                  form.controls.evolutionTime.value ===
+                  ('clinicalAttention.anamnesis.evolutionOptions.' + option | translate)
+                "
+                (click)="useEvolution(option)"
+              >
+                {{ 'clinicalAttention.anamnesis.evolutionOptions.' + option | translate }}
+              </button>
             }
           </div>
-        }
-
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'clinicalAttention.anamnesis.diet' | translate }}</mat-label>
-            <textarea
-              id="diet"
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'clinicalAttention.anamnesis.evolutionOther' | translate }}</mat-label>
+            <input
+              id="evolution-time"
               matInput
-              rows="2"
-              formControlName="diet"
-              [maxlength]="limits.diet"
-            ></textarea>
+              formControlName="evolutionTime"
+              [maxlength]="limits.evolutionTime"
+            />
+            @if (form.controls.evolutionTime.invalid) {
+              <mat-error>{{
+                'clinicalAttention.anamnesis.evolutionTimeRequired' | translate
+              }}</mat-error>
+            }
           </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'clinicalAttention.anamnesis.behavior' | translate }}</mat-label>
-            <textarea
-              id="behavior"
-              matInput
-              rows="2"
-              formControlName="behavior"
-              [maxlength]="limits.behavior"
-            ></textarea>
-          </mat-form-field>
-        </div>
+        </section>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>{{ 'clinicalAttention.anamnesis.previousTreatments' | translate }}</mat-label>
-          <textarea
-            id="previous-treatments"
-            matInput
-            rows="2"
-            formControlName="previousTreatments"
-            [maxlength]="limits.previousTreatments"
-          ></textarea>
-        </mat-form-field>
+        <!-- 2. Síntomas -->
+        <section class="form-section">
+          <header class="section-head">
+            <span class="section-icon"><app-icon name="activity" [size]="16" /></span>
+            <div>
+              <h3>{{ 'clinicalAttention.anamnesis.symptoms' | translate }}</h3>
+              <p>{{ 'clinicalAttention.anamnesis.symptomsHint' | translate }}</p>
+            </div>
+            @if (symptoms().length > 0) {
+              <span class="badge">{{ symptoms().length }}</span>
+            }
+          </header>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>{{ 'clinicalAttention.anamnesis.ownerObservations' | translate }}</mat-label>
-          <textarea
-            id="owner-observations"
-            matInput
-            rows="2"
-            formControlName="ownerObservations"
-            [maxlength]="limits.ownerObservations"
-          ></textarea>
-        </mat-form-field>
+          <div class="pills" role="group">
+            @for (key of symptomSuggestions; track key) {
+              <button
+                type="button"
+                class="pill"
+                [id]="'suggest-' + key"
+                [class.selected]="
+                  symptoms().includes('clinicalAttention.anamnesis.suggestions.' + key | translate)
+                "
+                (click)="suggest(key)"
+              >
+                <app-icon
+                  [name]="
+                    symptoms().includes('clinicalAttention.anamnesis.suggestions.' + key | translate)
+                      ? 'check'
+                      : 'plus'
+                  "
+                  [size]="13"
+                />
+                {{ 'clinicalAttention.anamnesis.suggestions.' + key | translate }}
+              </button>
+            }
+          </div>
 
-        <p class="meta">{{ 'clinicalAttention.anamnesis.saveHint' | translate }}</p>
-        <div class="actions">
+          <div class="symptom-input">
+            <mat-form-field appearance="outline" class="symptom-field">
+              <mat-label>{{
+                'clinicalAttention.anamnesis.symptomPlaceholder' | translate
+              }}</mat-label>
+              <input
+                id="symptom-draft"
+                matInput
+                [formControl]="symptomDraft"
+                [maxlength]="limits.symptom"
+                (keydown.enter)="$event.preventDefault(); addSymptom()"
+              />
+            </mat-form-field>
+            <button id="add-symptom-button" class="add-btn" mat-stroked-button type="button" (click)="addSymptom()">
+              <app-icon name="plus" [size]="14" /> {{ 'clinicalAttention.anamnesis.addSymptom' | translate }}
+            </button>
+          </div>
+
+          @if (symptoms().length > 0) {
+            <div id="symptom-list" class="selected-symptoms">
+              @for (symptom of symptoms(); track symptom) {
+                <span class="symptom">
+                  {{ symptom }}
+                  <button
+                    type="button"
+                    class="remove"
+                    [attr.aria-label]="'clinicalAttention.anamnesis.removeSymptom' | translate"
+                    (click)="removeSymptom(symptom)"
+                  >
+                    <app-icon name="x" [size]="12" />
+                  </button>
+                </span>
+              }
+            </div>
+          } @else {
+            <p class="no-symptoms">{{ 'clinicalAttention.anamnesis.noSymptoms' | translate }}</p>
+          }
+        </section>
+
+        <!-- 3. Contexto del paciente -->
+        <section class="form-section">
+          <header class="section-head">
+            <span class="section-icon"><app-icon name="paw" [size]="16" /></span>
+            <div>
+              <h3>{{ 'clinicalAttention.anamnesis.sectionContext' | translate }}</h3>
+              <p>{{ 'clinicalAttention.anamnesis.optionalHint' | translate }}</p>
+            </div>
+          </header>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'clinicalAttention.anamnesis.diet' | translate }}</mat-label>
+              <textarea
+                id="diet"
+                matInput
+                rows="2"
+                formControlName="diet"
+                [maxlength]="limits.diet"
+              ></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'clinicalAttention.anamnesis.behavior' | translate }}</mat-label>
+              <textarea
+                id="behavior"
+                matInput
+                rows="2"
+                formControlName="behavior"
+                [maxlength]="limits.behavior"
+              ></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'clinicalAttention.anamnesis.previousTreatments' | translate }}</mat-label>
+              <textarea
+                id="previous-treatments"
+                matInput
+                rows="2"
+                formControlName="previousTreatments"
+                [maxlength]="limits.previousTreatments"
+              ></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'clinicalAttention.anamnesis.ownerObservations' | translate }}</mat-label>
+              <textarea
+                id="owner-observations"
+                matInput
+                rows="2"
+                formControlName="ownerObservations"
+                [maxlength]="limits.ownerObservations"
+              ></textarea>
+            </mat-form-field>
+          </div>
+        </section>
+
+        <footer class="form-footer">
+          <p class="save-hint">
+            <app-icon name="shield" [size]="15" />
+            {{ 'clinicalAttention.anamnesis.saveHint' | translate }}
+          </p>
           <button
             id="register-anamnesis-button"
             mat-flat-button
             type="submit"
             [disabled]="saving()"
           >
-            {{ 'clinicalAttention.anamnesis.submit' | translate }}
+            <app-icon name="check" [size]="15" /> {{ 'clinicalAttention.anamnesis.submit' | translate }}
           </button>
-        </div>
+        </footer>
       </form>
     } @else {
       <p id="no-anamnesis" class="empty">
