@@ -101,6 +101,17 @@
       "mismatch": "Las contraseñas no coinciden",
       "submit": "Cambiar contraseña",
       "submitting": "Guardando..."
+    },
+    "changePassword": {
+      "title": "Actualiza tu contraseña",
+      "subtitle": "Tu clínica creó tu cuenta {{email}} con una contraseña temporal. Cámbiala para continuar.",
+      "current": "Contraseña temporal",
+      "currentPlaceholder": "La que te dio tu clínica",
+      "currentRequired": "Ingresa la contraseña temporal",
+      "wrongCurrent": "La contraseña temporal no es correcta",
+      "samePassword": "La nueva contraseña debe ser distinta a la temporal",
+      "submit": "Guardar y continuar",
+      "signOut": "Cerrar sesión"
     }
   },
   "shell": {
@@ -347,6 +358,21 @@
       "notificationsPending": "La configuración de notificaciones estará disponible próximamente.",
       "subscription": "Suscripción",
       "subscriptionPending": "La información de tu plan estará disponible cuando se integre el módulo de suscripciones."
+    },
+    "ownerComplete": {
+      "subtitle": "Registra tu información personal para comenzar a utilizar PetCare Hub.",
+      "personalInfo": "Información personal",
+      "firstNameRequired": "Los nombres son obligatorios.",
+      "lastNameRequired": "Los apellidos son obligatorios.",
+      "emailHint": "Correo asociado a tu cuenta de IAM.",
+      "phone": "Teléfono",
+      "photoTitle": "Fotografía de perfil",
+      "selectPhoto": "Seleccionar fotografía",
+      "photoHint": "Opcional · JPG, PNG o WebP",
+      "saving": "Guardando...",
+      "submit": "Crear mi perfil",
+      "alreadyExists": "Ya existe un perfil para esta cuenta.",
+      "createError": "No se pudo crear tu perfil. Inténtalo nuevamente."
     },
     "pets": {
       "title": "Mis mascotas",
@@ -947,6 +973,7 @@
       "eyebrow": "Asistencia con computer vision · triaje previo",
       "title": "Análisis visual orientativo",
       "subtitle": "Carga una fotografía de la zona dérmica o lesión de tu mascota para una detección preliminar computarizada antes de tu consulta veterinaria.",
+      "noPets": "Todavía no registraste mascotas. Añade una en «Mis mascotas» para analizar su foto.",
       "connected": "Conectado",
       "captureTitle": "Captura fotográfica de la lesión",
       "captureSubtitle": "Inspección interdigital y detección visual",
@@ -975,6 +1002,7 @@
       "eyebrow": "Imagenología · computer vision",
       "title": "Análisis de imágenes clínicas",
       "subtitle": "Sube una foto de piel para que el modelo marque las lesiones, o una radiografía para ver las enfermedades probables. El resultado es de apoyo y queda como antecedente de la consulta.",
+      "noPatients": "Tu clínica aún no tiene pacientes. Registra una mascota en «Pacientes» para analizar imágenes.",
       "consultationChip": "Consulta #{{id}}",
       "patient": "Paciente",
       "consultation": "N.° de consulta",
