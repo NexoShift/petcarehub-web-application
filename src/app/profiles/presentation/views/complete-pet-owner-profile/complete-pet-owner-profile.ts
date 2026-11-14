@@ -1,7 +1,9 @@
 
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { IamStore } from '../../../../iam/application/iam.store';
 import { PetOwnerStore } from '../../../application/pet-owner.store';
@@ -29,6 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatIconModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    TranslatePipe,
   ],
   templateUrl: './complete-pet-owner-profile.html',
   styleUrl: './complete-pet-owner-profile.css',
@@ -40,10 +43,11 @@ export class CompletePetOwnerProfile {
 
   protected readonly currentUser = this.iamStore.currentUser;
   protected readonly loading = this.petOwnerStore.loading;
-  protected readonly error = this.petOwnerStore.error;
 
   protected readonly selectedImage = signal<File | null>(null);
+  /** Claves de traducción: el texto se resuelve en la plantilla para seguir el idioma activo. */
   protected readonly imageError = signal<string | null>(null);
+  protected readonly errorKey = signal<string | null>(null);
 
   protected readonly form = inject(NonNullableFormBuilder).group({
     firstName: ['', [Validators.required, Validators.maxLength(100)]],
@@ -60,7 +64,7 @@ export class CompletePetOwnerProfile {
     const file = input.files?.[0] ?? null;
 
     if (file && !['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-      this.imageError.set('Selecciona una imagen JPG, PNG o WebP.');
+      this.imageError.set('profiles.owner.invalidImage');
       this.selectedImage.set(null);
       input.value = '';
       return;
@@ -98,12 +102,17 @@ export class CompletePetOwnerProfile {
       sex: values.sex || null,
     };
 
+    this.errorKey.set(null);
     this.petOwnerStore.create(command, this.selectedImage()).subscribe({
       next: () => {
         this.router.navigate(['/profile/pet-owner']);
       },
-      error: () => {
-        // The store already provides an error message.
+      error: (error: unknown) => {
+        this.errorKey.set(
+          error instanceof HttpErrorResponse && error.status === 409
+            ? 'profiles.ownerComplete.alreadyExists'
+            : 'profiles.ownerComplete.createError',
+        );
       },
     });
   }

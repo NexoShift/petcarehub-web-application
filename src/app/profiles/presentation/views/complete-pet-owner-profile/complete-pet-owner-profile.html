@@ -3,8 +3,8 @@
 <section class="onboarding-container">
 
   <header class="onboarding-header">
-    <h1>Completa tu perfil</h1>
-    <p>Registra tu información personal para comenzar a utilizar PetCare Hub.</p>
+    <h1>{{ 'profiles.owner.incompleteTitle' | translate }}</h1>
+    <p>{{ 'profiles.ownerComplete.subtitle' | translate }}</p>
   </header>
 
   <mat-card class="profile-card">
@@ -12,47 +12,47 @@
 
       <form [formGroup]="form" (ngSubmit)="submit()">
 
-        <h2>Información personal</h2>
+        <h2>{{ 'profiles.ownerComplete.personalInfo' | translate }}</h2>
 
         <div class="form-grid">
 
           <mat-form-field appearance="outline">
-            <mat-label>Nombres</mat-label>
+            <mat-label>{{ 'profiles.owner.firstName' | translate }}</mat-label>
             <mat-icon matPrefix>person</mat-icon>
 
             <input matInput formControlName="firstName"
                    maxlength="100" required>
 
             @if (form.controls.firstName.hasError('required')) {
-              <mat-error>Los nombres son obligatorios.</mat-error>
+              <mat-error>{{ 'profiles.ownerComplete.firstNameRequired' | translate }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Apellidos</mat-label>
+            <mat-label>{{ 'profiles.owner.lastName' | translate }}</mat-label>
             <mat-icon matPrefix>person_outline</mat-icon>
 
             <input matInput formControlName="lastName"
                    maxlength="100" required>
 
             @if (form.controls.lastName.hasError('required')) {
-              <mat-error>Los apellidos son obligatorios.</mat-error>
+              <mat-error>{{ 'profiles.ownerComplete.lastNameRequired' | translate }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Correo electrónico</mat-label>
+            <mat-label>{{ 'profiles.owner.email' | translate }}</mat-label>
             <mat-icon matPrefix>email</mat-icon>
 
             <input matInput
                    [value]="currentUser()?.email ?? ''"
                    readonly>
 
-            <mat-hint>Correo asociado a tu cuenta de IAM.</mat-hint>
+            <mat-hint>{{ 'profiles.ownerComplete.emailHint' | translate }}</mat-hint>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Teléfono</mat-label>
+            <mat-label>{{ 'profiles.ownerComplete.phone' | translate }}</mat-label>
             <mat-icon matPrefix>phone</mat-icon>
 
             <input matInput
@@ -62,18 +62,18 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Sexo</mat-label>
+            <mat-label>{{ 'profiles.owner.sex' | translate }}</mat-label>
 
             <mat-select formControlName="sex">
-              <mat-option value="">No especificado</mat-option>
-              <mat-option value="MALE">Masculino</mat-option>
-              <mat-option value="FEMALE">Femenino</mat-option>
+              <mat-option value="">{{ 'profiles.owner.notSpecified' | translate }}</mat-option>
+              <mat-option value="MALE">{{ 'profiles.owner.male' | translate }}</mat-option>
+              <mat-option value="FEMALE">{{ 'profiles.owner.female' | translate }}</mat-option>
             </mat-select>
           </mat-form-field>
 
         </div>
 
-        <h2>Fotografía de perfil</h2>
+        <h2>{{ 'profiles.ownerComplete.photoTitle' | translate }}</h2>
 
         <div class="image-section">
 
@@ -87,23 +87,23 @@
           <button mat-stroked-button type="button"
                   (click)="imageInput.click()">
             <mat-icon>add_photo_alternate</mat-icon>
-            Seleccionar fotografía
+            {{ 'profiles.ownerComplete.selectPhoto' | translate }}
           </button>
 
           @if (selectedImage(); as image) {
             <span>{{ image.name }}</span>
           } @else {
-            <span class="image-hint">Opcional · JPG, PNG o WebP</span>
+            <span class="image-hint">{{ 'profiles.ownerComplete.photoHint' | translate }}</span>
           }
 
-          @if (imageError()) {
-            <p class="error">{{ imageError() }}</p>
+          @if (imageError(); as key) {
+            <p class="error">{{ key | translate }}</p>
           }
 
         </div>
 
-        @if (error()) {
-          <p class="error" role="alert">{{ error() }}</p>
+        @if (errorKey(); as key) {
+          <p class="error" role="alert">{{ key | translate }}</p>
         }
 
         <div class="form-actions">
@@ -123,7 +123,7 @@
             </mat-icon>
 
             <span>
-              {{ loading() ? 'Guardando...' : 'Crear mi perfil' }}
+              {{ (loading() ? 'profiles.ownerComplete.saving' : 'profiles.ownerComplete.submit') | translate }}
             </span>
 
           </button>

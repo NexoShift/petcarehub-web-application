@@ -103,15 +103,15 @@
       "submitting": "Saving..."
     },
     "changePassword": {
-      "title": "Actualiza tu contraseña",
-      "subtitle": "Tu clínica creó tu cuenta {{email}} con una contraseña temporal. Cámbiala para continuar.",
-      "current": "Contraseña temporal",
-      "currentPlaceholder": "La que te dio tu clínica",
-      "currentRequired": "Ingresa la contraseña temporal",
-      "wrongCurrent": "La contraseña temporal no es correcta",
-      "samePassword": "La nueva contraseña debe ser distinta a la temporal",
-      "submit": "Guardar y continuar",
-      "signOut": "Cerrar sesión"
+      "title": "Update your password",
+      "subtitle": "Your clinic created your account {{email}} with a temporary password. Change it to continue.",
+      "current": "Temporary password",
+      "currentPlaceholder": "The one your clinic gave you",
+      "currentRequired": "Enter the temporary password",
+      "wrongCurrent": "The temporary password is incorrect",
+      "samePassword": "The new password must be different from the temporary one",
+      "submit": "Save and continue",
+      "signOut": "Sign out"
     }
   },
   "shell": {
@@ -530,6 +530,7 @@
       "eyebrow": "Computer vision assistance · pre-triage",
       "title": "Guidance visual analysis",
       "subtitle": "Upload a photo of your pet's skin area or lesion for a preliminary computer detection before your vet visit.",
+      "noPets": "You haven't registered any pets yet. Add one under “My pets” to analyze its photo.",
       "connected": "Connected",
       "captureTitle": "Photo of the lesion",
       "captureSubtitle": "Interdigital inspection and visual detection",
@@ -558,6 +559,7 @@
       "eyebrow": "Imaging · computer vision",
       "title": "Clinical image analysis",
       "subtitle": "Upload a skin photo so the model marks the lesions, or an X-ray to see the likely conditions. The result is supportive and is kept as a background for the visit.",
+      "noPatients": "Your clinic has no patients yet. Register a pet under “Patients” to analyze images.",
       "consultationChip": "Visit #{{id}}",
       "patient": "Patient",
       "consultation": "Visit no.",
@@ -794,6 +796,21 @@
       "notificationsPending": "Notification settings will be available soon.",
       "subscription": "Subscription",
       "subscriptionPending": "Your plan information will be available once the subscription module is integrated."
+    },
+    "ownerComplete": {
+      "subtitle": "Enter your personal information to start using PetCare Hub.",
+      "personalInfo": "Personal information",
+      "firstNameRequired": "First name is required.",
+      "lastNameRequired": "Last name is required.",
+      "emailHint": "Email linked to your IAM account.",
+      "phone": "Phone",
+      "photoTitle": "Profile photo",
+      "selectPhoto": "Select photo",
+      "photoHint": "Optional · JPG, PNG or WebP",
+      "saving": "Saving...",
+      "submit": "Create my profile",
+      "alreadyExists": "A profile already exists for this account.",
+      "createError": "We couldn't create your profile. Please try again."
     },
     "pets": {
       "title": "My pets",
