@@ -6,4 +6,7 @@ export const environment = {
   profilePetsEndpointPath: '/pets',
   profileVeterinariansEndpointPath: '/veterinarians',
   profileClinicsEndpointPath: '/clinics',
+  profileClinicPatientsEndpointPath: '/patients',
+  profileConsultingRoomsEndpointPath: '/consulting-rooms',
+  profileConsultingRoomAssignmentsEndpointPath: '/consulting-room-assignments',
 };
