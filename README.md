@@ -160,8 +160,8 @@ See [docs/adrs.md](docs/adrs.md) for the reasons behind the hosting choice.
 
 | Sprint | Scope | Status |
 |--------|-------|--------|
-| Sprint 1 | IAM, Profiles, consultations, exams, computer vision, dashboards | ✅ Released as `v1.0.0` |
-| Sprint 2 | Medical history, treatments and prescriptions, plans, LLM assistant | 🕓 Planned |
+| Sprint 1 | IAM, Profiles, consultations, exams, computer vision, dashboards | Released as `v1.0.0` |
+| Sprint 2 | Medical history, treatments and prescriptions, plans, LLM assistant | Planned |
 
 See [CHANGELOG.md](CHANGELOG.md) for the detailed history.
 
