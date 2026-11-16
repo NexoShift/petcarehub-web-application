@@ -113,7 +113,7 @@ Continuous deployment is handled by **Cloudflare Pages** through its GitHub inte
 
 The web application is hosted on **Cloudflare Pages** and consumes the PetCare Hub Platform API deployed on Microsoft Azure.
 
-- **Application URL**: `https://petcarehub-web.pages.dev`
+- **Application URL**: `https://petcarehub-web-application.pages.dev/`
 - **API base URL**: `https://petcarehub-api.kindwave-02283cc0.westus2.azurecontainerapps.io/api/v1`
 
 ### Build settings
