@@ -1,0 +1,88 @@
+<div class="dialog-header">
+
+  <span
+    class="dialog-icon"
+    [class.warning-icon]="data.cancelAtPeriodEnd"
+  >
+    <app-icon
+      [name]="data.cancelAtPeriodEnd ? 'alert' : 'refresh'"
+      [size]="28"
+    />
+  </span>
+
+  <h2 mat-dialog-title>
+    {{
+      (
+        data.cancelAtPeriodEnd
+          ? 'subscriptions.renewal.cancelTitle'
+          : 'subscriptions.renewal.resumeTitle'
+      ) | translate
+    }}
+  </h2>
+
+</div>
+
+<mat-dialog-content>
+
+  @if (data.cancelAtPeriodEnd) {
+
+    <p>
+      {{ 'subscriptions.renewal.cancelDescription' | translate }}
+    </p>
+
+    @if (data.isActive && data.currentPeriodEnd) {
+      <div class="period-notice">
+
+        <app-icon name="calendar" [size]="20" />
+
+        <div>
+          <span>
+            {{ 'subscriptions.renewal.accessUntil' | translate }}
+          </span>
+
+          <strong>
+            {{ data.currentPeriodEnd | date: 'dd/MM/yyyy' }}
+          </strong>
+        </div>
+
+      </div>
+    }
+
+  } @else {
+
+    <p>
+      {{ 'subscriptions.renewal.resumeDescription' | translate }}
+    </p>
+
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button
+    mat-stroked-button
+    type="button"
+    class="btn-outline"
+    [mat-dialog-close]="false"
+  >
+    {{ 'subscriptions.renewal.goBack' | translate }}
+  </button>
+
+  <button
+    mat-flat-button
+    type="button"
+    [class.btn-danger]="data.cancelAtPeriodEnd"
+    [class.btn-accent]="!data.cancelAtPeriodEnd"
+    [mat-dialog-close]="true"
+  >
+    {{
+      (
+        data.cancelAtPeriodEnd
+          ? 'subscriptions.renewal.confirmCancel'
+          : 'subscriptions.renewal.confirmResume'
+      ) | translate
+    }}
+  </button>
+
+</mat-dialog-actions>

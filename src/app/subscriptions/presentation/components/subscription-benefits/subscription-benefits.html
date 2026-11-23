@@ -1,0 +1,238 @@
+<section class="benefits-section">
+
+  @if (store.loading()) {
+    <div class="loading">
+      <mat-spinner diameter="36" />
+    </div>
+  } @else {
+
+    <!-- Subscription entitlements -->
+    <section class="section-block">
+
+      <div class="section-heading">
+        <h2>
+          {{ 'subscriptions.entitlements.title' | translate }}
+        </h2>
+
+        <p>
+          {{ 'subscriptions.entitlements.subtitle' | translate }}
+        </p>
+      </div>
+
+      @if (store.entitlements(); as entitlements) {
+        <div class="entitlements-grid">
+
+          @if (entitlements.maxPets !== null) {
+            <article class="card entitlement-card">
+              <span class="benefit-icon">
+                <app-icon name="paw" [size]="26" />
+              </span>
+
+              <div>
+                <span class="benefit-label">
+                  {{ 'subscriptions.entitlements.petLimit' | translate }}
+                </span>
+
+                <strong>
+                  {{ entitlements.maxPets }}
+                  {{ 'subscriptions.entitlements.pets' | translate }}
+                </strong>
+              </div>
+            </article>
+          }
+
+          @if (entitlements.maxVeterinarians !== null) {
+            <article class="card entitlement-card">
+              <span class="benefit-icon">
+                <app-icon name="stethoscope" [size]="26" />
+              </span>
+
+              <div>
+                <span class="benefit-label">
+                  {{ 'subscriptions.entitlements.veterinarianLimit' | translate }}
+                </span>
+
+                <strong>
+                  {{ entitlements.maxVeterinarians }}
+                  {{ 'subscriptions.entitlements.veterinarians' | translate }}
+                </strong>
+              </div>
+            </article>
+          }
+
+          <article class="card entitlement-card">
+            <span class="benefit-icon">
+              <app-icon name="scan" [size]="26" />
+            </span>
+
+            <div>
+              <span class="benefit-label">
+                {{ 'subscriptions.credits.computerVision' | translate }}
+              </span>
+
+              <strong>
+                {{ entitlements.monthlyComputerVisionCredits }}
+              </strong>
+
+              <small>
+                {{ 'subscriptions.entitlements.monthlyCredits' | translate }}
+              </small>
+            </div>
+          </article>
+
+          <article class="card entitlement-card">
+            <span class="benefit-icon">
+              <app-icon name="sparkles" [size]="26" />
+            </span>
+
+            <div>
+              <span class="benefit-label">
+                {{ 'subscriptions.credits.llm' | translate }}
+              </span>
+
+              <strong>
+                {{ entitlements.monthlyLlmCredits }}
+              </strong>
+
+              <small>
+                {{ 'subscriptions.entitlements.monthlyCredits' | translate }}
+              </small>
+            </div>
+          </article>
+
+        </div>
+      }
+
+      @if (store.entitlementsError()) {
+        <div class="error-card" role="alert">
+          <app-icon name="alert" [size]="20" />
+
+          {{ 'subscriptions.errors.entitlements' | translate }}
+        </div>
+      }
+
+    </section>
+
+    <!-- AI credit balances -->
+    <section class="section-block">
+
+      <div class="section-heading">
+        <h2>
+          {{ 'subscriptions.credits.title' | translate }}
+        </h2>
+
+        <p>
+          {{ 'subscriptions.credits.subtitle' | translate }}
+        </p>
+      </div>
+
+      @if (store.aiCredits(); as credits) {
+
+        <div class="period-info">
+          <app-icon name="calendar" [size]="18" />
+
+          <span>
+            {{ 'subscriptions.credits.period' | translate }}:
+
+            <strong>
+              {{ credits.periodStart | date: 'dd/MM/yyyy' }}
+              —
+              {{ credits.periodEnd | date: 'dd/MM/yyyy' }}
+            </strong>
+          </span>
+        </div>
+
+        <div class="credits-grid">
+
+          @for (card of creditCards(); track card.titleKey) {
+            <article class="card credit-card">
+
+              <div class="credit-heading">
+                <span class="benefit-icon">
+                  <app-icon [name]="card.icon" [size]="25" />
+                </span>
+
+                <h3>{{ card.titleKey | translate }}</h3>
+              </div>
+
+              <div class="credit-count">
+                <strong>{{ card.balance.available }}</strong>
+                <span>/ {{ card.balance.limit }}</span>
+              </div>
+
+              <p class="available-label">
+                {{ 'subscriptions.credits.available' | translate }}
+              </p>
+
+              <mat-progress-bar
+                mode="determinate"
+                [value]="card.balance.occupiedPercentage"
+                [attr.aria-label]="card.titleKey | translate"
+              />
+
+              <div class="credit-stats">
+
+                <div>
+                  <small>
+                    {{ 'subscriptions.credits.consumed' | translate }}
+                  </small>
+
+                  <strong>{{ card.balance.consumed }}</strong>
+                </div>
+
+                <div>
+                  <small>
+                    {{ 'subscriptions.credits.reserved' | translate }}
+                  </small>
+
+                  <strong>{{ card.balance.reserved }}</strong>
+                </div>
+
+                <div>
+                  <small>
+                    {{ 'subscriptions.credits.limit' | translate }}
+                  </small>
+
+                  <strong>{{ card.balance.limit }}</strong>
+                </div>
+
+              </div>
+
+              @if (card.balance.available === 0) {
+                <p class="credit-warning">
+                  <app-icon name="alert" [size]="17" />
+
+                  {{ 'subscriptions.credits.exhausted' | translate }}
+                </p>
+              }
+
+            </article>
+          }
+
+        </div>
+      }
+
+      @if (store.aiCreditsError()) {
+        <div class="error-card" role="alert">
+          <app-icon name="alert" [size]="20" />
+
+          {{ 'subscriptions.errors.credits' | translate }}
+        </div>
+      }
+
+    </section>
+
+    @if (store.entitlementsError() || store.aiCreditsError()) {
+      <button
+        mat-stroked-button
+        class="btn-outline"
+        type="button"
+        (click)="reload()"
+      >
+        <app-icon name="refresh" [size]="16" />
+        {{ 'subscriptions.retry' | translate }}
+      </button>
+    }
+
+  }
+</section>

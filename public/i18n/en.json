@@ -1190,6 +1190,116 @@
       "retry": "Retry"
     }
   },
+  "subscriptions": {
+    "title": "My subscription",
+    "subtitle": "View and manage your subscription benefits.",
+    "refresh": "Refresh",
+    "retry": "Try again",
+    "choosePlan": "Choose your plan",
+    "choosePlanDescription": "Select the plan that best suits your needs.",
+    "currentPlan": "Current plan",
+    "month": "month",
+    "subscribe": "Subscribe",
+    "continuePayment": "Continue to payment",
+    "pendingDescription": "Complete your payment to activate your subscription benefits.",
+    "periodStart": "Period start",
+    "periodEnd": "Period end",
+    "checkoutSuccess": "Your subscription has been activated successfully.",
+    "checkoutSynchronizing": "We are verifying your payment. Refresh your subscription status in a few seconds.",
+    "checkoutCancelled": "The payment was not completed. You can continue whenever you are ready.",
+    "cancellationScheduled": "Your subscription will not renew at the end of the current period.",
+    "noPlans": "There are no plans available at the moment.",
+    "planType": {
+      "BASIC": "Basic",
+      "PREMIUM": "Premium"
+    },
+    "status": {
+      "PENDING": "Pending payment",
+      "ACTIVE": "Active",
+      "PAST_DUE": "Past due",
+      "CANCELED": "Canceled",
+      "EXPIRED": "Expired"
+    },
+    "benefits": {
+      "pets": "Up to {{count}} pets",
+      "veterinarians": "Up to {{count}} veterinarians",
+      "computerVision": "{{count}} Computer Vision analyses per month",
+      "llm": "{{count}} AI queries per month"
+    },
+    "errors": {
+      "load": "Unable to load subscription information.",
+      "checkout": "Unable to start the payment process. Please try again.",
+      "conflict": "Unable to start payment. Refresh your subscription status.",
+      "invalidUrl": "Unable to open the payment link.",
+      "entitlements": "Unable to load subscription benefits.",
+      "credits": "Unable to load artificial intelligence credits.",
+      "renewal": "Unable to confirm the update. Refresh your subscription status before trying again.",
+      "payments": "Unable to load payment history. Please try again."
+    },
+    "entitlements": {
+      "title": "Your plan benefits",
+      "subtitle": "Discover the limits included in your subscription.",
+      "petLimit": "Pet limit",
+      "veterinarianLimit": "Veterinarian limit",
+      "pets": "pets",
+      "veterinarians": "veterinarians",
+      "monthlyCredits": "Monthly credits"
+    },
+    "credits": {
+      "title": "Artificial intelligence credits",
+      "subtitle": "Track your AI tool usage during the current billing period.",
+      "computerVision": "Computer Vision",
+      "llm": "LLM Assistant",
+      "period": "Billing period",
+      "available": "Available credits",
+      "consumed": "Consumed",
+      "reserved": "Reserved",
+      "limit": "Limit",
+      "exhausted": "You have no available credits for this tool."
+    },
+    "renewal": {
+      "title": "Automatic renewal",
+      "enabled": "Your subscription will renew automatically.",
+      "disabled": "Automatic renewal is disabled.",
+      "cancel": "Cancel renewal",
+      "resume": "Reactivate renewal",
+      "cancelTitle": "Cancel automatic renewal?",
+      "resumeTitle": "Reactivate automatic renewal?",
+      "cancelDescription": "Your subscription will not renew at the end of the current period. Cancellation does not delete your account or existing records.",
+      "resumeDescription": "Automatic renewal will be restored for the upcoming billing periods.",
+      "accessUntil": "Access to your benefits until",
+      "goBack": "Go back",
+      "confirmCancel": "Confirm cancellation",
+      "confirmResume": "Confirm reactivation",
+      "processing": "Processing request...",
+      "synchronizing": "Synchronizing changes with Stripe...",
+      "syncPending": "Your request was accepted. Refresh the page to check your subscription status.",
+      "updated": "Automatic renewal was updated successfully."
+    },
+    "payments": {
+      "title": "Payment history",
+      "subtitle": "View your payments and billing documents.",
+      "invoice": "Invoice",
+      "paymentDate": "Payment date",
+      "amount": "Amount",
+      "statusLabel": "Status",
+      "documents": "Documents",
+      "status": {
+        "PAID": "Paid"
+      },
+      "viewInvoice": "View invoice",
+      "downloadPdf": "Download PDF",
+      "noDocuments": "Unavailable",
+      "emptyTitle": "You have no recorded payments yet",
+      "emptyDescription": "Your completed payments will appear in this section.",
+      "emptyPageTitle": "There are no payments on this page",
+      "emptyPageDescription": "You can continue browsing previous records.",
+      "errorTitle": "Unable to load payment history",
+      "loadMore": "Load more",
+      "loadingMore": "Loading more payments...",
+      "stripeInformation": "Payments and billing documents are securely managed through Stripe."
+    }
+  },
   "clinicalAttention": {
     "close": "Close",
     "status": {
