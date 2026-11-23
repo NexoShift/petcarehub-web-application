@@ -752,6 +752,116 @@
       "retry": "Reintentar"
     }
   },
+  "subscriptions": {
+    "title": "Mi suscripción",
+    "subtitle": "Consulta y administra los beneficios de tu plan.",
+    "refresh": "Actualizar",
+    "retry": "Reintentar",
+    "choosePlan": "Elige tu plan",
+    "choosePlanDescription": "Selecciona el plan que mejor se adapte a tus necesidades.",
+    "currentPlan": "Plan actual",
+    "month": "mes",
+    "subscribe": "Contratar plan",
+    "continuePayment": "Continuar al pago",
+    "pendingDescription": "Completa el pago para activar los beneficios de tu suscripción.",
+    "periodStart": "Inicio del periodo",
+    "periodEnd": "Fin del periodo",
+    "checkoutSuccess": "Tu suscripción se ha activado correctamente.",
+    "checkoutSynchronizing": "Estamos verificando tu pago. Actualiza el estado de tu suscripción en unos segundos.",
+    "checkoutCancelled": "El proceso de pago no se completó. Puedes continuarlo cuando desees.",
+    "cancellationScheduled": "Tu suscripción no se renovará al finalizar el periodo actual.",
+    "noPlans": "No hay planes disponibles en este momento.",
+    "planType": {
+      "BASIC": "Básico",
+      "PREMIUM": "Premium"
+    },
+    "status": {
+      "PENDING": "Pago pendiente",
+      "ACTIVE": "Activa",
+      "PAST_DUE": "Pago vencido",
+      "CANCELED": "Cancelada",
+      "EXPIRED": "Expirada"
+    },
+    "benefits": {
+      "pets": "Hasta {{count}} mascotas",
+      "veterinarians": "Hasta {{count}} veterinarios",
+      "computerVision": "{{count}} análisis de Computer Vision al mes",
+      "llm": "{{count}} consultas de IA al mes"
+    },
+    "errors": {
+      "load": "No se pudo cargar la información de la suscripción.",
+      "checkout": "No se pudo iniciar el proceso de pago. Inténtalo nuevamente.",
+      "conflict": "No se pudo iniciar el pago. Actualiza el estado de tu suscripción.",
+      "invalidUrl": "No se pudo abrir el enlace de pago.",
+      "entitlements": "No se pudieron cargar los beneficios de la suscripción.",
+      "credits": "No se pudieron cargar los créditos de inteligencia artificial.",
+      "renewal": "No se pudo confirmar la actualización. Actualiza el estado de tu suscripción antes de intentarlo nuevamente.",
+      "payments": "No se pudo cargar el historial de pagos. Inténtalo nuevamente."
+    },
+    "entitlements": {
+      "title": "Beneficios de tu plan",
+      "subtitle": "Conoce los límites incluidos en tu suscripción.",
+      "petLimit": "Límite de mascotas",
+      "veterinarianLimit": "Límite de veterinarios",
+      "pets": "mascotas",
+      "veterinarians": "veterinarios",
+      "monthlyCredits": "Créditos mensuales"
+    },
+    "credits": {
+      "title": "Créditos de inteligencia artificial",
+      "subtitle": "Consulta el consumo de las herramientas de IA durante el periodo actual.",
+      "computerVision": "Computer Vision",
+      "llm": "LLM Assistant",
+      "period": "Periodo de facturación",
+      "available": "Créditos disponibles",
+      "consumed": "Consumidos",
+      "reserved": "Reservados",
+      "limit": "Límite",
+      "exhausted": "No tienes créditos disponibles para esta herramienta."
+    },
+    "renewal": {
+      "title": "Renovación automática",
+      "enabled": "Tu suscripción se renovará automáticamente.",
+      "disabled": "La renovación automática está deshabilitada.",
+      "cancel": "Cancelar renovación",
+      "resume": "Reactivar renovación",
+      "cancelTitle": "¿Cancelar renovación automática?",
+      "resumeTitle": "¿Reactivar renovación automática?",
+      "cancelDescription": "Tu suscripción no se renovará al finalizar el periodo actual. La cancelación no elimina tu cuenta ni tus registros existentes.",
+      "resumeDescription": "Se restablecerá la renovación automática de tu suscripción para los siguientes periodos de facturación.",
+      "accessUntil": "Acceso a tus beneficios hasta",
+      "goBack": "Volver",
+      "confirmCancel": "Confirmar cancelación",
+      "confirmResume": "Confirmar reactivación",
+      "processing": "Procesando solicitud...",
+      "synchronizing": "Sincronizando los cambios con Stripe...",
+      "syncPending": "La solicitud fue aceptada. Actualiza la pantalla para comprobar el estado de tu suscripción.",
+      "updated": "La renovación automática se actualizó correctamente."
+    },
+    "payments": {
+      "title": "Historial de pagos",
+      "subtitle": "Consulta tus pagos y documentos de facturación.",
+      "invoice": "Factura",
+      "paymentDate": "Fecha de pago",
+      "amount": "Importe",
+      "statusLabel": "Estado",
+      "documents": "Documentos",
+      "status": {
+        "PAID": "Pagado"
+      },
+      "viewInvoice": "Ver factura",
+      "downloadPdf": "Descargar PDF",
+      "noDocuments": "No disponible",
+      "emptyTitle": "Aún no tienes pagos registrados",
+      "emptyDescription": "Los pagos realizados aparecerán en este apartado.",
+      "emptyPageTitle": "No hay pagos en esta página",
+      "emptyPageDescription": "Puedes continuar consultando los registros anteriores.",
+      "errorTitle": "No se pudo cargar el historial",
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando más pagos...",
+      "stripeInformation": "Los pagos y documentos de facturación son gestionados de forma segura mediante Stripe."
+    }
+  },
   "clinicalExams": {
     "close": "Cerrar",
     "status": {
