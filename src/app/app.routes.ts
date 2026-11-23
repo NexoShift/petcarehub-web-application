@@ -63,6 +63,13 @@ export const routes: Routes = [
           import('./ai-assistance/ai-assistance.routes').then((m) => m.VET_IMAGING_ROUTES),
       },
       { path: '', pathMatch: 'full', redirectTo: 'home' },
+      {
+        path: 'plan',
+        loadChildren: () =>
+          import('./subscriptions/presentation/subscriptions.routes').then(
+            (m) => m.subscriptionRoutes,
+          ),
+      },
       // Enlaces del menú que aún no tienen pantalla
       {
         path: '**',
