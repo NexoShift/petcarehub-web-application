@@ -1,0 +1,226 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.benefits-section {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.section-heading {
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  margin: 0 0 8px;
+  color: var(--color-primary);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.section-heading p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.card {
+  border: 1px solid #e1e8f2;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(18, 40, 80, 0.06);
+}
+
+.entitlements-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.entitlement-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px;
+}
+
+.benefit-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.entitlement-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.benefit-label {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.entitlement-card strong {
+  color: var(--color-primary);
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.entitlement-card small {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.period-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.period-info strong {
+  color: var(--color-primary);
+}
+
+.credits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.credit-card {
+  padding: 26px;
+}
+
+.credit-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.credit-heading h3 {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.credit-count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.credit-count > strong {
+  color: var(--color-primary);
+  font-size: 40px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.credit-count > span {
+  color: var(--color-text-muted);
+  font-size: 19px;
+}
+
+.available-label {
+  margin: 8px 0 20px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+mat-progress-bar {
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.credit-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 22px;
+}
+
+.credit-stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.credit-stats small {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.credit-stats strong {
+  color: var(--color-primary);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.credit-warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0 0;
+  padding: 12px;
+  border-radius: 9px;
+  background: #fef0c7;
+  color: #93370d;
+  font-size: 13px;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+}
+
+.error-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid #fecdca;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--color-error);
+  font-size: 14px;
+}
+
+.btn-outline {
+  align-self: flex-start;
+  border-radius: 999px !important;
+}
+
+@media (max-width: 960px) {
+  .entitlements-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .entitlements-grid,
+  .credits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .credit-card {
+    padding: 20px;
+  }
+}
