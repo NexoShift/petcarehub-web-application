@@ -9,4 +9,7 @@ export const environment = {
   profileClinicPatientsEndpointPath: '/patients',
   profileConsultingRoomsEndpointPath: '/consulting-rooms',
   profileConsultingRoomAssignmentsEndpointPath: '/consulting-room-assignments',
+  // Subscription endpoints
+  subscriptionPlansEndpointPath: '/plans',
+  subscriptionAccountsEndpointPath: '/accounts',
 };
