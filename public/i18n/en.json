@@ -599,7 +599,17 @@
       "efusion_pleural": "Pleural effusion",
       "normal": "No abnormalities",
       "neumonia": "Pneumonia",
-      "fractura": "Fracture"
+      "fractura": "Fracture",
+      "cardiomegaly": "Cardiomegaly",
+      "alveolar_pattern": "Alveolar pattern",
+      "bronchial_pattern": "Bronchial pattern",
+      "pleural_effusion": "Pleural effusion",
+      "mass": "Mass",
+      "interstitial_pattern": "Interstitial pattern",
+      "pneumothorax": "Pneumothorax",
+      "pleural_mineralization": "Pleural mineralization",
+      "megaesophagus": "Megaesophagus",
+      "no_finding": "No relevant findings"
     },
     "descriptions": {
       "demodicosis": "Hairless, scaly areas consistent with Demodex mites. A skin scraping is needed to confirm it.",
@@ -633,6 +643,21 @@
       "waitingText": "Choose the image type and upload the file. It will be saved to this consultation.",
       "backgroundText": "Saved to this consultation. The clinical assistant will use it when drafting the SOAP note.",
       "optional": "This step is optional. Use it only when there is a skin lesion or an X-ray to analyze; otherwise go on to Diagnosis."
+    },
+    "xray": {
+      "caption": "Probability of each finding in the X-ray",
+      "colFinding": "Finding",
+      "colProbability": "Probability",
+      "colReading": "Reading",
+      "probable": "Probable",
+      "possible": "Possible",
+      "summaryProbable": "{{probable}} of {{total}} findings at 50% or more. Review them with the patient's clinical signs.",
+      "summaryPossible": "No finding reaches 50%. {{total}} at 20% or more are shown as possible.",
+      "normalTitle": "No relevant findings",
+      "normalText": "The model found no abnormalities in the X-ray ({{value}}% confidence). It does not replace the veterinarian's reading.",
+      "multiLabel": "Each finding has its own percentage: an X-ray can show several at once and they do not add up to 100%. Only findings at 20% or more are shown.",
+      "lowReliability": "Low reliability",
+      "lowReliabilityHint": "Pneumothorax and megaesophagus had very few cases when the model was trained: take them with caution."
     }
   },
   "aiAssistant": {

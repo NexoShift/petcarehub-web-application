@@ -1152,7 +1152,17 @@
       "efusion_pleural": "Efusión pleural",
       "normal": "Sin alteraciones",
       "neumonia": "Neumonía",
-      "fractura": "Fractura"
+      "fractura": "Fractura",
+      "cardiomegaly": "Cardiomegalia",
+      "alveolar_pattern": "Patrón alveolar",
+      "bronchial_pattern": "Patrón bronquial",
+      "pleural_effusion": "Efusión pleural",
+      "mass": "Masa",
+      "interstitial_pattern": "Patrón intersticial",
+      "pneumothorax": "Neumotórax",
+      "pleural_mineralization": "Mineralización pleural",
+      "megaesophagus": "Megaesófago",
+      "no_finding": "Sin hallazgos relevantes"
     },
     "descriptions": {
       "demodicosis": "Zonas sin pelo con descamación compatibles con ácaros Demodex. Requiere un raspado de piel para confirmarlo.",
@@ -1186,6 +1196,21 @@
       "waitingText": "Elige el tipo de imagen y sube el archivo. Se guardará en esta consulta.",
       "backgroundText": "Quedó guardado en esta consulta. El Asistente clínico lo usará al generar el borrador SOAP.",
       "optional": "Este paso es opcional. Úsalo solo si hay una lesión de piel o una radiografía que analizar; si no, pasa a Diagnóstico."
+    },
+    "xray": {
+      "caption": "Probabilidad de cada hallazgo en la radiografía",
+      "colFinding": "Hallazgo",
+      "colProbability": "Probabilidad",
+      "colReading": "Lectura",
+      "probable": "Probable",
+      "possible": "Posible",
+      "summaryProbable": "{{probable}} de {{total}} hallazgos con 50 % o más. Revísalos junto con la clínica del paciente.",
+      "summaryPossible": "Ningún hallazgo llega al 50 %. Se muestran {{total}} con 20 % o más como posibles.",
+      "normalTitle": "Sin hallazgos relevantes",
+      "normalText": "El modelo no encontró alteraciones en la radiografía ({{value}} % de confianza). No reemplaza la lectura del veterinario.",
+      "multiLabel": "Cada hallazgo tiene su propio porcentaje: una radiografía puede tener varios a la vez y no suman 100 %. Solo se muestran los de 20 % o más.",
+      "lowReliability": "Poca fiabilidad",
+      "lowReliabilityHint": "Neumotórax y megaesófago tuvieron muy pocos casos al entrenar el modelo: tómalos con cautela."
     }
   },
   "aiAssistant": {
