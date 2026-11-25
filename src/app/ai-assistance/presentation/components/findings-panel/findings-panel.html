@@ -20,19 +20,7 @@
     </div>
   </div>
 } @else if (analysis().isRadiograph) {
-  <ul class="bars">
-    @for (f of findings(); track f.id; let i = $index) {
-      <li [class.probable]="f.probable" [style.--i]="i">
-        <div class="bar-head">
-          <span class="name">{{ f.label | findingLabel }}</span>
-          @if (f.probable) { <span class="pill strong">{{ 'aiVision.findings.probable' | translate }}</span> }
-          <span class="pct">{{ f.confidencePercentage }}%</span>
-        </div>
-        <div class="track"><span [style.width.%]="f.confidencePercentage"></span></div>
-      </li>
-    }
-  </ul>
-  <p class="foot"><app-icon name="crosshair" [size]="14" />{{ 'aiVision.findings.xrayHint' | translate }}</p>
+  <app-radiograph-findings [analysis]="analysis()" />
 } @else {
   <ul class="list">
     @for (f of findings(); track f.id; let i = $index) {
