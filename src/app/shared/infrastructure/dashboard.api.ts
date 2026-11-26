@@ -167,6 +167,7 @@ export class DashboardApi {
       ongoing: firstOngoing
         ? {
             id: firstOngoing.id,
+            petId: firstOngoing.petId,
             patient: petName.get(firstOngoing.petId) ?? `#${firstOngoing.petId}`,
           }
         : null,

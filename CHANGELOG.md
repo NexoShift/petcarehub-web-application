@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-26
+
+Clinical assistant with LLM.
+
+### Added
+- **AI Assistance**
+  - Veterinarian clinical assistant (`/ai-assistant`): SOAP draft with up to 10 clinical backgrounds, regenerate, accept or reject, and PDF report.
+  - Step 4 of the consultation workspace opens the assistant.
+  - Owner "Explain with AI" chat (`/ai-explain`) about the pet's consultations.
+  - Imaging results can be used as background in the clinical assistant.
+- **Dashboards**
+  - Veterinarian home: AI assistant card that opens the ongoing consultation.
+  - AI entries in the menu and in the owner quick actions.
+
 ## [1.3.0] - 2026-11-26
 
 Medical history.
@@ -102,7 +116,8 @@ First stable release, delivered at the end of **Sprint 1**.
 ### Changed
 - Upgraded to Angular 22.2.5, Angular Material and CDK 22.2.7, Vitest 5 and jsdom 31.
 
-[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.3.0...develop
+[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.4.0...develop
+[1.4.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.0.0...v1.1.0

@@ -28,6 +28,11 @@
           </div>
           <p class="pet-line"><strong>{{ names().pet ?? '—' }}</strong></p>
         </div>
+        @if (c.status !== 'CANCELLED' && c.status !== 'CREATED') {
+          <a id="explain-with-ai" class="ai-link" routerLink="/ai-explain" [queryParams]="{ petId: c.petId, consultationId: c.id }">
+            <app-icon name="sparkles" [size]="16" /> {{ 'clinicalAttention.owner.explainWithAi' | translate }}
+          </a>
+        }
       </div>
 
       <div class="reason">
