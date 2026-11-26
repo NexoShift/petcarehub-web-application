@@ -12,6 +12,7 @@ interface PetResponse {
   species: string | null;
   breed: string | null;
   birthDate: string | null;
+  petCode?: string | null;
 }
 
 interface IdResponse {
@@ -53,7 +54,10 @@ export class PetOptionsApi {
 
 function toPetOption(pet: PetResponse): PetOption {
   const species = pet.species === 'DOG' || pet.species === 'CAT' ? pet.species : 'OTHER';
-  return { id: pet.id, name: pet.name, species, breed: pet.breed ?? '', ageYears: ageInYears(pet.birthDate) };
+  return {
+    id: pet.id, name: pet.name, species, breed: pet.breed ?? '', ageYears: ageInYears(pet.birthDate),
+    petCode: pet.petCode ?? undefined,
+  };
 }
 
 function ageInYears(birthDate: string | null): number {

@@ -94,13 +94,13 @@ describe('ConsultationWorkspace', () => {
     expect(find('#anamnesis-form')).not.toBeNull();
   });
 
-  it('opens the anamnesis phase first and keeps only phase 4 disabled', async () => {
+  it('opens the anamnesis phase first with every phase enabled', async () => {
     await render(consultation());
 
     expect(find('#anamnesis-form')).not.toBeNull();
     expect(find<HTMLButtonElement>('#phase-anamnesis')!.getAttribute('aria-current')).toBe('step');
     expect(find<HTMLButtonElement>('#phase-images')!.disabled).toBe(false);
-    expect(find<HTMLButtonElement>('#phase-assistant')!.disabled).toBe(true);
+    expect(find<HTMLButtonElement>('#phase-assistant')!.disabled).toBe(false);
   });
 
   it('shows the computer vision panel in the images phase', async () => {

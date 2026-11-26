@@ -47,6 +47,7 @@ const OWNER_MENU: NavSection[] = [
       { label: 'shell.menu.exams', path: '/exams', icon: 'flask' },
       { label: 'shell.menu.treatments', path: '/treatments', icon: 'pill' },
       { label: 'shell.menu.visualAnalysis', path: '/visual-analysis', icon: 'scan' },
+      { label: 'shell.menu.aiExplain', path: '/ai-explain', icon: 'sparkles' },
     ],
   },
 ];
@@ -65,6 +66,7 @@ const VET_MENU: NavSection[] = [
       { label: 'shell.menu.medicalHistory', path: '/medical-history', icon: 'history' },
       { label: 'shell.menu.laboratory', path: '/clinical-exams', icon: 'microscope' },
       { label: 'shell.menu.imaging', path: '/imaging', icon: 'image' },
+      { label: 'shell.menu.aiAssistant', path: '/ai-assistant', icon: 'sparkles' },
     ],
   },
 ];

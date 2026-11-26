@@ -17,7 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ConsultationImaging } from '../../../../ai-assistance';
+import { ConsultationAssistant, ConsultationImaging } from '../../../../ai-assistance';
 import { ClinicalAttentionStore } from '../../../application/clinical-attention.store';
 import { ConsultationStatus } from '../../../domain/enums/consultation-status.enum';
 import { AddClinicalFindingCommand } from '../../../domain/model/add-clinical-finding.command';
@@ -89,6 +89,7 @@ interface ConsultationNames {
     AssessmentPanel,
     CompletionPanel,
     ConsultationImaging,
+    ConsultationAssistant,
     ConsultationPhases,
     ConsultationStatusChip,
     DiagnosisPanel,

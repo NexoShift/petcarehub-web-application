@@ -288,8 +288,8 @@
       "toValidate": "Por validar",
       "noPendingExams": "No hay exámenes pendientes.",
       "noRecent": "Todavía no hay consultas completadas.",
-      "aiOngoing": "{{pet}} tiene la consulta N.° {{id}} en curso. Cuando el asistente esté disponible, podrás generar ahí el borrador SOAP.",
-      "aiIdle": "Cuando tengas una consulta en curso, el asistente te ayudará a redactar el borrador SOAP.",
+      "aiOngoing": "{{pet}} tiene la consulta N.° {{id}} en curso. Genera el borrador SOAP con sus antecedentes.",
+      "aiIdle": "Elige un paciente y su consulta para generar el borrador SOAP con sus antecedentes.",
       "openConsultation": "Abrir consulta",
       "patientStatus": {
         "inProgress": "En consulta · N.° {{id}}",
@@ -306,7 +306,8 @@
         "start": "Iniciar consulta",
         "newConsultation": "Nueva consulta"
       },
-      "noPatientsYet": "Todavía no hay pacientes registrados en la clínica."
+      "noPatientsYet": "Todavía no hay pacientes registrados en la clínica.",
+      "openAssistant": "Abrir asistente"
     }
   },
   "enums": {
@@ -1273,7 +1274,8 @@
       "legal": "Borrador generado por IA como apoyo. El diagnóstico y la prescripción son responsabilidad del médico veterinario.",
       "hidePdf": "Ocultar PDF",
       "pdfTitle": "Informe de la consulta en PDF",
-      "pdfNewTab": "Abrir en otra pestaña"
+      "pdfNewTab": "Abrir en otra pestaña",
+      "noActiveConsultation": "Este paciente no tiene una consulta en curso. Iníciala en Consultas."
     },
     "owner": {
       "title": "Explicar con IA",
@@ -1312,7 +1314,9 @@
       "consumed": "{{p}} % consumido",
       "renews": "Renueva en {{days}} días",
       "left": "Te quedan <strong>{{n}} explicaciones</strong> en este ciclo mensual para resolver dudas de historias clínicas.",
-      "topUp": "Adquirir recarga de consultas"
+      "topUp": "Adquirir recarga de consultas",
+      "dayOpen": "Día {{day}}",
+      "basedOnNoLicense": "Basado en la consulta con {{vet}}"
     },
     "errors": {
       "missingConsultation": "Elige el paciente y escribe el número de la consulta actual.",
@@ -1409,7 +1413,7 @@
       },
       "assistant": {
         "title": "Asistente",
-        "subtitle": "Sugerencias clínicas"
+        "subtitle": "Opcional · borrador SOAP con IA"
       },
       "diagnosis": {
         "title": "Diagnóstico",
@@ -1662,7 +1666,8 @@
       "primary": "principal",
       "noExams": "En esta consulta no se pidieron exámenes.",
       "seeExams": "Ver resultados y archivos",
-      "treatmentPlan": "Tratamiento y receta"
+      "treatmentPlan": "Tratamiento y receta",
+      "explainWithAi": "Explicar con IA"
     },
     "treatmentStatus": {
       "ACTIVE": "Activo",

@@ -48,6 +48,8 @@ export class OwnerDashboard implements OnInit {
       link: 'dashboard.owner.quick.historyLink', path: '/medical-history' },
     { icon: 'pill', title: 'dashboard.owner.quick.treatmentsTitle', text: 'dashboard.owner.quick.treatmentsText',
       link: 'dashboard.owner.quick.treatmentsLink', path: '/treatments' },
+    { icon: 'sparkles', title: 'dashboard.owner.quick.aiTitle', text: 'dashboard.owner.quick.aiText',
+      link: 'dashboard.owner.quick.aiLink', path: '/ai-explain', badge: 'dashboard.owner.quick.aiBadge', ai: true },
     { icon: 'scan', title: 'dashboard.owner.quick.visualTitle', text: 'dashboard.owner.quick.visualText',
       link: 'dashboard.owner.quick.visualLink', path: '/visual-analysis', badge: 'dashboard.owner.quick.visualBadge' },
   ];

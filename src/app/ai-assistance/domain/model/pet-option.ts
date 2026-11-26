@@ -10,6 +10,8 @@ export interface PetOption {
   species: 'DOG' | 'CAT' | 'OTHER';
   breed: string;
   ageYears: number;
+  /** Código público de la mascota (PET-XXXXXXXX), si Profiles lo envía. */
+  petCode?: string;
   /** Solo para el vet: consulta en curso con esta mascota, para precargar el campo. */
   activeConsultationId?: number;
   /** Solo para el vet: nombre del tutor. */

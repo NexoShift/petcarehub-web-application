@@ -77,6 +77,9 @@ const ICONS = {
   refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/>',
   xray: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 6v12M8.5 8.5c1.2.8 2.3 1 3.5 1s2.3-.2 3.5-1M8 12c1.3.8 2.6 1.2 4 1.2s2.7-.4 4-1.2M8.5 15.5c1.2.7 2.3 1 3.5 1s2.3-.3 3.5-1"/>',
   pencil: '<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"/><path d="m14.5 5.5 3 3"/>',
+  'thumb-up': '<path d="M7 10v11H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z"/><path d="M7 10l4-7a2.5 2.5 0 0 1 2.5 2.8L13 10h5.6a2 2 0 0 1 2 2.4l-1.4 7A2 2 0 0 1 17.2 21H7"/>',
+  'thumb-down': '<path d="M17 14V3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1z"/><path d="M17 14l-4 7a2.5 2.5 0 0 1-2.5-2.8L11 14H5.4a2 2 0 0 1-2-2.4l1.4-7A2 2 0 0 1 6.8 3H17"/>',
+  copy: '<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',
 } as const;
 
 export type IconName = keyof typeof ICONS;

@@ -1,0 +1,205 @@
+<section class="page">
+  <header class="page-header reveal">
+    <div class="intro">
+      <h1>{{ 'aiAssistant.owner.title' | translate }} <span class="live">{{ 'aiAssistant.active' | translate }}</span></h1>
+      <p>{{ 'aiAssistant.owner.subtitle' | translate }}</p>
+    </div>
+    @if (store.selectedPet(); as pet) {
+      <div class="pet-chip">
+        <app-pet-avatar [name]="pet.name" [size]="40" [online]="true" />
+        <span class="who">
+          <strong>{{ pet.name }}&nbsp;<small class="inline">• {{ 'enums.species.' + pet.species | translate }} ({{ pet.breed }})</small></strong>
+          <small>{{ 'aiVision.years' | translate: { n: pet.ageYears } }}</small>
+        </span>
+        @if (store.pets().length > 1) {
+          <button type="button" class="icon-btn" [matMenuTriggerFor]="petMenu" [attr.aria-label]="'aiVision.changePet' | translate"
+                  [matTooltip]="'aiVision.changePet' | translate"><app-icon name="swap" [size]="16" /></button>
+          <mat-menu #petMenu="matMenu" xPosition="before">
+            @for (p of store.pets(); track p.id) {
+              <button mat-menu-item type="button" (click)="store.selectPet(p.id)">{{ p.name }}</button>
+            }
+          </mat-menu>
+        }
+      </div>
+    }
+  </header>
+
+  <div class="layout">
+    <!-- Chat -->
+    <article class="card chat reveal" style="--i: 1">
+      <div class="notice clinical">
+        <span class="notice-icon"><app-icon name="shield" [size]="16" /></span>
+        <div>
+          <strong>{{ 'aiAssistant.owner.noticeTitle' | translate }}</strong>
+          <p>{{ 'aiAssistant.owner.notice' | translate: { vet: store.consultation()?.vet?.name ?? '' } }}</p>
+        </div>
+      </div>
+
+      @if (store.consultation(); as c) {
+        <div class="ref-row">
+          <span class="ref"><app-icon name="history" [size]="13" />
+            {{ 'aiAssistant.owner.refChip' | translate: { reason: c.reason, date: (c.date | localDate: language.locale() : false) } }}</span>
+        </div>
+      }
+
+      <div class="thread" #thread aria-live="polite">
+        <!-- Saludo -->
+        <div class="msg bot">
+          <span class="avatar"><app-icon name="sparkles" [size]="16" /></span>
+          <div class="bubble-wrap">
+            <div class="bubble">
+              @if (store.consultation(); as c) {
+                {{ 'aiAssistant.owner.greeting' | translate: { name: ownerName(), pet: store.selectedPet()?.name, date: (c.date | localDate: language.locale() : false), reason: c.reason } }}
+              } @else {
+                {{ 'aiAssistant.owner.greetingNoRef' | translate: { name: ownerName(), pet: store.selectedPet()?.name ?? '' } }}
+              }
+            </div>
+            @if (!store.messages().length && !store.pending()) {
+              <div class="suggestions">
+                @for (s of suggestions(); track s) {
+                  <button type="button" (click)="useSuggestion(s)" data-testid="suggestion">
+                    <app-icon name="sparkles" [size]="13" />
+                    {{ s | translate: { pet: store.selectedPet()?.name, treatment: store.consultation()?.treatment?.name, diagnosis: store.consultation()?.diagnosis } }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        @if (store.loading()) {
+          <div class="msg bot"><span class="avatar"><app-icon name="sparkles" [size]="16" /></span><div class="bubble typing"><i></i><i></i><i></i></div></div>
+        }
+
+        @for (m of store.messages(); track m.id) {
+          <div class="msg me">
+            <div class="bubble-wrap">
+              <div class="bubble">{{ m.question }}</div>
+              <span class="time">{{ m.createdAt | localDate: language.locale() }} <app-icon name="check" [size]="12" /></span>
+            </div>
+          </div>
+          <div class="msg bot">
+            <span class="avatar"><app-icon name="sparkles" [size]="16" /></span>
+            <div class="bubble-wrap">
+              <div class="bubble answer" [innerHTML]="m.answer | simpleMarkdown"></div>
+              @if (store.consultation(); as c) {
+                <span class="based"><app-icon name="check-circle" [size]="14" />
+                  {{ (c.vet.license ? 'aiAssistant.owner.basedOn' : 'aiAssistant.owner.basedOnNoLicense') | translate: { vet: c.vet.name, license: c.vet.license } }}</span>
+              }
+              <div class="feedback">
+                <span>{{ 'aiAssistant.owner.clear' | translate }}</span>
+                <button type="button" [class.on]="store.feedback()[m.id] === 'up'" (click)="store.rate(m.id, 'up')"
+                        [attr.aria-label]="'aiAssistant.owner.thumbUp' | translate"><app-icon name="thumb-up" [size]="14" /></button>
+                <button type="button" [class.on]="store.feedback()[m.id] === 'down'" (click)="store.rate(m.id, 'down')"
+                        [attr.aria-label]="'aiAssistant.owner.thumbDown' | translate"><app-icon name="thumb-down" [size]="14" /></button>
+                <button type="button" (click)="copy(m.id, m.answer)" [attr.aria-label]="'aiAssistant.owner.copy' | translate">
+                  <app-icon [name]="copiedId() === m.id ? 'check' : 'copy'" [size]="14" />
+                </button>
+                <span class="time">{{ m.createdAt | localDate: language.locale() }}@if (m.model) { · {{ m.model }} }</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (store.pending(); as p) {
+          <div class="msg me">
+            <div class="bubble-wrap">
+              <div class="bubble" [class.failed]="p.error">{{ p.question }}</div>
+              @if (p.error) {
+                <span class="retry">{{ p.error | translate }}
+                  <button type="button" (click)="store.retry()" data-testid="retry">{{ 'aiAssistant.owner.retry' | translate }}</button>
+                  <button type="button" (click)="store.discardPending()">{{ 'aiVision.remove' | translate }}</button>
+                </span>
+              }
+            </div>
+          </div>
+          @if (!p.error) {
+            <div class="msg bot"><span class="avatar"><app-icon name="sparkles" [size]="16" /></span>
+              <div class="bubble typing" [attr.aria-label]="'aiAssistant.owner.typing' | translate"><i></i><i></i><i></i></div></div>
+          }
+        }
+      </div>
+
+      @if (store.error(); as error) {
+        <div class="error-banner" role="alert"><app-icon name="alert" [size]="16" />{{ error | translate }}</div>
+      }
+
+      <form class="composer" (submit)="$event.preventDefault(); send()">
+        <textarea rows="1" [maxlength]="maxQuestion" [ngModel]="draft()" (ngModelChange)="draft.set($event)" name="question"
+                  (keydown)="onKeydown($event)" [placeholder]="'aiAssistant.owner.placeholder' | translate"
+                  [attr.aria-label]="'aiAssistant.owner.placeholder' | translate" data-testid="question"></textarea>
+        <button type="submit" class="send" [disabled]="!draft().trim() || store.sending()" [attr.aria-label]="'aiAssistant.owner.send' | translate"
+                data-testid="send">
+          @if (store.sending()) { <span class="spin"></span> } @else { <app-icon name="arrow-right" [size]="18" /> }
+        </button>
+      </form>
+      <p class="foot">{{ 'aiAssistant.owner.foot' | translate }}</p>
+    </article>
+
+    <!-- Contexto y cuota -->
+    <div class="side">
+      <aside class="card reveal" style="--i: 2">
+        <div class="card-header">
+          <h2 class="with-icon"><app-icon name="history" [size]="18" />{{ 'aiAssistant.owner.contextTitle' | translate }}</h2>
+          <span class="chip success">{{ 'aiAssistant.owner.synced' | translate }}</span>
+        </div>
+        @if (store.selectedPet(); as pet) {
+          <div class="pet-mini">
+            <app-pet-avatar [name]="pet.name" [size]="44" />
+            <div><strong>{{ pet.name }}</strong>&nbsp;<small>• {{ 'enums.species.' + pet.species | translate }}</small>
+              <small class="block">@if (pet.petCode) { {{ pet.petCode }} · }{{ 'aiVision.years' | translate: { n: pet.ageYears } }}</small></div>
+          </div>
+        }
+        @if (store.consultation(); as c) {
+          <div class="ctx">
+            <div class="ctx-head"><span class="section-label">{{ 'aiAssistant.owner.refConsultation' | translate }}</span>
+              <span class="chip info">{{ c.date | localDate: language.locale() : false }}</span></div>
+            <strong>{{ c.code }}</strong>
+            @if (c.diagnosis) { <span class="chip warning">{{ c.diagnosis }}</span> } @else { <small class="muted">{{ c.reason }}</small> }
+          </div>
+          @if (c.treatment; as t) {
+            <div class="ctx">
+              <div class="ctx-head"><span class="section-label">{{ 'aiAssistant.owner.treatment' | translate }}</span>
+                <span class="day">{{ (t.totalDays ? 'aiAssistant.owner.day' : 'aiAssistant.owner.dayOpen') | translate: { day: t.day, total: t.totalDays } }}</span></div>
+              <strong>{{ t.name }}</strong>
+              <small>{{ t.route }}</small>
+            </div>
+          }
+          <div class="ctx vet">
+            <app-icon name="stethoscope" [size]="18" />
+            <div><small>{{ 'aiAssistant.owner.attendingVet' | translate }}</small><strong>{{ c.vet.name }}</strong>@if (c.vet.license) { <small>{{ c.vet.license }}</small> }</div>
+          </div>
+          @if (store.consultations().length > 1) {
+            <button type="button" class="change" [matMenuTriggerFor]="refMenu" data-testid="change-ref">
+              {{ 'aiAssistant.owner.changeRef' | translate }} <app-icon name="arrow-right" [size]="15" />
+            </button>
+            <mat-menu #refMenu="matMenu">
+              @for (r of store.consultations(); track r.id) {
+                <button mat-menu-item type="button" (click)="store.selectConsultation(r.id)">
+                  {{ r.code }} · {{ r.reason }} ({{ r.date | localDate: language.locale() : false }})
+                </button>
+              }
+            </mat-menu>
+          }
+        } @else {
+          <p class="muted">{{ 'aiAssistant.owner.noConsultations' | translate }}</p>
+        }
+      </aside>
+
+      @if (quota(); as q) {
+        <aside class="card quota reveal" style="--i: 3">
+          <div class="card-header">
+            <h2 class="with-icon"><app-icon name="activity" [size]="18" />{{ 'aiAssistant.owner.quotaTitle' | translate }}</h2>
+            <span class="chip success">{{ q.plan }}</span>
+          </div>
+          <div class="q-row"><span>{{ 'aiAssistant.owner.quotaLabel' | translate }}</span><strong>{{ q.used }} / {{ q.limit }}</strong></div>
+          <div class="bar"><span [style.width.%]="q.percent"></span></div>
+          <div class="q-row small"><span>{{ 'aiAssistant.owner.consumed' | translate: { p: q.percent } }}</span>
+            <span>{{ 'aiAssistant.owner.renews' | translate: { days: q.renewsInDays } }}</span></div>
+          <p class="q-note" [innerHTML]="'aiAssistant.owner.left' | translate: { n: q.left }"></p>
+          <a class="btn btn-outline btn-block btn-sm" routerLink="/plan"><app-icon name="plus" [size]="15" />{{ 'aiAssistant.owner.topUp' | translate }}</a>
+        </aside>
+      }
+    </div>
+  </div>
+</section>
