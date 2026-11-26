@@ -65,6 +65,19 @@ export class IamStore {
     );
   }
 
+  /**
+   * Entra (o crea la cuenta) con el idToken de Google. El backend devuelve el mismo JWT que el
+   * sign-in normal. Si el correo es nuevo y falta accountType responde 422 ACCOUNT_TYPE_REQUIRED.
+   */
+  googleSignIn(idToken: string, accountType?: AccountType): Observable<{ user: User; created: boolean }> {
+    return this.api.googleSignIn(accountType ? { idToken, accountType } : { idToken }).pipe(
+      map((response) => ({ body: response.body!, created: response.status === 201 })),
+      tap(({ body }) => this.tokens.save(body.token)),
+      map(({ body, created }) => ({ user: UserAssembler.fromAuthenticatedResponse(body), created })),
+      tap(({ user }) => this._currentUser.set(user)),
+    );
+  }
+
   signUp(email: string, password: string, accountType: AccountType): Observable<User> {
     return this.api
       .signUp({ email, password, accountType })

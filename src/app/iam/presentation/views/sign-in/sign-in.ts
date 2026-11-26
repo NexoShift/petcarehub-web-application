@@ -5,6 +5,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { IamStore } from '../../../application/iam.store';
 import { AuthLayout } from '../../components/auth-layout/auth-layout';
+import { GoogleSignInButton } from '../../components/google-sign-in-button/google-sign-in-button';
+import { GoogleIdentityService } from '../../../infrastructure/google-identity.service';
 
 /**
  * MW-01 · Inicio de sesión. No hay pestañas Dueño/Veterinario: el rol llega en la respuesta
@@ -12,11 +14,14 @@ import { AuthLayout } from '../../components/auth-layout/auth-layout';
  */
 @Component({
   selector: 'app-sign-in',
-  imports: [ReactiveFormsModule, RouterLink, AuthLayout, TranslatePipe],
+  imports: [ReactiveFormsModule, RouterLink, AuthLayout, TranslatePipe, GoogleSignInButton],
   templateUrl: './sign-in.html',
   styleUrl: '../auth-form.css',
 })
 export class SignIn {
+  /** Sin Client ID de Google configurado no se muestra el separador ni el botón. */
+  protected readonly googleEnabled = inject(GoogleIdentityService).enabled;
+
   private readonly store = inject(IamStore);
   private readonly router = inject(Router);
 

@@ -80,6 +80,12 @@
       {{ (loading() ? 'auth.signUp.submitting' : 'auth.signUp.submit') | translate }}
     </button>
 
+    @if (googleEnabled) {
+      <div class="divider">{{ 'auth.signIn.or' | translate }}</div>
+      <app-google-sign-in-button mode="signup" [accountType]="form.controls.accountType.value" />
+      <p class="google-terms">{{ 'auth.google.termsNote' | translate }}</p>
+    }
+
     <p class="switch">{{ 'auth.signUp.haveAccount' | translate }} <a routerLink="/sign-in">{{ 'auth.signUp.signIn' | translate }}</a></p>
   </form>
 </app-auth-layout>

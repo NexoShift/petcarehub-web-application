@@ -126,4 +126,32 @@ describe('IamStore', () => {
     expect(store.isSignedIn()).toBe(false);
     expect(localStorage.getItem('petcarehub.token')).toBeNull();
   });
+  it('googleSignIn manda el idToken, guarda el token y avisa si la cuenta es nueva (201)', () => {
+    let result: { created: boolean } | undefined;
+    store.googleSignIn('google-id-token', 'PET_OWNER').subscribe((r) => (result = r));
+
+    const req = http.expectOne(`${API}/authentication/google-sign-in`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ idToken: 'google-id-token', accountType: 'PET_OWNER' });
+    req.flush(
+      { userId: 9, accountId: 4, accountType: 'PET_OWNER', email: 'luz@gmail.com', roles: ['ROLE_PET_OWNER'], mustChangePassword: false, token: 'jwt-google' },
+      { status: 201, statusText: 'Created' },
+    );
+
+    expect(result?.created).toBe(true);
+    expect(store.currentUser()?.email).toBe('luz@gmail.com');
+    expect(localStorage.getItem('petcarehub.token')).toBe('jwt-google');
+  });
+
+  it('googleSignIn sin tipo de cuenta solo manda el idToken y marca created=false con 200', () => {
+    let result: { created: boolean } | undefined;
+    store.googleSignIn('google-id-token').subscribe((r) => (result = r));
+
+    const req = http.expectOne(`${API}/authentication/google-sign-in`);
+    expect(req.request.body).toEqual({ idToken: 'google-id-token' });
+    req.flush({ userId: 9, accountId: 4, accountType: 'CLINIC', email: 'vet@gmail.com', roles: ['ROLE_CLINIC_ADMIN'], mustChangePassword: false, token: 'jwt-google' });
+
+    expect(result?.created).toBe(false);
+    expect(store.isSignedIn()).toBe(true);
+  });
 });
