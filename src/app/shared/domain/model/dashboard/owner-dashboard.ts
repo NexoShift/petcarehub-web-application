@@ -75,18 +75,27 @@ export interface ReadyResult {
   date: string; // fecha del resultado (yyyy-MM-dd)
 }
 
+/** Créditos de IA de un tipo en el periodo actual (Subscriptions: /subscription/ai-credits). */
 export interface AiUsage {
+  kind: 'llm' | 'vision';
+  /** Claves de i18n. */
   label: string;
+  hint: string;
+  /** Consumidos + reservados (los reservados son pedidos en curso). */
   used: number;
   limit: number;
-  hint: string;
+  left: number;
 }
 
 export interface AiQuota {
   plan: string;
-  cycle: string;
+  /** Inicio y fin del periodo (yyyy-MM-dd). */
+  periodStart: string;
+  periodEnd: string;
   renewsInDays: number;
   usages: AiUsage[];
+  /** Cuándo se leyeron los créditos: lo hecho después se suma en pantalla. */
+  loadedAt: Date;
 }
 
 export interface AssignedVet {
@@ -102,6 +111,6 @@ export interface OwnerDashboard {
   treatment: ActiveTreatment | null; // Tratamientos: aún no existe
   events: UpcomingEvent[];
   results: ReadyResult[];
-  aiQuota: AiQuota | null; // Suscripciones: aún no existe
+  aiQuota: AiQuota | null; // null si la cuenta no tiene suscripción activa
   assignedVet: AssignedVet | null; // veterinario de la última consulta
 }

@@ -17,6 +17,6 @@ describe('progreso del panel', () => {
   });
 
   it('nunca pasa de 100 %', () => {
-    expect(usagePercent({ label: 'x', used: 20, limit: 15, hint: '' })).toBe(100);
+    expect(usagePercent({ kind: 'llm', label: 'x', used: 20, limit: 15, left: 0, hint: '' })).toBe(100);
   });
 });

@@ -10,7 +10,10 @@ import { CLINICAL_EXAMS_REPOSITORY } from '../../clinical-exams/infrastructure/r
 import { Pet } from '../../profiles/domain/model/pet.entity';
 import { PetOwner } from '../../profiles/domain/model/pet-owner.entity';
 import { ProfileApi } from '../../profiles/infrastructure/profile-api';
+import { AiCredit } from '../../subscriptions/domain/model/ai-credit.entity';
+import { SubscriptionApi } from '../../subscriptions/infrastructure/subscription-api';
 import {
+  AiQuota,
   AssignedVet,
   OwnerDashboard,
   PetSummary,
@@ -37,6 +40,7 @@ export class DashboardApi {
   private readonly profiles = inject(ProfileApi);
   private readonly consultations = inject(CLINICAL_ATTENTION_REPOSITORY);
   private readonly exams = inject(CLINICAL_EXAMS_REPOSITORY);
+  private readonly subscriptions = inject(SubscriptionApi);
 
   // =================================================================
   // Panel del veterinario
@@ -177,6 +181,7 @@ export class DashboardApi {
     const user = this.iam.currentUser();
     if (!user) throw new Error('No session');
 
+    const quota = this.aiQuotaOf(user.accountId);
     const owner = await firstValueFrom(this.profiles.getPetOwnerByUserId(user.id));
     const pets = await safe(firstValueFrom(this.profiles.getPetsByOwnerId(owner.id)), [] as Pet[]);
 
@@ -252,9 +257,23 @@ export class DashboardApi {
       treatment: null,
       events: events.slice(0, 4),
       results: results.slice(0, 3),
-      aiQuota: null,
+      aiQuota: await quota,
       assignedVet: last ? await this.vetOf(last) : null,
     };
+  }
+
+  /** Plan y créditos de IA del periodo; null si no hay suscripción activa (404/403). */
+  private async aiQuotaOf(accountId: number): Promise<AiQuota | null> {
+    try {
+      const [subscription, credits] = await Promise.all([
+        firstValueFrom(this.subscriptions.getSubscriptionByAccountId(accountId)),
+        firstValueFrom(this.subscriptions.getAiCredits(accountId)),
+      ]);
+      const plan = await safe(firstValueFrom(this.subscriptions.getPlanById(subscription.planId)), null);
+      return toAiQuota(plan?.name ?? '', credits, new Date());
+    } catch {
+      return null;
+    }
   }
 
   private async vetOf(consultation: ClinicalConsultation): Promise<AssignedVet | null> {
@@ -281,6 +300,31 @@ function unitOf(count: number): string {
 }
 
 /** Si la llamada falla, devuelve el valor por defecto para que el panel se muestre igual. */
+/** Créditos del backend → cuota del panel. LLM primero: es lo que más usa el dueño. */
+export function toAiQuota(plan: string, credits: AiCredit, now: Date): AiQuota {
+  const usage = (kind: 'llm' | 'vision') => {
+    const balance = kind === 'llm' ? credits.llm : credits.computerVision;
+    const used = Math.min(balance.limit, balance.consumed + balance.reserved);
+    return {
+      kind,
+      label: `dashboard.owner.usage.${kind}`,
+      hint: `dashboard.owner.usage.${kind}Hint`,
+      used,
+      limit: balance.limit,
+      left: Math.max(0, balance.available),
+    };
+  };
+  const end = new Date(credits.periodEnd);
+  return {
+    plan,
+    periodStart: credits.periodStart.slice(0, 10),
+    periodEnd: credits.periodEnd.slice(0, 10),
+    renewsInDays: Math.max(0, Math.ceil((end.getTime() - now.getTime()) / 86_400_000)),
+    usages: [usage('llm'), usage('vision')],
+    loadedAt: now,
+  };
+}
+
 function safe<T>(promise: Promise<T>, fallback: T): Promise<T> {
   return promise.catch(() => fallback);
 }
