@@ -44,6 +44,12 @@ export const routes: Routes = [
             (m) => m.OWNER_TREATMENTS_ROUTES,
           ),
       },
+      // Historia clínica: dueño (sus mascotas) y veterinario (pacientes de su clínica)
+      {
+        path: 'medical-history',
+        loadChildren: () =>
+          import('./medical-history/medical-history.routes').then((m) => m.MEDICAL_HISTORY_ROUTES),
+      },
       {
         path: 'exams',
         canActivate: [roleGuard('ROLE_PET_OWNER')],

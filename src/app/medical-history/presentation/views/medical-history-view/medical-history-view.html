@@ -1,0 +1,244 @@
+<section class="list-page">
+  <header class="page-head">
+    <span class="head-icon"><app-icon name="history" [size]="28" /></span>
+    <div class="head-text">
+      <h1>{{ 'medicalHistory.title' | translate }}</h1>
+      <p>{{ (isVet() ? 'medicalHistory.subtitleVet' : 'medicalHistory.subtitleOwner') | translate }}</p>
+    </div>
+  </header>
+
+  <div class="mh-layout">
+    <!-- ===== Mascotas / pacientes ===== -->
+    <aside id="pet-selector" class="card pets-card">
+      <div class="section-head small">
+        <h2><app-icon name="paw" [size]="18" /> {{ (isVet() ? 'medicalHistory.patients' : 'medicalHistory.pets') | translate }}</h2>
+        <span class="count">{{ pets().length }}</span>
+      </div>
+      @if (isVet() && pets().length > 6) {
+        <label class="search">
+          <app-icon name="search" [size]="16" />
+          <input id="pet-search" type="search" [value]="query()" (input)="query.set($any($event.target).value)"
+                 [placeholder]="'medicalHistory.search' | translate" />
+        </label>
+      }
+      @if (petsLoading()) {
+        <div class="loading"><mat-spinner diameter="32" /></div>
+      } @else {
+        <ul class="pets">
+          @for (pet of filteredPets(); track pet.id) {
+            <li>
+              <button type="button" class="pet" [id]="'pet-' + pet.id"
+                      [class.active]="selectedPetId() === pet.id" (click)="select(pet.id)">
+                <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="40" />
+                <span class="pet-text">
+                  <strong>{{ pet.name }}</strong>
+                  <small>{{ 'enums.species.' + pet.species | translate }}@if (pet.breed) { · {{ pet.breed }} }</small>
+                </span>
+                <app-icon name="chevron-right" [size]="16" />
+              </button>
+            </li>
+          } @empty {
+            <li id="no-pets" class="no-pets">
+              @if (query()) {
+                <p>{{ 'medicalHistory.noMatches' | translate }}</p>
+              } @else if (isVet()) {
+                <p>{{ 'medicalHistory.noPatients' | translate }}</p>
+              } @else {
+                <p>{{ 'medicalHistory.noPets' | translate }}</p>
+                <a routerLink="/profiles/pets/new"><app-icon name="plus" [size]="15" /> {{ 'medicalHistory.addPet' | translate }}</a>
+              }
+            </li>
+          }
+        </ul>
+      }
+    </aside>
+
+    <!-- ===== Historia ===== -->
+    <div class="card history-card">
+      @if (selectedPetId() === null) {
+        <div class="placeholder">
+          <span class="placeholder-icon"><app-icon name="history" [size]="30" /></span>
+          <h2>{{ 'medicalHistory.pickTitle' | translate }}</h2>
+          <p>{{ 'medicalHistory.pickText' | translate }}</p>
+        </div>
+      } @else {
+        <div class="pet-head">
+          @if (selectedPet(); as pet) {
+            <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="56" />
+            <div class="pet-id">
+              <h2>{{ pet.name }}</h2>
+              <p>
+                <span class="code">{{ pet.petCode }}</span>
+                {{ 'enums.species.' + pet.species | translate }}@if (pet.breed) { · {{ pet.breed }} }
+                @if (pet.birthDate) { · {{ 'medicalHistory.born' | translate: { date: (pet.birthDate | date: 'dd/MM/yyyy') } }} }
+              </p>
+            </div>
+          }
+          @if (store.history()?.hasSevereAllergy) {
+            <span id="severe-flag" class="flag"><app-icon name="alert" [size]="15" /> {{ 'medicalHistory.severeFlag' | translate }}</span>
+          }
+        </div>
+
+        @if (store.error(); as error) {
+          <p class="error-message" role="alert"><app-icon name="alert" [size]="16" /> {{ error | translate }}</p>
+        }
+
+        @if (store.isLoading()) {
+          <div class="loading"><mat-spinner diameter="40" /></div>
+        } @else if (store.history(); as history) {
+          <div class="stats">
+            <div class="stat"><strong id="stat-allergies">{{ history.allergies.length }}</strong><span>{{ 'medicalHistory.stats.allergies' | translate }}</span></div>
+            <div class="stat"><strong id="stat-vaccinations">{{ history.vaccinations.length }}</strong><span>{{ 'medicalHistory.stats.vaccinations' | translate }}</span></div>
+            <div class="stat"><strong id="stat-events">{{ history.entries.length }}</strong><span>{{ 'medicalHistory.stats.events' | translate }}</span></div>
+          </div>
+
+          @if (pendingDoses().length) {
+            <ul id="pending-doses" class="doses">
+              @for (v of pendingDoses(); track v.id) {
+                <li [class.overdue]="v.isOverdueOn(today)">
+                  <app-icon [name]="v.isOverdueOn(today) ? 'alert' : 'calendar'" [size]="16" />
+                  {{ (v.isOverdueOn(today) ? 'medicalHistory.vaccinations.overdue' : 'medicalHistory.vaccinations.dueSoon') | translate: { vaccine: v.vaccineName, date: (v.nextDoseOn | date: 'dd/MM/yyyy') } }}
+                </li>
+              }
+            </ul>
+          }
+
+          <div class="tabs" role="tablist">
+            <button type="button" role="tab" id="tab-summary" class="tab" [class.active]="tab() === 'summary'"
+                    [attr.aria-selected]="tab() === 'summary'" (click)="tab.set('summary')">
+              {{ 'medicalHistory.tabs.summary' | translate }}
+            </button>
+            <button type="button" role="tab" id="tab-timeline" class="tab" [class.active]="tab() === 'timeline'"
+                    [attr.aria-selected]="tab() === 'timeline'" (click)="tab.set('timeline')">
+              {{ 'medicalHistory.tabs.timeline' | translate }} <span class="tab-count">{{ history.entries.length }}</span>
+            </button>
+          </div>
+
+          @if (tab() === 'summary') {
+            <!-- Alergias -->
+            <section id="allergies" class="block">
+              <div class="block-head">
+                <h3><app-icon name="shield" [size]="17" /> {{ 'medicalHistory.allergies.title' | translate }}</h3>
+                @if (!showAllergyForm()) {
+                  <button id="add-allergy" mat-stroked-button type="button" class="btn-outline" (click)="showAllergyForm.set(true)">
+                    <app-icon name="plus" [size]="15" /> {{ 'medicalHistory.allergies.add' | translate }}
+                  </button>
+                }
+              </div>
+              @if (showAllergyForm()) {
+                <app-allergy-form [saving]="store.isSaving()" (submitted)="recordAllergy($event)" (cancelled)="showAllergyForm.set(false)" />
+              }
+              @if (history.allergies.length) {
+                <ul id="allergy-list" class="items">
+                  @for (a of history.allergies; track a.id) {
+                    <li class="item allergy" [class]="'sev-' + a.severity">
+                      <div class="item-head">
+                        <strong>{{ a.allergen }}</strong>
+                        <span class="pill" [class]="'pill-' + a.severity">{{ 'medicalHistory.severity.' + a.severity | translate }}</span>
+                      </div>
+                      @if (a.reaction) { <p>{{ a.reaction }}</p> }
+                      @if (a.notes) { <p class="notes">{{ a.notes }}</p> }
+                      <small class="meta">{{ 'medicalHistory.allergies.reportedBy.' + a.reportedBy | translate }} · {{ a.recordedAt | date: 'dd/MM/yyyy' }}</small>
+                    </li>
+                  }
+                </ul>
+              } @else {
+                <p id="no-allergies" class="empty">{{ 'medicalHistory.allergies.empty' | translate }}</p>
+              }
+            </section>
+
+            <!-- Vacunas -->
+            <section id="vaccinations" class="block">
+              <div class="block-head">
+                <h3><app-icon name="check-circle" [size]="17" /> {{ 'medicalHistory.vaccinations.title' | translate }}</h3>
+                @if (isVet() && !showVaccinationForm()) {
+                  <button id="add-vaccination" mat-stroked-button type="button" class="btn-outline" (click)="showVaccinationForm.set(true)">
+                    <app-icon name="plus" [size]="15" /> {{ 'medicalHistory.vaccinations.add' | translate }}
+                  </button>
+                }
+              </div>
+              @if (showVaccinationForm()) {
+                <app-vaccination-form [saving]="store.isSaving()" (submitted)="recordVaccination($event)" (cancelled)="showVaccinationForm.set(false)" />
+              }
+              @if (history.vaccinations.length) {
+                <div class="table-wrap">
+                  <table id="vaccination-table" class="vax">
+                    <thead>
+                      <tr>
+                        <th>{{ 'medicalHistory.vaccinations.vaccine' | translate }}</th>
+                        <th>{{ 'medicalHistory.vaccinations.dose' | translate }}</th>
+                        <th>{{ 'medicalHistory.vaccinations.appliedOn' | translate }}</th>
+                        <th>{{ 'medicalHistory.vaccinations.nextDose' | translate }}</th>
+                        <th>{{ 'medicalHistory.vaccinations.appliedBy' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (v of history.vaccinations; track v.id) {
+                        <tr>
+                          <th scope="row">{{ v.vaccineName }}
+                            @if (v.batchNumber) { <small>{{ 'medicalHistory.vaccinations.batchShort' | translate: { batch: v.batchNumber } }}</small> }
+                          </th>
+                          <td>{{ v.doseNumber ?? '—' }}</td>
+                          <td>{{ v.appliedOn | date: 'dd/MM/yyyy' }}</td>
+                          <td>
+                            @if (v.nextDoseOn) {
+                              <span class="due" [class.overdue]="v.isOverdueOn(today)" [class.soon]="v.isDueSoonOn(today)">{{ v.nextDoseOn | date: 'dd/MM/yyyy' }}</span>
+                            } @else { — }
+                          </td>
+                          <td class="who">
+                            @if (v.veterinarianId !== null && vetNames()[v.veterinarianId]) { {{ vetNames()[v.veterinarianId] }} }
+                            @if (v.clinicId !== null && clinicNames()[v.clinicId]) { <small>{{ clinicNames()[v.clinicId] }}</small> }
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              } @else {
+                <p id="no-vaccinations" class="empty">
+                  {{ (isVet() ? 'medicalHistory.vaccinations.emptyVet' : 'medicalHistory.vaccinations.emptyOwner') | translate }}
+                </p>
+              }
+            </section>
+          } @else {
+            <!-- Línea de tiempo -->
+            <section id="timeline" class="block">
+              @for (group of timeline(); track group.year) {
+                <h3 class="year">{{ group.year }}</h3>
+                <ol class="timeline">
+                  @for (e of group.entries; track e.id) {
+                    <li class="event" [class.exam]="e.isExamResult" [id]="'entry-' + e.id">
+                      <span class="dot"><app-icon [name]="e.isExamResult ? 'flask' : 'stethoscope'" [size]="15" /></span>
+                      <div class="event-body">
+                        <div class="item-head">
+                          <strong>
+                            @if (e.isExamResult) {
+                              {{ 'medicalHistory.timeline.exam' | translate: { type: ('clinicalExams.types.' + (e.examType ?? 'OTHER')) | translate } }}
+                            } @else {
+                              {{ 'medicalHistory.timeline.consultation' | translate }}
+                            }
+                          </strong>
+                          <time>{{ e.occurredAt | date: 'dd MMM, HH:mm' }}</time>
+                        </div>
+                        @if (e.summary) { <p>{{ e.summary }}</p> }
+                        <small class="meta">
+                          @if (e.veterinarianId !== null && vetNames()[e.veterinarianId]) { {{ vetNames()[e.veterinarianId] }} }
+                          @if (e.clinicId !== null && clinicNames()[e.clinicId]) { · {{ clinicNames()[e.clinicId] }} }
+                          @if (consultationLink(e); as link) {
+                            <a [routerLink]="link" class="open-link">{{ 'medicalHistory.timeline.open' | translate }} <app-icon name="arrow-right" [size]="13" /></a>
+                          }
+                        </small>
+                      </div>
+                    </li>
+                  }
+                </ol>
+              } @empty {
+                <p id="no-entries" class="empty">{{ 'medicalHistory.timeline.empty' | translate }}</p>
+              }
+            </section>
+          }
+        }
+      }
+    </div>
+  </div>
+</section>
