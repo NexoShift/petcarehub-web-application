@@ -1,7 +1,8 @@
 /*
  * Modelo de lectura del panel del dueño de mascota.
  * Vive en shared porque no es un bounded context: junta datos que ya existen en otros contextos
- * (Profiles: mascotas; Clinical Attention: consultas; Clinical Exams: exámenes y resultados).
+ * (Profiles: mascotas; Clinical Attention: consultas y tratamientos; Clinical Exams: exámenes;
+ * Medical History: alergias y vacunas; Subscriptions: créditos de IA).
  * Lo que no aplica (sin tratamiento vigente, sin alertas, sin plan) llega en null y esa
  * tarjeta no se muestra.
  */
@@ -26,10 +27,18 @@ export interface PetSummary {
   tags: PetTag[];
 }
 
+/**
+ * Lo más urgente de la historia clínica de sus mascotas (Medical History):
+ * primero una vacuna con la dosis siguiente vencida y, si no hay, una alergia severa.
+ */
 export interface ClinicalAlert {
-  title: string;
-  detail: string;
-  badge: string;
+  kind: 'vaccine' | 'allergy';
+  petId: number;
+  pet: string;
+  subject: string; // nombre de la vacuna o alérgeno
+  detail: string | null; // reacción de la alergia
+  dueOn: string | null; // fecha de la dosis vencida (yyyy-MM-dd)
+  others: number; // otras alertas además de esta
 }
 
 /** Un medicamento de la última receta de la consulta (Clinical Attention). */

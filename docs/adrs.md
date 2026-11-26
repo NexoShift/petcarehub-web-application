@@ -13,7 +13,7 @@ Accepted
 The application covers several business capabilities (identity, profiles, consultations, exams and AI assistance) that evolve at different speeds and are developed by different team members. The backend is a modular monolith organized by the same bounded contexts.
 
 ### Decision
-Organize `src/app` by bounded context (`iam`, `profiles`, `clinical-attention`, `clinical-exams`, `ai-assistance`, `subscriptions`) plus `shared`, each with four layers:
+Organize `src/app` by bounded context (`iam`, `profiles`, `clinical-attention`, `clinical-exams`, `medical-history`, `ai-assistance`, `subscriptions`) plus `shared`, each with four layers:
 - `domain`: entities and value objects.
 - `application`: signal-based stores and use cases.
 - `infrastructure`: HTTP repositories and assemblers (DTO ↔ entity).

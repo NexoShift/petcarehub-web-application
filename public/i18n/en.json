@@ -229,7 +229,16 @@
       "otherTreatments": "And {{count}} more treatment(s) in progress",
       "seeTreatments": "See treatments",
       "clinicTitle": "{{clinic}}",
-      "clinicText": "Clinic of your last consultation. Call before going if it is an emergency."
+      "clinicText": "Clinic of your last consultation. Call before going if it is an emergency.",
+      "alerts": {
+        "vaccineTitle": "{{pet}}: {{subject}} vaccine overdue",
+        "vaccineDetail": "The next dose was due on {{date}}. Contact your clinic.",
+        "vaccineBadge": "Vaccine overdue",
+        "allergyTitle": "{{pet}}: severe allergy to {{subject}}",
+        "allergyDetail": "Tell your vet before any medication.",
+        "allergyBadge": "Severe allergy",
+        "others": "{{count}} more alert(s) in the medical record"
+      }
     },
     "vet": {
       "morning": "Good morning",
@@ -1715,5 +1724,92 @@
     "title": "We could not find this page",
     "text": "The address does not exist or has changed. Go back home to continue.",
     "goHome": "Go home"
+  },
+  "medicalHistory": {
+    "title": "Medical history",
+    "subtitleOwner": "Allergies, vaccines and everything that happened in your pets' visits.",
+    "subtitleVet": "Your patients' background: allergies, vaccines and their clinical timeline.",
+    "pets": "My pets",
+    "patients": "Patients",
+    "search": "Name or code",
+    "noPets": "You have no pets yet.",
+    "addPet": "Add pet",
+    "noPatients": "Your clinic has no patients yet.",
+    "noMatches": "No patient matches.",
+    "pickTitle": "Choose a pet",
+    "pickText": "You will see its allergies, vaccines and the timeline of visits and exams.",
+    "born": "born {{date}}",
+    "severeFlag": "Severe allergy",
+    "cancel": "Cancel",
+    "close": "Close",
+    "stats": {
+      "allergies": "Allergies",
+      "vaccinations": "Vaccines",
+      "events": "Clinical events"
+    },
+    "tabs": {
+      "summary": "Allergies and vaccines",
+      "timeline": "Timeline"
+    },
+    "severity": {
+      "MILD": "Mild",
+      "MODERATE": "Moderate",
+      "SEVERE": "Severe"
+    },
+    "allergies": {
+      "title": "Allergies",
+      "add": "Add allergy",
+      "empty": "No allergies recorded.",
+      "allergen": "Allergen",
+      "allergenHint": "E.g. chicken, penicillin, flea bite",
+      "allergenRequired": "Say what it is allergic to.",
+      "severity": "Severity",
+      "severityRequired": "Choose the severity.",
+      "reaction": "Reaction",
+      "reactionHint": "E.g. itching, vomiting, swelling",
+      "notes": "Notes",
+      "save": "Save allergy",
+      "saved": "Allergy recorded",
+      "reportedBy": {
+        "OWNER": "Reported by the owner",
+        "VETERINARIAN": "Recorded by the veterinarian"
+      }
+    },
+    "vaccinations": {
+      "title": "Vaccines",
+      "add": "Add vaccine",
+      "emptyVet": "No vaccines recorded.",
+      "emptyOwner": "No vaccines recorded yet. The veterinarian records them at the clinic.",
+      "vaccine": "Vaccine",
+      "vaccineHint": "E.g. DHPPi+L, Rabies",
+      "vaccineRequired": "Enter the vaccine.",
+      "dose": "Dose",
+      "appliedOn": "Applied",
+      "nextDose": "Next dose",
+      "appliedBy": "Applied by",
+      "batch": "Batch",
+      "batchShort": "Batch {{batch}}",
+      "notes": "Notes",
+      "save": "Save vaccine",
+      "saved": "Vaccine recorded",
+      "overdue": "The {{vaccine}} booster was due on {{date}}.",
+      "dueSoon": "{{vaccine}} booster on {{date}}."
+    },
+    "timeline": {
+      "consultation": "Visit completed",
+      "exam": "Result validated: {{type}}",
+      "open": "Open visit",
+      "empty": "No completed visits or validated results yet."
+    },
+    "errors": {
+      "invalidAllergy": "Check the allergy details.",
+      "invalidVaccination": "Check the vaccine details.",
+      "invalidVaccinationDates": "The next dose must be after the application date.",
+      "appliedInFuture": "The application date cannot be in the future.",
+      "petNotFound": "We could not find that pet.",
+      "notAllowed": "You are not allowed to view or edit this medical history.",
+      "sessionExpired": "Your session expired. Sign in again.",
+      "unexpected": "We could not load the medical history. Try again."
+    }
   }
 }

@@ -1,0 +1,44 @@
+<form id="allergy-form" class="mh-form" [formGroup]="form" (ngSubmit)="submit()">
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>{{ 'medicalHistory.allergies.allergen' | translate }}</mat-label>
+    <input id="allergy-allergen" matInput formControlName="allergen" [maxlength]="limits.allergen"
+           [placeholder]="'medicalHistory.allergies.allergenHint' | translate" />
+    @if (form.controls.allergen.invalid) {
+      <mat-error>{{ 'medicalHistory.allergies.allergenRequired' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <fieldset class="severity" [class.invalid]="form.controls.severity.touched && form.controls.severity.invalid">
+    <legend>{{ 'medicalHistory.allergies.severity' | translate }}</legend>
+    <div class="severity-options" role="radiogroup">
+      @for (s of severities; track s) {
+        <button type="button" role="radio" class="sev" [id]="'allergy-severity-' + s"
+                [class]="'sev-' + s" [class.active]="form.controls.severity.value === s"
+                [attr.aria-checked]="form.controls.severity.value === s" (click)="pick(s)">
+          {{ 'medicalHistory.severity.' + s | translate }}
+        </button>
+      }
+    </div>
+    @if (form.controls.severity.touched && form.controls.severity.invalid) {
+      <small class="field-error">{{ 'medicalHistory.allergies.severityRequired' | translate }}</small>
+    }
+  </fieldset>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>{{ 'medicalHistory.allergies.reaction' | translate }}</mat-label>
+    <input id="allergy-reaction" matInput formControlName="reaction" [maxlength]="limits.reaction"
+           [placeholder]="'medicalHistory.allergies.reactionHint' | translate" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>{{ 'medicalHistory.allergies.notes' | translate }}</mat-label>
+    <textarea id="allergy-notes" matInput rows="2" formControlName="notes" [maxlength]="limits.allergyNotes"></textarea>
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="cancelled.emit()">{{ 'medicalHistory.cancel' | translate }}</button>
+    <button id="allergy-submit" mat-flat-button class="btn-accent" type="submit" [disabled]="saving()">
+      {{ 'medicalHistory.allergies.save' | translate }}
+    </button>
+  </div>
+</form>

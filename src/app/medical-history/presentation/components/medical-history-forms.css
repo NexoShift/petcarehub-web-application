@@ -1,0 +1,81 @@
+:host { display: block; }
+
+.mh-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border: 1px dashed #b9e9e5;
+  border-radius: 14px;
+  background: #f7fcfb;
+}
+
+.full { width: 100%; }
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 12px;
+}
+
+.row mat-form-field { width: 100%; }
+
+.severity {
+  margin: 0 0 14px;
+  padding: 0;
+  border: 0;
+}
+
+.severity legend {
+  margin-bottom: 8px;
+  color: #475467;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.severity-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sev {
+  padding: 7px 16px;
+  border: 1px solid #d0d5dd;
+  border-radius: 999px;
+  background: #fff;
+  color: #475467;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sev-MILD.active { border-color: #12b76a; background: #ecfdf3; color: #067647; }
+.sev-MODERATE.active { border-color: #f79009; background: #fffaeb; color: #b54708; }
+.sev-SEVERE.active { border-color: #f04438; background: #fef3f2; color: #b42318; }
+
+.severity.invalid .sev { border-color: #f7c8c4; }
+
+.field-error {
+  margin: 0 0 10px;
+  color: #b42318;
+  font-size: 13px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-accent {
+  border-radius: 999px;
+  background: #0bc3bd;
+  color: #062b55;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .row { grid-template-columns: 1fr; }
+}
