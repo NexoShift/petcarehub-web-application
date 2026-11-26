@@ -49,6 +49,10 @@ export class SubscriptionStore {
 
   private readonly renewalNoticeSignal = signal<string | null>(null);
 
+  private readonly activationPendingSignal = signal(false);
+
+  private readonly activationTimedOutSignal = signal(false);
+
   // Read-only state
   readonly plans = this.plansSignal.asReadonly();
   readonly subscription = this.subscriptionSignal.asReadonly();
@@ -66,6 +70,12 @@ export class SubscriptionStore {
   readonly renewalError = this.renewalErrorSignal.asReadonly();
 
   readonly renewalNotice = this.renewalNoticeSignal.asReadonly();
+
+  /** True while waiting for the Stripe webhook to activate the subscription after checkout. */
+  readonly activationPending = this.activationPendingSignal.asReadonly();
+
+  /** True when Stripe did not confirm the payment within the waiting time. */
+  readonly activationTimedOut = this.activationTimedOutSignal.asReadonly();
 
   // Derived state
   readonly hasSubscription = computed(() => this.subscription() !== null);
@@ -128,6 +138,37 @@ export class SubscriptionStore {
         error: () => {
           this.errorSignal.set('subscriptions.errors.load');
         },
+      });
+  }
+
+  /**
+   * After returning from Stripe Checkout, the subscription becomes ACTIVE only when the
+   * backend receives the Stripe webhook. Polls the subscription until it is active
+   * (every 2 seconds, up to 60 seconds) so the user does not need to refresh the page.
+   */
+  waitForActivation(accountId: number): void {
+    if (this.activationPending()) {
+      return;
+    }
+
+    this.activationPendingSignal.set(true);
+    this.activationTimedOutSignal.set(false);
+
+    timer(1000, 2000)
+      .pipe(
+        exhaustMap(() =>
+          this.subscriptionApi.getSubscriptionByAccountId(accountId).pipe(catchError(() => of(null))),
+        ),
+        filter((subscription): subscription is Subscription => subscription !== null),
+        tap((subscription) => this.subscriptionSignal.set(subscription)),
+        filter((subscription) => subscription.isActive),
+        take(1),
+        timeout({ first: 60000 }),
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.activationPendingSignal.set(false)),
+      )
+      .subscribe({
+        error: () => this.activationTimedOutSignal.set(true),
       });
   }
 

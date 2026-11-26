@@ -24,7 +24,6 @@ import { VisionViewer } from '../../components/vision-viewer/vision-viewer';
  * El dueño solo puede subir fotos de piel (SKIN); las radiografías son del veterinario.
  */
 /** Análisis visuales por mes mientras no exista Payments. Cambia aquí el máximo. */
-const MONTHLY_VISION_LIMIT = 10;
 @Component({
   selector: 'app-owner-visual-analysis',
   imports: [
@@ -63,14 +62,16 @@ export class OwnerVisualAnalysis {
   });
   protected readonly caption = computed(() => captionOf(this.picked()));
   /**
-   * Cuota "Análisis dérmico e imágenes" del plan (Subscriptions; hoy sale del panel del dueño).
-   * Se le suma lo analizado en esta pantalla. Solo se muestra: mientras sea demo no bloquea;
-   * el que limita es el backend (429 → aiVision.errors.usageLimit).
+   * Créditos de visión del plan (Subscriptions, leídos al cargar el panel del dueño) más lo analizado
+   * después en esta pantalla. Solo informa: el que bloquea es el backend (409 sin créditos).
    */
   protected readonly usage = computed(() => {
-    const now = new Date();
-    const used = this.store.history().filter((a) => a.isCompleted && a.createdAt.getFullYear() === now.getFullYear() && a.createdAt.getMonth() === now.getMonth(),).length;
-    return { used, limit: MONTHLY_VISION_LIMIT };
+    const quota = this.dashboard.owner()?.aiQuota;
+    const vision = quota?.usages.find((u) => u.kind === 'vision');
+    if (!quota || !vision || vision.limit <= 0) return null;
+    const since = quota.loadedAt.getTime();
+    const extra = this.store.history().filter((a) => a.isCompleted && a.createdAt.getTime() > since).length;
+    return { used: Math.min(vision.limit, vision.used + extra), limit: vision.limit };
   });
   protected readonly canAnalyze = computed(
     () => !!this.picked() && !this.store.processing() && !this.store.current(),

@@ -202,7 +202,7 @@
       "cycle": "Ciclo actual: {{cycle}}",
       "used": "{{used}} / {{limit}} usadas",
       "buyMore": "Adquirir paquete adicional",
-      "renewsIn": "Renueva en {{days}} d",
+      "renewsIn": "se renueva en {{days}} días",
       "aiNote": "Sugerencia de la IA: siempre requiere validación del veterinario colegiado.",
       "writeVet": "Escribir al veterinario",
       "seeConsultations": "Ver consultas",
@@ -223,8 +223,16 @@
         "visits": "Consultas: {{count}}",
         "noVisits": "Sin consultas"
       },
-      "aiQuotaNoPlan": "Activa un plan para ver tus créditos de IA del mes.",
-      "choosePlan": "Elegir plan"
+      "aiQuotaNoPlan": "Aún no tienes un plan activo. Con un plan tienes créditos para explicaciones y análisis visuales con IA.",
+      "choosePlan": "Ver planes",
+      "usage": {
+        "llm": "Explicaciones con IA",
+        "llmHint": "Te quedan {{n}} este periodo.",
+        "vision": "Análisis visuales",
+        "visionHint": "Te quedan {{n}} este periodo."
+      },
+      "upgrade": "Mejora tu plan",
+      "noPlan": "Sin plan"
     },
     "vet": {
       "morning": "Buenos días",
@@ -756,7 +764,7 @@
     "periodStart": "Inicio del periodo",
     "periodEnd": "Fin del periodo",
     "checkoutSuccess": "Tu suscripción se ha activado correctamente.",
-    "checkoutSynchronizing": "Estamos verificando tu pago. Actualiza el estado de tu suscripción en unos segundos.",
+    "checkoutSynchronizing": "Estamos confirmando tu pago con Stripe. Esto tarda unos segundos.",
     "checkoutCancelled": "El proceso de pago no se completó. Puedes continuarlo cuando desees.",
     "cancellationScheduled": "Tu suscripción no se renovará al finalizar el periodo actual.",
     "noPlans": "No hay planes disponibles en este momento.",
@@ -849,7 +857,11 @@
       "loadMore": "Cargar más",
       "loadingMore": "Cargando más pagos...",
       "stripeInformation": "Los pagos y documentos de facturación son gestionados de forma segura mediante Stripe."
-    }
+    },
+    "onboarding": {
+      "welcome": "Último paso: elige tu plan. Sin un plan activo no puedes registrar mascotas, veterinarios ni usar la IA."
+    },
+    "checkoutStillPending": "Stripe todavía no confirma tu pago. Toca Actualizar en un momento; si pagaste, el plan se activará solo."
   },
   "clinicalExams": {
     "close": "Cerrar",

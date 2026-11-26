@@ -209,19 +209,25 @@
             <h2><app-icon name="sparkles" [size]="18" /> {{ 'dashboard.owner.aiQuota' | translate }}</h2>
             @if (d.aiQuota; as quota) {
               <span class="chip success">{{ quota.plan }}</span>
+            } @else {
+              <span class="chip info">{{ 'dashboard.owner.noPlan' | translate }}</span>
             }
           </div>
           @if (d.aiQuota; as quota) {
-            <small class="muted">{{ 'dashboard.owner.cycle' | translate: { cycle: quota.cycle } }}</small>
-            @for (usage of quota.usages; track usage.label) {
-              <div class="usage">
-                <div class="usage-row"><span>{{ usage.label }}</span><strong>{{ 'dashboard.owner.used' | translate: { used: usage.used, limit: usage.limit } }}</strong></div>
+            <small class="muted">{{ 'dashboard.owner.cycle' | translate: { cycle: (quota.periodStart | date: 'dd/MM') + ' – ' + (quota.periodEnd | date: 'dd/MM') } }}
+              · {{ 'dashboard.owner.renewsIn' | translate: { days: quota.renewsInDays } }}</small>
+            @for (usage of quota.usages; track usage.kind) {
+              <div class="usage" [id]="'ai-usage-' + usage.kind">
+                <div class="usage-row"><span>{{ usage.label | translate }}</span><strong>{{ 'dashboard.owner.used' | translate: { used: usage.used, limit: usage.limit } }}</strong></div>
                 <app-progress-bar [value]="usagePercent(usage)" />
-                <small class="muted">{{ usage.hint }}</small>
+                <small class="muted">{{ usage.hint | translate: { n: usage.left } }}</small>
               </div>
             }
+            @if (quota.usages[0].left === 0 || quota.usages[1].left === 0) {
+              <a class="link" routerLink="/plan">{{ 'dashboard.owner.upgrade' | translate }}</a>
+            }
           } @else {
-            <p class="muted">{{ 'dashboard.owner.aiQuotaNoPlan' | translate }}</p>
+            <p id="ai-quota-empty" class="muted">{{ 'dashboard.owner.aiQuotaNoPlan' | translate }}</p>
             <a class="link" routerLink="/plan">{{ 'dashboard.owner.choosePlan' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
           }
           <p class="ai-note">{{ 'dashboard.owner.aiNote' | translate }}</p>

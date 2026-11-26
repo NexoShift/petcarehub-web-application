@@ -370,3 +370,8 @@
     align-items: stretch;
   }
 }
+
+/* Aviso de bienvenida: la cuenta todavía no tiene plan */
+.notice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 14px; font-size: 14px; line-height: 1.5; }
+.notice span { flex: 1 1 240px; min-width: 0; }
+.notice.info { background: #EEF4FA; color: var(--color-primary); }
