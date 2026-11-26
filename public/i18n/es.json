@@ -678,7 +678,7 @@
       "confirmRegistration": "Confirmar registro",
       "registering": "Registrando...",
       "registered": "La mascota se registró correctamente como paciente de la clínica.",
-      "registerNotAuthorized": "No tienes permisos para registrar pacientes en esta clínica.",
+      "registerNotAuthorized": "El código no corresponde a esta mascota o no tienes permiso para registrar pacientes en esta clínica.",
       "petUnavailable": "La clínica o la mascota ya no está disponible.",
       "registerError": "No se pudo registrar la mascota como paciente."
     },
