@@ -90,6 +90,8 @@ The backend URL is set in `apiBaseUrl`:
 | `src/environments/environment-dev.ts` | `npm start` (`ng serve`, development) | `http://localhost:8080/api/v1` |
 | `src/environments/environment.ts` | `npm run build` (production) | Azure API (see [Deployment](#deployment)) |
 
+Sign in with Google appears only when `googleClientId` is set in the environment file (the same web Client ID as `GOOGLE_CLIENT_ID` in the API).
+
 `angular.json` replaces `environment.ts` with `environment-dev.ts` in the `development` configuration. To run the app locally against the deployed API, use `npx ng serve --configuration production`.
 
 ## Available scripts
@@ -99,7 +101,7 @@ The backend URL is set in `apiBaseUrl`:
 | `npm start` | Development server with live reload |
 | `npm run build` | Production build in `dist/` |
 | `npm run watch` | Development build in watch mode |
-| `npm test` | Unit tests with Vitest (172 tests in 1.0.0) |
+| `npm test` | Unit tests with Vitest (235 tests in 2.0.0) |
 
 ## CI/CD
 
@@ -135,7 +137,8 @@ To roll back, open a previous deployment in Cloudflare Pages and choose **Rollba
 
 ### Notes
 - Cloudflare Pages serves `index.html` for unknown paths (single-page application mode), so deep links such as `/home` work after a page reload.
-- The backend allows this origin in `CORS_ALLOWED_ORIGINS`, and password-reset emails link to `https://petcarehub-web.pages.dev/reset-password`.
+- The backend allows this origin in `CORS_ALLOWED_ORIGINS`, and password-reset emails link to `https://petcarehub-web-application.pages.dev/reset-password`.
+- Stripe Checkout returns to `/subscription?checkout=success` or `?checkout=cancelled` (`STRIPE_CHECKOUT_*_URL` in the API), and the app redirects it to `/plan`.
 - The API scales to zero when idle, so the first request after a while can take a few seconds.
 
 See [docs/adrs.md](docs/adrs.md) for the reasons behind the hosting choice.
