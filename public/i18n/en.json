@@ -1815,6 +1815,10 @@
       "notAllowed": "You are not allowed to view or edit this medical history.",
       "sessionExpired": "Your session expired. Sign in again.",
       "unexpected": "We could not load the medical history. Try again."
+    },
+    "access": {
+      "granted": "The owner gave you access to other clinics' history until {{date}}.",
+      "ownClinicOnly": "You see your clinic's records and allergies. To see other clinics' history, ask the owner to grant access from the mobile app."
     }
   },
   "plan": {

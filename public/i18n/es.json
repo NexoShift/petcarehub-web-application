@@ -1815,6 +1815,10 @@
       "notAllowed": "No tienes permiso para ver o editar esta historia clínica.",
       "sessionExpired": "Tu sesión expiró. Vuelve a iniciar sesión.",
       "unexpected": "No pudimos cargar la historia clínica. Inténtalo de nuevo."
+    },
+    "access": {
+      "granted": "El dueño te dio acceso al historial de otras clínicas hasta el {{date}}.",
+      "ownClinicOnly": "Ves lo registrado en tu clínica y las alergias. Para ver el historial de otras clínicas, pide al dueño que te dé permiso desde la app móvil."
     }
   },
   "plan": {
