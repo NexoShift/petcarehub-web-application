@@ -3,4 +3,5 @@
  */
 export interface CreateClinicPatientRequest {
   petId: number;
+  petCode: string;
 }

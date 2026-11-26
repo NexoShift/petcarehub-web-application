@@ -320,6 +320,7 @@ export class ClinicPatients {
     const command: CreateClinicPatientCommand = {
       clinicId: clinic.id,
       petId: pet.id,
+      petCode: pet.petCode,
     };
 
     this.registrationError.set(null);
