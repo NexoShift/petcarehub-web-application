@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-11-26
+
+### Fixed
+- **IAM**: Sign in and sign up with Google now appear in production (web Client ID set).
+
 ## [2.0.0] - 2026-11-26
 
 Final release.
