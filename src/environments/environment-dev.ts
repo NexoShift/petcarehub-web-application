@@ -15,5 +15,5 @@ export const environment = {
   subscriptionPlansEndpointPath: '/plans',
   subscriptionAccountsEndpointPath: '/accounts',
   /** Client ID web de Google (termina en .apps.googleusercontent.com). Vacío = sin botón de Google. */
-  googleClientId: '',
+  googleClientId: '436854976303-cr980uen1lj550mnkh1ecd1vc985f8pp.apps.googleusercontent.com',
 };
