@@ -21,14 +21,26 @@
     </button>
   </header>
 
+  @if (welcome && !store.hasActiveSubscription()) {
+    <div class="notice info" role="status" data-testid="plan-welcome">
+      <app-icon name="info" [size]="18" />
+      <span>{{ 'subscriptions.onboarding.welcome' | translate }}</span>
+    </div>
+  }
+
   @if (checkoutResult === 'success') {
     <div class="notice success-notice" role="status">
       <app-icon name="info" [size]="20" />
 
       @if (store.hasActiveSubscription()) {
         {{ 'subscriptions.checkoutSuccess' | translate }}
+      } @else if (store.activationTimedOut()) {
+        {{ 'subscriptions.checkoutStillPending' | translate }}
       } @else {
         {{ 'subscriptions.checkoutSynchronizing' | translate }}
+        @if (store.activationPending()) {
+          <mat-spinner diameter="18" data-testid="activation-pending" />
+        }
       }
     </div>
   }

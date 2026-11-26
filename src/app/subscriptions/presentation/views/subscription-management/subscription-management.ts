@@ -60,12 +60,21 @@ export class SubscriptionManagement implements OnInit {
 
   protected readonly navigationError = signal(false);
 
+  /** Llega desde el registro: todavía no tiene plan y la app se lo pide antes de seguir. */
+  protected readonly welcome = this.route.snapshot.queryParamMap.has('welcome');
+
   private readonly dialog = inject(MatDialog);
 
   private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.reload();
+
+    // Back from Stripe: wait for the webhook to activate the plan instead of asking for a refresh.
+    const user = this.iamStore.currentUser();
+    if (user && this.checkoutResult === 'success') {
+      this.store.waitForActivation(user.accountId);
+    }
   }
 
   protected reload(): void {
