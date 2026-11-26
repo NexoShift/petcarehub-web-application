@@ -11,7 +11,6 @@
     "showPassword": "Mostrar contraseña",
     "hidePassword": "Ocultar contraseña",
     "backToSignIn": "Volver a iniciar sesión",
-    "comingSoon": "Próximamente",
     "years": "{{count}} años",
     "active": "Activo",
     "cancel": "Cancelar"
@@ -121,9 +120,7 @@
     "roleVet": "Médico veterinario",
     "openMenu": "Abrir o cerrar el menú",
     "mainMenu": "Menú principal",
-    "notifications": "Notificaciones",
     "userMenu": "Menú de usuario",
-    "search": "Buscar paciente, historia o tutor...",
     "signOut": "Cerrar sesión",
     "online": "En línea",
     "sections": {
@@ -148,12 +145,8 @@
       "planSubscription": "Plan y suscripción",
       "myPlan": "Mi plan",
       "profile": "Perfil"
-    }
-  },
-  "comingSoon": {
-    "title": "Esta sección viene en camino",
-    "text": "Estamos preparando esta parte de PetCare Hub. Mientras tanto, vuelve a tu panel.",
-    "goHome": "Ir al inicio"
+    },
+    "offline": "Sin conexión"
   },
   "dashboard": {
     "owner": {
@@ -217,7 +210,6 @@
       "seeAll": "Ver todos",
       "noEvents": "No tienes consultas ni exámenes pendientes.",
       "noResults": "Todavía no hay resultados validados.",
-      "aiQuotaSoon": "Tu plan y la cuota de IA aparecerán aquí cuando se active Suscripciones.",
       "vetRole": "Médico veterinario",
       "events": {
         "consultationScheduled": "Consulta programada",
@@ -230,7 +222,9 @@
         "pendingExams": "Exámenes pendientes: {{count}}",
         "visits": "Consultas: {{count}}",
         "noVisits": "Sin consultas"
-      }
+      },
+      "aiQuotaNoPlan": "Activa un plan para ver tus créditos de IA del mes.",
+      "choosePlan": "Elegir plan"
     },
     "vet": {
       "morning": "Buenos días",
@@ -280,7 +274,6 @@
       "toValidate": "Por validar",
       "noPendingExams": "No hay exámenes pendientes.",
       "noRecent": "Todavía no hay consultas completadas.",
-      "comingSoon": "Próximamente",
       "aiOngoing": "{{pet}} tiene la consulta N.° {{id}} en curso. Cuando el asistente esté disponible, podrás generar ahí el borrador SOAP.",
       "aiIdle": "Cuando tengas una consulta en curso, el asistente te ayudará a redactar el borrador SOAP.",
       "openConsultation": "Abrir consulta",
@@ -352,10 +345,6 @@
       "imageError": "No se pudo actualizar la fotografía.",
       "invalidImage": "Selecciona una imagen JPG, PNG o WebP.",
       "close": "Cerrar",
-      "preferences": "Preferencias de comunicación",
-      "preferencesHint": "Configuración de avisos relacionados con tus mascotas.",
-      "notificationsTitle": "Notificaciones y recordatorios",
-      "notificationsPending": "La configuración de notificaciones estará disponible próximamente.",
       "subscription": "Suscripción",
       "subscriptionPending": "La información de tu plan estará disponible cuando se integre el módulo de suscripciones."
     },
@@ -1654,5 +1643,10 @@
       "noExams": "En esta consulta no se pidieron exámenes.",
       "seeExams": "Ver resultados y archivos"
     }
+  },
+  "notFound": {
+    "title": "No encontramos esta página",
+    "text": "La dirección no existe o cambió. Vuelve al inicio para seguir.",
+    "goHome": "Ir al inicio"
   }
 }

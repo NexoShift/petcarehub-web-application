@@ -11,7 +11,6 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "backToSignIn": "Back to sign in",
-    "comingSoon": "Coming soon",
     "years": "{{count}} years",
     "active": "Active",
     "cancel": "Cancel"
@@ -121,9 +120,7 @@
     "roleVet": "Veterinarian",
     "openMenu": "Open or close the menu",
     "mainMenu": "Main menu",
-    "notifications": "Notifications",
     "userMenu": "User menu",
-    "search": "Search patient, record or owner...",
     "signOut": "Sign out",
     "online": "Online",
     "sections": {
@@ -148,12 +145,8 @@
       "planSubscription": "Plan & subscription",
       "myPlan": "My plan",
       "profile": "Profile"
-    }
-  },
-  "comingSoon": {
-    "title": "This section is on its way",
-    "text": "We're building this part of PetCare Hub. Meanwhile, head back to your dashboard.",
-    "goHome": "Go home"
+    },
+    "offline": "Offline"
   },
   "dashboard": {
     "owner": {
@@ -217,7 +210,6 @@
       "seeAll": "See all",
       "noEvents": "You have no pending consultations or exams.",
       "noResults": "No validated results yet.",
-      "aiQuotaSoon": "Your plan and AI quota will appear here once Subscriptions is enabled.",
       "vetRole": "Veterinarian",
       "events": {
         "consultationScheduled": "Scheduled consultation",
@@ -230,7 +222,9 @@
         "pendingExams": "Pending exams: {{count}}",
         "visits": "Consultations: {{count}}",
         "noVisits": "No consultations"
-      }
+      },
+      "aiQuotaNoPlan": "Activate a plan to see your AI credits for the month.",
+      "choosePlan": "Choose a plan"
     },
     "vet": {
       "morning": "Good morning",
@@ -280,7 +274,6 @@
       "toValidate": "To validate",
       "noPendingExams": "No pending exams.",
       "noRecent": "No completed consultations yet.",
-      "comingSoon": "Coming soon",
       "aiOngoing": "{{pet}} has consultation #{{id}} in progress. When the assistant is available you will be able to draft the SOAP note there.",
       "aiIdle": "When you have a consultation in progress, the assistant will help you draft the SOAP note.",
       "openConsultation": "Open consultation",
@@ -815,10 +808,6 @@
       "imageError": "Unable to update your photo.",
       "invalidImage": "Select a JPG, PNG or WebP image.",
       "close": "Close",
-      "preferences": "Communication preferences",
-      "preferencesHint": "Notification settings related to your pets.",
-      "notificationsTitle": "Notifications and reminders",
-      "notificationsPending": "Notification settings will be available soon.",
       "subscription": "Subscription",
       "subscriptionPending": "Your plan information will be available once the subscription module is integrated."
     },
@@ -1654,5 +1643,10 @@
       "noExams": "No exams were requested in this consultation.",
       "seeExams": "See results and files"
     }
+  },
+  "notFound": {
+    "title": "We could not find this page",
+    "text": "The address does not exist or has changed. Go back home to continue.",
+    "goHome": "Go home"
   }
 }
