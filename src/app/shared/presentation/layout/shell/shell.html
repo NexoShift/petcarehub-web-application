@@ -18,20 +18,7 @@
 
     <span class="spacer"></span>
 
-    @if (isVet()) {
-      <label class="search">
-        <app-icon name="search" [size]="16" />
-        <input type="search" [placeholder]="'shell.search' | translate" [attr.aria-label]="'shell.search' | translate">
-      </label>
-    }
-
     <app-language-switcher class="lang" />
-
-    <button mat-icon-button type="button" class="bell" [attr.aria-label]="'shell.notifications' | translate"
-            [matTooltip]="'shell.notifications' | translate">
-      <app-icon name="bell" [size]="19" />
-      <span class="bell-dot"></span>
-    </button>
 
     <!-- Al hacer clic se abre el mat-menu de abajo (#userMenu) -->
     <button type="button" class="user" matRipple [matMenuTriggerFor]="userMenu" [attr.aria-label]="'shell.userMenu' | translate">
@@ -95,7 +82,10 @@
             {{ item.label | translate }}
           </a>
         }
-        <p class="status"><span class="dot"></span> {{ 'shell.online' | translate }} <span class="version">v1.0.0</span></p>
+        <p class="status" [class.offline]="!online()" role="status">
+          <span class="dot"></span> {{ (online() ? 'shell.online' : 'shell.offline') | translate }}
+          <span class="version">v{{ version }}</span>
+        </p>
       </div>
     </mat-sidenav>
 
