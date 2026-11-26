@@ -315,3 +315,27 @@ dd {
 .owner-prescription { margin-top: 12px; padding-top: 12px; border-top: 1px solid #EEF1F5; }
 .rx-title { margin: 0 0 6px; color: #475467; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
 .rx-note { margin: 8px 0 0; color: #344054; font-size: 13px; line-height: 1.5; }
+
+/* Enlace a "Explicar con IA" con esta consulta como referencia */
+.ai-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: #e6f9f8;
+  color: #067a76;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ai-link:hover {
+  background: #d6f9f5;
+}
+
+@media (max-width: 600px) {
+  .hero-main { flex-wrap: wrap; }
+  .ai-link { margin-left: 0; }
+}

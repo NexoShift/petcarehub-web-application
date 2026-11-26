@@ -181,6 +181,9 @@
         @case ('images') {
           <app-consultation-imaging [petId]="consultation.petId" [consultationId]="consultation.id" />
         }
+        @case ('assistant') {
+          <app-consultation-assistant [petId]="consultation.petId" [consultationId]="consultation.id" />
+        }
         @case ('diagnosis') {
           <div class="layout">
             <app-diagnosis-panel
