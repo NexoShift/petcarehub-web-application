@@ -45,6 +45,8 @@ describe('ConsultationList', () => {
       addClinicalFinding: vi.fn(),
       registerDiagnosis: vi.fn(),
       reevaluateDiagnosis: vi.fn(),
+      registerTreatment: vi.fn(),
+      registerPrescription: vi.fn(),
       complete: vi.fn(),
       cancel: vi.fn(),
     };
