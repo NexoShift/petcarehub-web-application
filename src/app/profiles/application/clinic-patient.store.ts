@@ -120,6 +120,7 @@ export class ClinicPatientStore {
   ): CreateClinicPatientRequest {
     return {
       petId: command.petId,
+      petCode: command.petCode,
     };
   }
 

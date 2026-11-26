@@ -1144,7 +1144,7 @@
       "confirmRegistration": "Confirm registration",
       "registering": "Registering...",
       "registered": "The pet was successfully registered as a clinic patient.",
-      "registerNotAuthorized": "You are not authorized to register patients in this clinic.",
+      "registerNotAuthorized": "The code does not match this pet or you are not allowed to register patients in this clinic.",
       "petUnavailable": "The clinic or pet is no longer available.",
       "registerError": "Unable to register the pet as a clinic patient."
     },
