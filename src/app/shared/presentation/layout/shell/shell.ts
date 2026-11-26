@@ -44,6 +44,7 @@ const OWNER_MENU: NavSection[] = [
       { label: 'shell.menu.pets', path: '/profiles/pets', icon: 'paw' },
       { label: 'shell.menu.consultations', path: '/my-consultations', icon: 'stethoscope' },
       { label: 'shell.menu.exams', path: '/exams', icon: 'flask' },
+      { label: 'shell.menu.treatments', path: '/treatments', icon: 'pill' },
       { label: 'shell.menu.visualAnalysis', path: '/visual-analysis', icon: 'scan' },
     ],
   },
