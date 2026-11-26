@@ -1,6 +1,6 @@
 export const environment = {
   /** Versión que se muestra en el menú; se cambia en cada release. */
-  appVersion: '1.0.0',
+  appVersion: '1.1.0',
   production: false,
   apiBaseUrl: 'http://localhost:8080/api/v1',
   // Profile endpoints
