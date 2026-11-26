@@ -310,3 +310,8 @@ dd {
     flex-wrap: wrap;
   }
 }
+
+/* Tratamiento y receta */
+.owner-prescription { margin-top: 12px; padding-top: 12px; border-top: 1px solid #EEF1F5; }
+.rx-title { margin: 0 0 6px; color: #475467; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+.rx-note { margin: 8px 0 0; color: #344054; font-size: 13px; line-height: 1.5; }
