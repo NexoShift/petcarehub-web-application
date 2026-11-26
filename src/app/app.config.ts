@@ -10,6 +10,7 @@ import { routes } from './app.routes';
 import { IamStore } from './iam';
 import { authInterceptor } from './iam/infrastructure/auth.interceptor';
 import { errorInterceptor } from './shared/infrastructure/error.interceptor';
+import { planRequiredInterceptor } from './shared/infrastructure/plan-required.interceptor';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { firstValueFrom } from 'rxjs';
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, planRequiredInterceptor, errorInterceptor])),
     provideAppInitializer(() => inject(IamStore).restoreSession()),
     // ngx-translate: lee public/i18n/es.json y public/i18n/en.json. Si falta una clave en inglés, usa la de español.
     provideTranslateService({

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-11-26
+
+Final release.
+
+### Added
+- **Subscriptions**
+  - Plan notice: when the API answers that a plan is required, that the plan does not include a registration, that the plan limit was reached or that the AI credits ran out, a notice offers to open the plans page.
+- **Medical History**
+  - Veterinarians see whether the owner granted temporary access to the history from other clinics. Owners grant and revoke it from the mobile app.
+- **IAM**
+  - Sign in and sign up with Google (shown only when `googleClientId` is set).
+
+### Changed
+- **BREAKING**: registering a clinic patient sends the pet code (`petCode`) that the owner shares. Requires API 2.0.0 or later.
+- **BREAKING**: this version works only with API 2.0.x (Stripe, Google, OpenAI and Roboflow are required in the backend).
+
 ## [1.4.0] - 2026-11-26
 
 Clinical assistant with LLM.
@@ -116,7 +132,8 @@ First stable release, delivered at the end of **Sprint 1**.
 ### Changed
 - Upgraded to Angular 22.2.5, Angular Material and CDK 22.2.7, Vitest 5 and jsdom 31.
 
-[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.4.0...develop
+[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v2.0.0...develop
+[2.0.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.4.0...v2.0.0
 [1.4.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.1.0...v1.2.0

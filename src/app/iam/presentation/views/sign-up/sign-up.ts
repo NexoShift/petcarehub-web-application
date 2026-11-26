@@ -7,14 +7,19 @@ import { ApiError } from '../../../../shared/domain/api-error';
 import { IamStore } from '../../../application/iam.store';
 import { AccountType } from '../../../domain/model/account-type';
 import { AuthLayout } from '../../components/auth-layout/auth-layout';
+import { GoogleSignInButton } from '../../components/google-sign-in-button/google-sign-in-button';
+import { GoogleIdentityService } from '../../../infrastructure/google-identity.service';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [ReactiveFormsModule, RouterLink, AuthLayout, TranslatePipe],
+  imports: [ReactiveFormsModule, RouterLink, AuthLayout, TranslatePipe, GoogleSignInButton],
   templateUrl: './sign-up.html',
   styleUrls: ['../auth-form.css', './sign-up.css'],
 })
 export class SignUp {
+  /** Sin Client ID de Google configurado no se muestra el separador ni el botón. */
+  protected readonly googleEnabled = inject(GoogleIdentityService).enabled;
+
   /** Paso 2 del onboarding según el tipo de cuenta. Las pantallas viven en el BC de Profiles. */
   static readonly ONBOARDING_ROUTES: Record<AccountType, string> = {
     PET_OWNER: '/profiles/pet-owner/complete',

@@ -108,6 +108,8 @@
 }
 .social button:disabled { cursor: not-allowed; opacity: 0.7; }
 .social svg { width: 18px; height: 18px; }
+.social-stack { grid-template-columns: 1fr; }
+.google-terms { margin: -4px 0 0; color: var(--color-text-muted); font-size: 12px; text-align: center; }
 
 .switch { margin: 8px 0 0; text-align: center; color: var(--color-text-muted); font-size: 14px; }
 .switch a { color: var(--color-primary); font-weight: 600; }

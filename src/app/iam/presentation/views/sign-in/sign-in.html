@@ -50,6 +50,14 @@
       {{ (loading() ? 'auth.signIn.submitting' : 'auth.signIn.submit') | translate }}
     </button>
 
+    @if (googleEnabled) {
+      <div class="divider">{{ 'auth.signIn.or' | translate }}</div>
+      <!-- Google: botón oficial (Google Identity Services) -->
+      <div class="social social-stack">
+        <app-google-sign-in-button mode="signin" />
+      </div>
+    }
+
     <p class="switch">{{ 'auth.signIn.noAccount' | translate }} <a routerLink="/sign-up">{{ 'auth.signIn.signUp' | translate }}</a></p>
   </form>
 </app-auth-layout>

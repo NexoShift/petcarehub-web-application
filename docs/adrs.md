@@ -78,3 +78,20 @@ Host the production build on **Cloudflare Pages** using its GitHub integration:
 ### Consequences
 - **Positive**: Free tier with global CDN and automatic HTTPS; native SPA fallback with no extra configuration; no deployment token in GitHub; one-click rollback to any previous deployment.
 - **Negative**: Frontend (Cloudflare) and backend (Azure) are on different providers and domains, so CORS must be configured on the API; build settings live in the Cloudflare dashboard instead of the repository.
+
+---
+
+## ADR 005: Owner Consent for History Access Only in the Mobile App
+
+### Status
+Accepted
+
+### Context
+API 2.0.0 lets the owner grant a clinic temporary access (1 to 72 hours) to the pet's history from other clinics, and revoke it. The owner is usually at the clinic with the phone when the veterinarian asks for it.
+
+### Decision
+Owners grant and revoke access only in the mobile app. The web application only reads the grants: the veterinarian sees in the medical history whether access is active and until when, or a message to ask the owner.
+
+### Consequences
+- **Positive**: One place to manage consent, simpler owner web screens, and the decision happens where the owner is.
+- **Negative**: An owner without the mobile app cannot grant access from the web.

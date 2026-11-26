@@ -111,6 +111,13 @@
       "samePassword": "La nueva contraseña debe ser distinta a la temporal",
       "submit": "Guardar y continuar",
       "signOut": "Cerrar sesión"
+    },
+    "google": {
+      "chooseTitle": "Es tu primera vez con esta cuenta de Google. ¿Cómo vas a usar PetCare Hub?",
+      "invalid": "Google no pudo confirmar tu cuenta. Inténtalo de nuevo.",
+      "notConfigured": "El acceso con Google no está disponible por ahora.",
+      "failed": "No pudimos entrar con Google. Inténtalo de nuevo.",
+      "termsNote": "Al continuar con Google aceptas los Términos y la Política de privacidad."
     }
   },
   "shell": {
@@ -678,7 +685,7 @@
       "confirmRegistration": "Confirmar registro",
       "registering": "Registrando...",
       "registered": "La mascota se registró correctamente como paciente de la clínica.",
-      "registerNotAuthorized": "No tienes permisos para registrar pacientes en esta clínica.",
+      "registerNotAuthorized": "El código no corresponde a esta mascota o no tienes permiso para registrar pacientes en esta clínica.",
       "petUnavailable": "La clínica o la mascota ya no está disponible.",
       "registerError": "No se pudo registrar la mascota como paciente."
     },
@@ -1815,6 +1822,19 @@
       "notAllowed": "No tienes permiso para ver o editar esta historia clínica.",
       "sessionExpired": "Tu sesión expiró. Vuelve a iniciar sesión.",
       "unexpected": "No pudimos cargar la historia clínica. Inténtalo de nuevo."
+    },
+    "access": {
+      "granted": "El dueño te dio acceso al historial de otras clínicas hasta el {{date}}.",
+      "ownClinicOnly": "Ves lo registrado en tu clínica y las alergias. Para ver el historial de otras clínicas, pide al dueño que te dé permiso desde la app móvil."
+    }
+  },
+  "plan": {
+    "notice": {
+      "noPlan": "Necesitas un plan activo para hacer esto.",
+      "notIncluded": "Tu plan actual no incluye este registro. Cambia a un plan que lo incluya.",
+      "limit": "Llegaste al límite de tu plan. Mejora tu plan para agregar más.",
+      "credits": "Se acabaron tus créditos de IA de este mes. Mejora tu plan o espera al siguiente periodo.",
+      "action": "Ver planes"
     }
   }
 }

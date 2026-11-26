@@ -8,6 +8,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { forkJoin, of, catchError, map } from 'rxjs';
 import { IamStore } from '../../../../iam';
 import { Pet } from '../../../../profiles/domain/model/pet.entity';
+import { HistoryAccessGrant } from '../../../../profiles/domain/model/history-access-grant.entity';
 import { ProfileApi } from '../../../../profiles/infrastructure/profile-api';
 import { Icon } from '../../../../shared/presentation/components/icon/icon';
 import { PetAvatar } from '../../../../shared/presentation/components/pet-avatar/pet-avatar';
@@ -55,6 +56,9 @@ export class MedicalHistoryView implements OnInit {
   protected readonly tab = signal<Tab>('summary');
   protected readonly showAllergyForm = signal(false);
   protected readonly showVaccinationForm = signal(false);
+  /** Vet: permiso vigente del dueño para ver lo de otras clínicas (null = solo ve lo de su clínica). */
+  protected readonly accessGrant = signal<HistoryAccessGrant | null>(null);
+  protected readonly accessChecked = signal(false);
 
   /** Nombres de veterinarios y clínicas que aparecen en la historia (se piden una vez por id). */
   protected readonly vetNames = signal<Record<number, string>>({});
@@ -145,7 +149,22 @@ export class MedicalHistoryView implements OnInit {
     this.selectedPetId.set(petId);
     this.showAllergyForm.set(false);
     this.showVaccinationForm.set(false);
+    if (this.isVet()) this.loadAccessGrant(petId);
     if (await this.store.load(petId)) this.resolveNames();
+  }
+
+  private loadAccessGrant(petId: number): void {
+    this.accessGrant.set(null);
+    this.accessChecked.set(false);
+    this.profiles.getHistoryAccessGrants(petId).subscribe({
+      next: (grants) => {
+        if (this.selectedPetId() !== petId) return;
+        const now = new Date();
+        this.accessGrant.set(grants.find((g) => g.isActiveAt(now)) ?? null);
+        this.accessChecked.set(true);
+      },
+      error: () => this.accessChecked.set(true),
+    });
   }
 
   /** Pide los nombres de veterinarios y clínicas que todavía no conoce. */

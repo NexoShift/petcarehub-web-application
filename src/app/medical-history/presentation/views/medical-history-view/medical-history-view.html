@@ -83,6 +83,19 @@
           <p class="error-message" role="alert"><app-icon name="alert" [size]="16" /> {{ error | translate }}</p>
         }
 
+        @if (isVet() && accessChecked()) {
+          @if (accessGrant(); as grant) {
+            <p id="access-banner" class="access-banner on">
+              <app-icon name="shield" [size]="16" />
+              {{ 'medicalHistory.access.granted' | translate: { date: (grant.expiresAt | date: 'dd/MM HH:mm') } }}
+            </p>
+          } @else {
+            <p id="access-banner" class="access-banner">
+              <app-icon name="info" [size]="16" /> {{ 'medicalHistory.access.ownClinicOnly' | translate }}
+            </p>
+          }
+        }
+
         @if (store.isLoading()) {
           <div class="loading"><mat-spinner diameter="40" /></div>
         } @else if (store.history(); as history) {

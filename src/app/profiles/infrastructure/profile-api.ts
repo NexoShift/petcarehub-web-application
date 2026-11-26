@@ -13,6 +13,8 @@ import { PetOwnersApiEndpoint } from './pet-owners-api-endpoint';
 import { PetsApiEndpoint } from './pets-api-endpoint';
 import { ClinicsApiEndpoint } from './clinics-api-endpoint';
 import { VeterinariansApiEndpoint } from './veterinarians-api-endpoint';
+import { HistoryAccessGrantsApiEndpoint } from './history-access-grants-api-endpoint';
+import { HistoryAccessGrant } from '../domain/model/history-access-grant.entity';
 import { ClinicPatientsApiEndpoint } from './clinic-patients-api-endpoint';
 import { ConsultingRoomsApiEndpoint } from './consulting-rooms-api-endpoint';
 import { ConsultingRoomAssignmentsApiEndpoint } from './consulting-room-assignments-api-endpoint';
@@ -49,6 +51,7 @@ export class ProfileApi {
   private readonly clinicPatientsEndpoint = inject(ClinicPatientsApiEndpoint);
   private readonly consultingRoomsEndpoint = inject(ConsultingRoomsApiEndpoint);
   private readonly assignmentsEndpoint = inject(ConsultingRoomAssignmentsApiEndpoint);
+  private readonly historyAccessEndpoint = inject(HistoryAccessGrantsApiEndpoint);
 
   // --------------------------------------------------
   // Pet Owners
@@ -357,5 +360,13 @@ export class ProfileApi {
    */
   unassignVeterinarian(clinicId: number, assignmentId: number): Observable<{ message: string }> {
     return this.assignmentsEndpoint.unassign(clinicId, assignmentId);
+  }
+
+  // --------------------------------------------------
+  // History access grants (owner's temporary permission, granted from the mobile app)
+  // --------------------------------------------------
+
+  getHistoryAccessGrants(petId: number): Observable<HistoryAccessGrant[]> {
+    return this.historyAccessEndpoint.getByPetId(petId);
   }
 }

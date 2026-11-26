@@ -1,6 +1,6 @@
 export const environment = {
   /** Versión que se muestra en el menú; se cambia en cada release. */
-  appVersion: '1.4.0',
+  appVersion: '2.0.0',
   production: false,
   apiBaseUrl: 'http://localhost:8080/api/v1',
   // Profile endpoints
@@ -14,4 +14,6 @@ export const environment = {
   // Subscription endpoints
   subscriptionPlansEndpointPath: '/plans',
   subscriptionAccountsEndpointPath: '/accounts',
+  /** Client ID web de Google (termina en .apps.googleusercontent.com). Vacío = sin botón de Google. */
+  googleClientId: '',
 };

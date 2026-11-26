@@ -111,6 +111,13 @@
       "samePassword": "The new password must be different from the temporary one",
       "submit": "Save and continue",
       "signOut": "Sign out"
+    },
+    "google": {
+      "chooseTitle": "This is your first time with this Google account. How will you use PetCare Hub?",
+      "invalid": "Google could not confirm your account. Try again.",
+      "notConfigured": "Google sign-in is not available right now.",
+      "failed": "We could not sign you in with Google. Try again.",
+      "termsNote": "By continuing with Google you accept the Terms and the Privacy Policy."
     }
   },
   "shell": {
@@ -1144,7 +1151,7 @@
       "confirmRegistration": "Confirm registration",
       "registering": "Registering...",
       "registered": "The pet was successfully registered as a clinic patient.",
-      "registerNotAuthorized": "You are not authorized to register patients in this clinic.",
+      "registerNotAuthorized": "The code does not match this pet or you are not allowed to register patients in this clinic.",
       "petUnavailable": "The clinic or pet is no longer available.",
       "registerError": "Unable to register the pet as a clinic patient."
     },
@@ -1815,6 +1822,19 @@
       "notAllowed": "You are not allowed to view or edit this medical history.",
       "sessionExpired": "Your session expired. Sign in again.",
       "unexpected": "We could not load the medical history. Try again."
+    },
+    "access": {
+      "granted": "The owner gave you access to other clinics' history until {{date}}.",
+      "ownClinicOnly": "You see your clinic's records and allergies. To see other clinics' history, ask the owner to grant access from the mobile app."
+    }
+  },
+  "plan": {
+    "notice": {
+      "noPlan": "You need an active plan to do this.",
+      "notIncluded": "Your current plan does not include this registration. Switch to a plan that includes it.",
+      "limit": "You reached your plan limit. Upgrade your plan to add more.",
+      "credits": "You ran out of AI credits this month. Upgrade your plan or wait for the next period.",
+      "action": "See plans"
     }
   }
 }
