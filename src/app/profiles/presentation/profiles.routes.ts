@@ -52,16 +52,6 @@ const clinicAssignmentHistory = () =>
   import('./views/clinic-assignment-history/clinic-assignment-history').then((m) => m.ClinicAssignmentHistory);
 
 /**
- * Temporary view for features not yet implemented.
- *
- * @remarks
- * Each route will load its own component as the
- * corresponding Presentation block is completed.
- */
-const comingSoon = () =>
-  import('../../shared/presentation/views/coming-soon/coming-soon').then((m) => m.ComingSoon);
-
-/**
  * Routes for the Profile bounded context.
  */
 export const profileRoutes: Routes = [
