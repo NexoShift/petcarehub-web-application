@@ -1,6 +1,6 @@
 export const environment = {
   /** Versión que se muestra en el menú; se cambia en cada release. */
-  appVersion: '2.0.0',
+  appVersion: '2.0.1',
   production: true,
   apiBaseUrl: 'https://petcarehub-api.kindwave-02283cc0.westus2.azurecontainerapps.io/api/v1',
   // Profile endpoints
