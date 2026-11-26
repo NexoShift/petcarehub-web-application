@@ -1,0 +1,257 @@
+<section class="page" [class.embedded]="embedded()">
+  @if (!embedded()) {
+  <header class="page-header reveal">
+    <div class="intro">
+      <span class="eyebrow"><app-icon name="sparkles" [size]="14" />{{ 'aiAssistant.vet.eyebrow' | translate }}</span>
+      <h1>{{ 'aiAssistant.vet.title' | translate }} <span class="live">{{ 'aiAssistant.active' | translate }}</span></h1>
+      <p>{{ 'aiAssistant.vet.subtitle' | translate }}</p>
+    </div>
+    @if (store.selectedPet(); as pet) {
+      <div class="pet-chip">
+        <app-pet-avatar [name]="pet.name" [size]="40" />
+        <span class="who">
+          <strong>{{ pet.name }}</strong>
+          <small>{{ 'enums.species.' + pet.species | translate }}@if (pet.breed) { · {{ pet.breed }} }@if (pet.ownerName) { · {{ pet.ownerName }} }</small>
+        </span>
+        @if (store.consultationId()) { <span class="chip info">{{ 'aiVision.vet.consultationChip' | translate: { id: store.consultationId() } }}</span> }
+      </div>
+    }
+  </header>
+
+  <article class="card setup reveal" style="--i: 1">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>{{ 'aiVision.vet.patient' | translate }}</mat-label>
+      <mat-select [value]="store.selectedPet()?.id" (valueChange)="selectPet($event)" data-testid="patient-select">
+        @for (p of store.pets(); track p.id) { <mat-option [value]="p.id">{{ p.name }} · {{ p.breed }}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>{{ 'aiAssistant.vet.consultation' | translate }}</mat-label>
+      <mat-select [value]="store.consultationId()" (valueChange)="setConsultation($event)" data-testid="consultation-select"
+                  [disabled]="!store.activeConsultations().length">
+        @for (c of store.activeConsultations(); track c.id) {
+          <mat-option [value]="c.id">#{{ c.id }} · {{ c.reason }} ({{ c.date | localDate: language.locale() : false }})</mat-option>
+        }
+      </mat-select>
+      @if (!store.consultationsLoading() && !store.activeConsultations().length) {
+        <mat-hint data-testid="no-active-consultation">{{ 'aiAssistant.vet.noActiveConsultation' | translate }}</mat-hint>
+      } @else {
+        <mat-hint>{{ 'aiAssistant.vet.consultationHint' | translate }}</mat-hint>
+      }
+    </mat-form-field>
+    <a class="btn btn-outline imaging-link" routerLink="/imaging"
+       [queryParams]="{ petId: store.selectedPet()?.id, consultationId: store.consultationId() }">
+      <app-icon name="scan" [size]="16" />{{ 'aiAssistant.vet.goImaging' | translate }}
+    </a>
+  </article>
+  }
+
+  <div class="layout">
+    <!-- Izquierda: lo que se le manda al LLM -->
+    <article class="card reveal" style="--i: 2">
+      <div class="card-header">
+        <div class="title">
+          <span class="title-icon"><app-icon name="history" [size]="18" /></span>
+          <div>
+            <h2>{{ 'aiAssistant.vet.contextTitle' | translate }}</h2>
+            <small>{{ 'aiAssistant.vet.contextSubtitle' | translate }}</small>
+          </div>
+        </div>
+      </div>
+
+      <mat-form-field appearance="outline" class="reason">
+        <mat-label>{{ 'aiAssistant.vet.reason' | translate }}</mat-label>
+        <textarea matInput rows="4" [maxlength]="maxReason" [ngModel]="reason()" (ngModelChange)="reason.set($event)"
+                  [placeholder]="'aiAssistant.vet.reasonPlaceholder' | translate" data-testid="reason"></textarea>
+        <mat-hint align="end">{{ reason().length }} / {{ maxReason }}</mat-hint>
+      </mat-form-field>
+
+      <div class="bg-head">
+        <span class="section-label">{{ 'aiAssistant.vet.backgrounds' | translate }}</span>
+        <span class="chip" [class.warning]="store.limitReached()">
+          {{ 'aiAssistant.vet.selected' | translate: { n: store.selectedCount(), max: maxBackgrounds } }}
+        </span>
+      </div>
+
+      @for (group of [
+        { key: 'aiAssistant.vet.previous', icon: 'stethoscope', items: store.consultations() },
+        { key: 'aiAssistant.vet.vision', icon: 'scan', items: store.visionAnalyses() }
+      ]; track group.key) {
+        @if (group.items.length) {
+          <div class="bg-group">
+            <span class="group-title"><app-icon [name]="$any(group.icon)" [size]="14" />{{ group.key | translate }}</span>
+            @for (b of group.items; track b.type + b.referenceId) {
+              <label class="bg-item" [class.on]="store.isSelected(b)" [class.current]="b.type === 'PREVIOUS_CONSULTATION' && b.referenceId === store.consultationId()">
+                <mat-checkbox [checked]="store.isSelected(b)" (change)="store.toggle(b)"
+                              [disabled]="!store.isSelected(b) && store.limitReached()" />
+                <span class="bg-text">
+                  <span class="bg-top"><strong>{{ b.title }}</strong><time>{{ b.date | localDate: language.locale() : false }}</time></span>
+                  <small>{{ b.summary }}</small>
+                </span>
+              </label>
+            }
+          </div>
+        }
+      } @empty {}
+      @if (!store.backgrounds().length) {
+        <p class="muted">{{ 'aiAssistant.vet.noBackgrounds' | translate }}</p>
+      }
+
+      <button type="button" class="btn btn-accent btn-block" (click)="generate()" data-testid="generate"
+              [disabled]="!!store.busy() || !reason().trim() || !store.consultationId() || !!store.assistance()?.confirmedDraft">
+        @if (store.busy() === 'generating') { <span class="spin"></span>{{ 'aiAssistant.vet.generating' | translate }} }
+        @else { <app-icon name="sparkles" [size]="16" />{{ (store.assistance() ? 'aiAssistant.vet.generateNew' : 'aiAssistant.vet.generate') | translate }} }
+      </button>
+      @if (store.error(); as error) {
+        <div class="error-banner" role="alert"><app-icon name="alert" [size]="16" />{{ error | translate }}</div>
+      }
+    </article>
+
+    <!-- Derecha: el borrador -->
+    <aside class="card draft-card reveal" style="--i: 3">
+      <div class="card-header">
+        <div class="title">
+          <span class="title-icon"><app-icon name="history" [size]="18" /></span>
+          <div>
+            <h2>{{ 'aiAssistant.vet.draftTitle' | translate }}</h2>
+            <small>{{ 'aiAssistant.vet.draftSubtitle' | translate }}</small>
+          </div>
+        </div>
+        @switch (phase()) {
+          @case ('confirmed') { <span class="chip success"><app-icon name="check-circle" [size]="12" />{{ 'aiAssistant.vet.confirmed' | translate }}</span> }
+          @case ('draft') { <span class="chip warning">{{ 'aiAssistant.vet.pendingReview' | translate }}</span> }
+          @case ('generating') { <span class="chip info"><span class="spin small"></span>{{ 'aiAssistant.vet.generatingShort' | translate }}</span> }
+        }
+      </div>
+
+      @if (store.assistance(); as a) {
+        @if (a.drafts.length > 1) {
+          <div class="tabs" role="tablist">
+            @for (d of a.drafts; track d.id; let i = $index) {
+              <button type="button" role="tab" [class.active]="d.id === store.activeDraft()?.id" (click)="store.showDraft(d.id)"
+                      [attr.aria-selected]="d.id === store.activeDraft()?.id">
+                {{ 'aiAssistant.vet.draftN' | translate: { n: i + 1 } }}
+                @if (d.isConfirmed) { <app-icon name="check" [size]="12" /> }
+                @if (d.isDiscarded) { <app-icon name="x" [size]="12" /> }
+              </button>
+            }
+          </div>
+        }
+      }
+
+      @if (phase() === 'generating') {
+        <div class="soap skeleton-soap">
+          @for (l of ['S', 'O', 'A', 'P']; track l) { <div class="sk"><span class="letter">{{ l }}</span><span class="lines"><i></i><i></i></span></div> }
+        </div>
+      } @else if (store.activeDraft(); as d) {
+        @if (d.warnings.length) {
+          <div class="warnings"><app-icon name="alert" [size]="16" />
+            <ul>@for (w of d.warnings; track w) { <li>{{ w }}</li> }</ul>
+          </div>
+        }
+
+        @if (editing()) {
+          <mat-form-field appearance="outline" class="edit">
+            <mat-label>{{ 'aiAssistant.vet.editLabel' | translate }}</mat-label>
+            <textarea matInput rows="14" maxlength="4000" [ngModel]="editedText()" (ngModelChange)="editedText.set($event)" data-testid="edit-text"></textarea>
+            <mat-hint align="end">{{ editedText().length }} / 4000</mat-hint>
+          </mat-form-field>
+        } @else if (d.decision === Decision.Edited && d.editedText) {
+          <div class="edited"><span class="section-label">{{ 'aiAssistant.vet.editedVersion' | translate }}</span><p>{{ d.editedText }}</p></div>
+        } @else {
+          <div class="soap" [class.discarded]="d.isDiscarded">
+            @for (s of [
+              { l: 'S', k: 'aiAssistant.soap.subjective', t: d.subjective },
+              { l: 'O', k: 'aiAssistant.soap.objective', t: d.objective },
+              { l: 'A', k: 'aiAssistant.soap.assessment', t: d.assessment },
+              { l: 'P', k: 'aiAssistant.soap.plan', t: d.plan }
+            ]; track s.l) {
+              <section class="soap-row">
+                <span class="letter">{{ s.l }}</span>
+                <div><h3>{{ s.k | translate }}</h3><p>{{ s.t }}</p></div>
+              </section>
+            }
+          </div>
+        }
+        <p class="meta"><app-icon name="sparkles" [size]="13" />{{ d.model }} · {{ d.createdAt | localDate: language.locale() }}</p>
+
+        @if (d.isConfirmed) {
+          <div class="confirmed">
+            <app-icon name="check-circle" [size]="20" />
+            <div>
+              <strong>{{ (d.decision === Decision.Edited ? 'aiAssistant.vet.savedEdited' : 'aiAssistant.vet.savedAccepted') | translate }}</strong>
+              <p>{{ 'aiAssistant.vet.reportReady' | translate }}</p>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-navy grow-1" (click)="togglePdf()" [disabled]="store.busy() === 'report'" data-testid="open-pdf">
+              @if (store.busy() === 'report') { <span class="spin"></span> } @else { <app-icon [name]="pdf() ? 'x' : 'eye'" [size]="16" /> }
+              {{ (pdf() ? 'aiAssistant.vet.hidePdf' : 'aiAssistant.vet.openPdf') | translate }}
+            </button>
+            <button type="button" class="btn btn-outline" (click)="downloadPdf()" [disabled]="store.busy() === 'report'">
+              <app-icon name="upload" [size]="16" class="flip" />{{ 'aiAssistant.vet.downloadPdf' | translate }}
+            </button>
+          </div>
+          @if (pdf(); as file) {
+            <div class="pdf-frame">
+              <iframe [src]="file.safe" [title]="'aiAssistant.vet.pdfTitle' | translate" data-testid="pdf-frame"></iframe>
+              <a [href]="file.raw" target="_blank" rel="noopener" class="link-out">
+                <app-icon name="arrow-right" [size]="14" />{{ 'aiAssistant.vet.pdfNewTab' | translate }}
+              </a>
+            </div>
+          }
+        } @else if (d.isDiscarded) {
+          <div class="discarded-note"><app-icon name="x" [size]="16" />{{ 'aiAssistant.vet.discardedNote' | translate }}</div>
+          @if (store.assistance()?.canRegenerate) {
+            <button type="button" class="btn btn-outline btn-block" (click)="store.regenerate()" [disabled]="!!store.busy()" data-testid="regenerate">
+              <app-icon name="refresh" [size]="16" />{{ 'aiAssistant.vet.regenerate' | translate }}
+            </button>
+          }
+        } @else if (editing()) {
+          <div class="btn-row">
+            <button type="button" class="btn btn-ghost" (click)="editing.set(false)">{{ 'common.cancel' | translate }}</button>
+            <button type="button" class="btn btn-navy grow" (click)="saveEdit()" [disabled]="!!store.busy()" data-testid="save-edit">
+              <app-icon name="check" [size]="16" />{{ 'aiAssistant.vet.saveEdit' | translate }}
+            </button>
+          </div>
+        } @else if (confirmDiscard()) {
+          <div class="confirm-box">
+            <span>{{ 'aiAssistant.vet.discardConfirm' | translate }}</span>
+            <div class="btn-row">
+              <button type="button" class="btn btn-ghost btn-sm" (click)="confirmDiscard.set(false)">{{ 'common.cancel' | translate }}</button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="store.decide(Decision.Discarded)" data-testid="discard-yes">
+                {{ 'aiAssistant.vet.discard' | translate }}
+              </button>
+            </div>
+          </div>
+        } @else {
+          <div class="btn-row actions">
+            <button type="button" class="btn btn-navy" (click)="store.decide(Decision.Accepted)" [disabled]="!!store.busy()" data-testid="accept">
+              <app-icon name="check" [size]="16" />{{ 'aiAssistant.vet.accept' | translate }}
+            </button>
+            <button type="button" class="btn btn-outline" (click)="startEdit()" [disabled]="!!store.busy()" data-testid="edit">
+              <app-icon name="history" [size]="16" />{{ 'aiAssistant.vet.edit' | translate }}
+            </button>
+            <button type="button" class="btn btn-outline" (click)="store.regenerate()" [disabled]="!!store.busy()" data-testid="regenerate"
+                    [matTooltip]="'aiAssistant.vet.regenerateHint' | translate">
+              <app-icon name="refresh" [size]="16" />{{ 'aiAssistant.vet.regenerate' | translate }}
+            </button>
+            <button type="button" class="btn btn-ghost danger" (click)="confirmDiscard.set(true)" [disabled]="!!store.busy()" data-testid="discard">
+              <app-icon name="x" [size]="16" />{{ 'aiAssistant.vet.discard' | translate }}
+            </button>
+          </div>
+        }
+      } @else if (store.busy() === 'loading') {
+        <div class="soap skeleton-soap"><div class="sk"><span class="letter">·</span><span class="lines"><i></i></span></div></div>
+      } @else {
+        <div class="waiting">
+          <span class="waiting-icon"><app-icon name="sparkles" [size]="22" /></span>
+          <strong>{{ 'aiAssistant.vet.emptyTitle' | translate }}</strong>
+          <p>{{ 'aiAssistant.vet.emptyText' | translate }}</p>
+        </div>
+      }
+
+      <p class="legal"><app-icon name="shield" [size]="14" />{{ 'aiAssistant.vet.legal' | translate }}</p>
+    </aside>
+  </div>
+</section>

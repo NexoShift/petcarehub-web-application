@@ -76,6 +76,19 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./ai-assistance/ai-assistance.routes').then((m) => m.VET_IMAGING_ROUTES),
       },
+      // AI Assistance (LLM): dueño /ai-explain (chat), vet /ai-assistant (borrador SOAP)
+      {
+        path: 'ai-explain',
+        canActivate: [roleGuard('ROLE_PET_OWNER')],
+        loadChildren: () =>
+          import('./ai-assistance/ai-assistance.routes').then((m) => m.OWNER_AI_EXPLAIN_ROUTES),
+      },
+      {
+        path: 'ai-assistant',
+        canActivate: [roleGuard('ROLE_VETERINARIAN')],
+        loadChildren: () =>
+          import('./ai-assistance/ai-assistance.routes').then((m) => m.VET_CLINICAL_ASSISTANT_ROUTES),
+      },
       { path: '', pathMatch: 'full', redirectTo: 'home' },
       {
         path: 'plan',

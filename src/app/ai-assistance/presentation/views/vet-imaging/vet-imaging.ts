@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Icon } from '../../../../shared/presentation/components/icon/icon';
 import { PetAvatar } from '../../../../shared/presentation/components/pet-avatar/pet-avatar';
@@ -32,7 +33,7 @@ type HistoryFilter = 'ALL' | ImageType;
 @Component({
   selector: 'app-vet-imaging',
   imports: [
-    TranslatePipe, FormsModule,
+    TranslatePipe, FormsModule, RouterLink,
     MatSelectModule, MatFormFieldModule, MatInputModule, MatButtonToggleModule, MatSlideToggleModule, MatTooltipModule,
     Icon, PetAvatar, VisionViewer, FindingsPanel, AnalysisSteps, AnalysisHistory, FindingLabelPipe,
   ],
