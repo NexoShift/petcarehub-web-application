@@ -58,8 +58,10 @@ export interface RecentConsultation {
 }
 
 /** Consulta en curso que puede usar el asistente clínico (null si no hay ninguna). */
+/** Consulta en curso: desde el panel se abre en el Asistente clínico (borrador SOAP). */
 export interface OngoingConsultation {
   id: number;
+  petId: number;
   patient: string;
 }
 
