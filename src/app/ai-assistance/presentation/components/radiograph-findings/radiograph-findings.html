@@ -1,0 +1,58 @@
+@if (normal()) {
+  <div class="normal" data-testid="xray-normal">
+    <app-icon name="check-circle" [size]="18" />
+    <div>
+      <strong>{{ 'aiVision.xray.normalTitle' | translate }}</strong>
+      <p>{{ 'aiVision.xray.normalText' | translate: { value: normalPercentage() } }}</p>
+    </div>
+  </div>
+} @else {
+  <p class="summary" data-testid="xray-summary">
+    {{ (probableCount() ? 'aiVision.xray.summaryProbable' : 'aiVision.xray.summaryPossible')
+       | translate: { probable: probableCount(), total: rows().length } }}
+  </p>
+
+  <div class="table-wrap">
+    <table data-testid="xray-table">
+      <caption class="visually-hidden">{{ 'aiVision.xray.caption' | translate }}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{{ 'aiVision.xray.colFinding' | translate }}</th>
+          <th scope="col" class="num">{{ 'aiVision.xray.colProbability' | translate }}</th>
+          <th scope="col" class="read">{{ 'aiVision.xray.colReading' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (f of rows(); track f.id; let i = $index) {
+          <tr [class.probable]="f.probable" [style.--i]="i">
+            <th scope="row">
+              <span class="name">{{ f.label | findingLabel }}</span>
+              @if (f.lowReliability) {
+                <span class="caution" [title]="'aiVision.xray.lowReliabilityHint' | translate">
+                  <app-icon name="alert" [size]="12" />{{ 'aiVision.xray.lowReliability' | translate }}
+                </span>
+              }
+            </th>
+            <td class="num">
+              <span class="pct">{{ f.confidencePercentage }} %</span>
+              <span class="track" aria-hidden="true"><span [style.width.%]="f.confidencePercentage"></span></span>
+            </td>
+            <td class="read">
+              <span class="pill" [class.strong]="f.probable">
+                {{ (f.probable ? 'aiVision.xray.probable' : 'aiVision.xray.possible') | translate }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<ul class="notes">
+  <li><app-icon name="info" [size]="14" />{{ 'aiVision.xray.multiLabel' | translate }}</li>
+  @if (hasLowReliability()) {
+    <li><app-icon name="alert" [size]="14" />{{ 'aiVision.xray.lowReliabilityHint' | translate }}</li>
+  }
+  <li><app-icon name="crosshair" [size]="14" />{{ 'aiVision.findings.xrayHint' | translate }}</li>
+</ul>

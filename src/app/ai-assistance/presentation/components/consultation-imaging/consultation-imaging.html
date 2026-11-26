@@ -90,7 +90,7 @@
 
         @if (store.current(); as current) {
           @if (current.topFinding; as top) {
-            @if (top.probable) {
+            @if (top.probable && !top.isNormal) {
               <div class="lead">
                 <span class="section-label">{{ 'aiVision.vet.mostLikely' | translate }}</span>
                 <strong>{{ top.label | findingLabel }}</strong>
