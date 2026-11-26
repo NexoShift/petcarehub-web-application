@@ -70,11 +70,11 @@ export const routes: Routes = [
             (m) => m.subscriptionRoutes,
           ),
       },
-      // Enlaces del menú que aún no tienen pantalla
+      // Cualquier dirección que no existe
       {
         path: '**',
         loadComponent: () =>
-          import('./shared/presentation/views/coming-soon/coming-soon').then((m) => m.ComingSoon),
+          import('./shared/presentation/views/not-found/not-found').then((m) => m.NotFound),
       },
     ],
   },

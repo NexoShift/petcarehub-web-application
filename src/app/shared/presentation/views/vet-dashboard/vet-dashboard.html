@@ -149,23 +149,6 @@
           <a class="link center" routerLink="/consultations">{{ 'dashboard.vet.allConsultations' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
         </article>
 
-        <article class="card ai reveal" style="--i: 8">
-          <div class="card-header">
-            <h2><span class="ai-icon"><app-icon name="sparkles" [size]="16" /></span> {{ 'dashboard.vet.aiAssistant' | translate }}</h2>
-            <span class="chip info">{{ 'dashboard.vet.comingSoon' | translate }}</span>
-          </div>
-          @if (d.ongoing; as o) {
-            <p class="ai-text">{{ 'dashboard.vet.aiOngoing' | translate: { pet: o.patient, id: o.id } }}</p>
-          } @else {
-            <p class="ai-text">{{ 'dashboard.vet.aiIdle' | translate }}</p>
-          }
-          <div class="ai-footer">
-            <small>{{ 'dashboard.vet.aiNote' | translate }}</small>
-            @if (d.ongoing; as o) {
-              <a class="link" [routerLink]="['/consultations', o.id]">{{ 'dashboard.vet.openConsultation' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
-            }
-          </div>
-        </article>
       </aside>
     </div>
   } @else if (store.loading()) {

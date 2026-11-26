@@ -133,17 +133,6 @@
           }
         }
         <app-findings-panel [analysis]="current" audience="vet" />
-        <div class="notice">
-          <span class="notice-icon"><app-icon name="sparkles" [size]="16" /></span>
-          <div>
-            <strong>{{ 'aiVision.vet.backgroundTitle' | translate }}</strong>
-            <p>{{ 'aiVision.vet.backgroundText' | translate }}</p>
-          </div>
-        </div>
-        <a class="btn btn-navy btn-block" routerLink="/ai-assistant"
-           [queryParams]="{ petId: current.petId, consultationId: current.consultationId ?? consultation() }">
-          <app-icon name="sparkles" [size]="16" />{{ 'aiVision.vet.openAssistant' | translate }}
-        </a>
       } @else {
         <div class="waiting">
           <span class="waiting-icon"><app-icon [name]="store.processing() ? 'scan' : (imageType() === ImageType.Radiograph ? 'xray' : 'image')" [size]="22" /></span>
