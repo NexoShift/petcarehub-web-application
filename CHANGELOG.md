@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-26
+
+Medical history.
+
+### Added
+- **Medical History** (new bounded context `medical-history`)
+  - Allergies, vaccinations and clinical timeline of each pet, for owners and veterinarians.
+  - Owners report allergies; veterinarians record vaccinations with the next dose date.
+- **Dashboards**
+  - Owner home priority alert: overdue vaccine first, then severe allergy, linking to the pet's history.
+  - Medical history in the menu and in the owner quick actions.
+
 ## [1.2.0] - 2026-11-26
 
 Treatments and prescriptions.
@@ -90,7 +102,8 @@ First stable release, delivered at the end of **Sprint 1**.
 ### Changed
 - Upgraded to Angular 22.2.5, Angular Material and CDK 22.2.7, Vitest 5 and jsdom 31.
 
-[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.2.0...develop
+[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.3.0...develop
+[1.3.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/NexoShift/petcarehub-web-application/releases/tag/v1.0.0
