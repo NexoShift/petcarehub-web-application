@@ -1816,5 +1816,14 @@
       "sessionExpired": "Your session expired. Sign in again.",
       "unexpected": "We could not load the medical history. Try again."
     }
+  },
+  "plan": {
+    "notice": {
+      "noPlan": "You need an active plan to do this.",
+      "notIncluded": "Your current plan does not include this registration. Switch to a plan that includes it.",
+      "limit": "You reached your plan limit. Upgrade your plan to add more.",
+      "credits": "You ran out of AI credits this month. Upgrade your plan or wait for the next period.",
+      "action": "See plans"
+    }
   }
 }
