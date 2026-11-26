@@ -160,20 +160,13 @@
       "newPetHint": "Inscribir historia clínica y vacunas",
       "priorityAlert": "Alerta clínica prioritaria",
       "inProgress": "En curso",
-      "prescription": "Receta {{code}}",
       "startedAt": "Iniciado: {{date}}",
       "treatment": "Tratamiento: {{title}}",
-      "prescribedBy": "Prescrito por el {{vet}}",
+      "prescribedBy": "Indicado por {{vet}} · {{clinic}}",
       "totalDuration": "Duración total:",
       "days": "{{count}} días",
-      "dailyDose": "Dosis diaria",
-      "dosesPerDay": "{{count}} tomas / día",
       "dayOf": "Día {{current}} de {{total}}",
-      "dosesDone": "{{taken}} tomas completadas de {{total}}",
       "percentDone": "{{percent}}% completado",
-      "nextDose": "Próxima toma programada",
-      "viewLog": "Ver bitácora",
-      "registerDose": "Registrar toma",
       "quickTools": "Herramientas y acciones rápidas",
       "clinicalAccess": "Acceso clínico directo",
       "quick": {
@@ -182,7 +175,7 @@
         "historyLink": "Ver expediente",
         "treatmentsTitle": "Tratamientos",
         "treatmentsText": "Recetas activas y archivo de dispensación",
-        "treatmentsLink": "Próximamente",
+        "treatmentsLink": "Ver tratamientos",
         "aiTitle": "Explicar con IA",
         "aiText": "Aclarar diagnósticos y recetas complejas",
         "aiLink": "Consultar asistente",
@@ -192,10 +185,6 @@
         "visualLink": "Iniciar captura",
         "visualBadge": "Visión"
       },
-      "emergencyTitle": "Guardia veterinaria 24h",
-      "emergencyText": "Línea directa para urgencias de tus mascotas. Conexión de triaje prioritario con el equipo de turno.",
-      "emergencyRoute": "Ver ruta de guardia",
-      "emergencyCall": "Llamar a urgencias",
       "upcoming": "Próximos eventos",
       "calendar": "Ver calendario",
       "aiQuota": "Cuota de asistencia IA",
@@ -232,7 +221,15 @@
         "visionHint": "Te quedan {{n}} este periodo."
       },
       "upgrade": "Mejora tu plan",
-      "noPlan": "Sin plan"
+      "noPlan": "Sin plan",
+      "treatmentFor": "Para {{pet}}",
+      "medDuration": "Duración",
+      "dayCount": "Día {{current}}",
+      "noEndDate": "sin fecha de fin",
+      "otherTreatments": "Y {{count}} tratamiento(s) más en curso",
+      "seeTreatments": "Ver tratamientos",
+      "clinicTitle": "{{clinic}}",
+      "clinicText": "Clínica de tu última consulta. Llama antes de ir si es una urgencia."
     },
     "vet": {
       "morning": "Buenos días",
@@ -1382,7 +1379,9 @@
       "diagnosisConflict": "Ya existe un diagnóstico principal vigente o este diagnóstico ya fue reevaluado. Recarga la consulta.",
       "notAllowed": "Solo el veterinario a cargo de la consulta puede hacer esto.",
       "sessionExpired": "Tu sesión expiró. Vuelve a iniciar sesión.",
-      "unexpected": "Ocurrió un error inesperado. Inténtalo otra vez."
+      "unexpected": "Ocurrió un error inesperado. Inténtalo otra vez.",
+      "invalidTreatmentDates": "La fecha de fin no puede ser anterior a la de inicio.",
+      "invalidPrescription": "La receta necesita de 1 a 15 medicamentos con nombre, dosis, frecuencia y duración."
     },
     "phases": {
       "nav": "Fases de la consulta",
@@ -1653,7 +1652,63 @@
       "respiratoryRate": "Frecuencia respiratoria",
       "primary": "principal",
       "noExams": "En esta consulta no se pidieron exámenes.",
-      "seeExams": "Ver resultados y archivos"
+      "seeExams": "Ver resultados y archivos",
+      "treatmentPlan": "Tratamiento y receta"
+    },
+    "treatmentStatus": {
+      "ACTIVE": "Activo",
+      "COMPLETED": "Terminado",
+      "SUSPENDED": "Suspendido"
+    },
+    "treatments": {
+      "title": "Tratamiento",
+      "subtitle": "Indicaciones para el tutor",
+      "empty": "Todavía no hay tratamientos.",
+      "registerTitle": "Registrar tratamiento",
+      "description": "Tratamiento",
+      "descriptionRequired": "Escribe el tratamiento.",
+      "instruction": "Indicaciones",
+      "instructionHint": "Cómo aplicarlo, cuidados y señales de alarma.",
+      "instructionRequired": "Escribe las indicaciones.",
+      "startDate": "Inicio",
+      "endDate": "Fin",
+      "endDateHint": "Opcional",
+      "submit": "Registrar tratamiento",
+      "registered": "Tratamiento registrado",
+      "range": "Del {{start}} al {{end}}",
+      "from": "Desde el {{start}}"
+    },
+    "prescriptions": {
+      "title": "Receta",
+      "subtitle": "Medicamentos indicados",
+      "empty": "Todavía no hay recetas.",
+      "registerTitle": "Emitir receta",
+      "medication": "Medicamento {{n}}",
+      "name": "Medicamento",
+      "dosage": "Dosis",
+      "frequency": "Frecuencia",
+      "duration": "Duración",
+      "indication": "Indicación (opcional)",
+      "dosageExample": "Ej.: 250 mg",
+      "frequencyExample": "Ej.: cada 12 h",
+      "durationExample": "Ej.: 7 días",
+      "remove": "Quitar",
+      "add": "Agregar medicamento (máx. {{max}})",
+      "generalInstruction": "Indicación general",
+      "incomplete": "Completa nombre, dosis, frecuencia y duración de cada medicamento.",
+      "submit": "Emitir receta",
+      "registered": "Receta emitida",
+      "issued": "Receta del {{date}}",
+      "count": "{{n}} medicamento(s)"
+    },
+    "ownerTreatments": {
+      "title": "Tratamientos",
+      "subtitle": "Lo que el veterinario indicó a tus mascotas",
+      "current": "En curso",
+      "inProgress": "En curso",
+      "noCurrent": "No hay tratamientos en curso.",
+      "past": "Anteriores",
+      "fromConsultation": "Consulta del {{date}}"
     }
   },
   "notFound": {
