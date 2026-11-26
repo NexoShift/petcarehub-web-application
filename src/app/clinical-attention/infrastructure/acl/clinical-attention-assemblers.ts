@@ -13,12 +13,17 @@ import { ClinicalConsultation } from '../../domain/model/clinical-consultation.e
 import { ClinicalFinding } from '../../domain/model/clinical-finding.entity';
 import { Diagnosis } from '../../domain/model/diagnosis.entity';
 import { PhysiologicalAssessment } from '../../domain/model/physiological-assessment.entity';
+import { Prescription } from '../../domain/model/prescription.entity';
+import { Treatment } from '../../domain/model/treatment.entity';
+import { TreatmentStatus } from '../../domain/enums/treatment-status.enum';
 import {
   AnamnesisResponse,
   ClinicalConsultationResponse,
   ClinicalFindingResponse,
   DiagnosisResponse,
   PhysiologicalAssessmentResponse,
+  PrescriptionResponse,
+  TreatmentResponse,
 } from './clinical-attention-responses';
 
 const toDate = (value: string | null): Date | null => (value ? new Date(value) : null);
@@ -79,6 +84,29 @@ export function toDiagnosis(response: DiagnosisResponse): Diagnosis {
   });
 }
 
+export function toTreatment(response: TreatmentResponse): Treatment {
+  return new Treatment(
+    response.id,
+    response.description,
+    response.instruction,
+    response.startDate,
+    response.endDate ?? null,
+    response.status as TreatmentStatus,
+    response.prescribedByVeterinarianId,
+    new Date(response.createdAt),
+  );
+}
+
+export function toPrescription(response: PrescriptionResponse): Prescription {
+  return new Prescription(
+    response.id,
+    new Date(response.issuedAt),
+    response.generalInstruction ?? null,
+    (response.medications ?? []).map((m) => ({ ...m, indication: m.indication ?? null })),
+    response.prescribedByVeterinarianId,
+  );
+}
+
 export function toClinicalConsultation(
   response: ClinicalConsultationResponse,
 ): ClinicalConsultation {
@@ -100,6 +128,8 @@ export function toClinicalConsultation(
     ),
     findings: (response.findings ?? []).map(toClinicalFinding),
     diagnoses: (response.diagnoses ?? []).map(toDiagnosis),
+    treatments: (response.treatments ?? []).map(toTreatment),
+    prescriptions: (response.prescriptions ?? []).map(toPrescription),
     createdAt: new Date(response.createdAt),
     updatedAt: new Date(response.updatedAt),
   });

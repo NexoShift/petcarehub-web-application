@@ -11,6 +11,8 @@ import { ReevaluateDiagnosisCommand } from '../domain/model/reevaluate-diagnosis
 import { RegisterAnamnesisCommand } from '../domain/model/register-anamnesis.command';
 import { RegisterDiagnosisCommand } from '../domain/model/register-diagnosis.command';
 import { RegisterPhysiologicalAssessmentCommand } from '../domain/model/register-physiological-assessment.command';
+import { RegisterPrescriptionCommand } from '../domain/model/register-prescription.command';
+import { RegisterTreatmentCommand } from '../domain/model/register-treatment.command';
 import { CLINICAL_ATTENTION_REPOSITORY } from '../infrastructure/repositories/clinical-attention.token';
 
 type Status = 'idle' | 'loading' | 'saving' | 'loaded' | 'error';
@@ -86,6 +88,14 @@ export class ClinicalAttentionStore {
 
   reevaluateDiagnosis(command: ReevaluateDiagnosisCommand): Promise<boolean> {
     return this.save(() => this.repository.reevaluateDiagnosis(command));
+  }
+
+  registerTreatment(command: RegisterTreatmentCommand): Promise<boolean> {
+    return this.save(() => this.repository.registerTreatment(command));
+  }
+
+  registerPrescription(command: RegisterPrescriptionCommand): Promise<boolean> {
+    return this.save(() => this.repository.registerPrescription(command));
   }
 
   complete(consultationId: number): Promise<boolean> {

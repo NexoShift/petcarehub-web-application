@@ -45,6 +45,34 @@ export interface DiagnosisResponse {
   diagnosedAt: string;
 }
 
+export interface TreatmentResponse {
+  id: number;
+  description: string;
+  instruction: string;
+  startDate: string;
+  endDate: string | null;
+  status: string;
+  prescribedByVeterinarianId: number;
+  createdAt: string;
+}
+
+export interface MedicationResponse {
+  id: number;
+  name: string;
+  dosage: string;
+  frequency: string;
+  duration: string;
+  indication: string | null;
+}
+
+export interface PrescriptionResponse {
+  id: number;
+  issuedAt: string;
+  generalInstruction: string | null;
+  medications: MedicationResponse[] | null;
+  prescribedByVeterinarianId: number;
+}
+
 export interface ClinicalConsultationResponse {
   id: number;
   petId: number;
@@ -61,6 +89,8 @@ export interface ClinicalConsultationResponse {
   physiologicalAssessments: PhysiologicalAssessmentResponse[] | null;
   findings: ClinicalFindingResponse[] | null;
   diagnoses: DiagnosisResponse[] | null;
+  treatments?: TreatmentResponse[] | null;
+  prescriptions?: PrescriptionResponse[] | null;
   createdAt: string;
   updatedAt: string;
 }
