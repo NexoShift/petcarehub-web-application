@@ -1,0 +1,185 @@
+<div class="plan-grid">
+  <!-- Tratamientos -->
+  <mat-card id="treatments-card" appearance="outlined">
+    <mat-card-header>
+      <span mat-card-avatar class="card-icon"><app-icon name="activity" [size]="20" /></span>
+      <mat-card-title>{{ 'clinicalAttention.treatments.title' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'clinicalAttention.treatments.subtitle' | translate }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (consultation().treatments.length === 0) {
+        <p id="no-treatments" class="empty">{{ 'clinicalAttention.treatments.empty' | translate }}</p>
+      } @else {
+        <ul id="treatment-list" class="records">
+          @for (t of consultation().treatments; track t.id) {
+            <li class="record" [id]="'treatment-' + t.id">
+              <div class="record-header">
+                <strong>{{ t.description }}</strong>
+                <span class="tag" [class.strong]="t.isCurrentOn(today)">
+                  {{ 'clinicalAttention.treatmentStatus.' + t.status | translate }}
+                </span>
+              </div>
+              <p>{{ t.instruction }}</p>
+              <p class="meta">
+                <app-icon name="calendar" [size]="13" />
+                @if (t.endDate) {
+                  {{ 'clinicalAttention.treatments.range' | translate: { start: (t.startDate | date: 'dd/MM/yyyy'), end: (t.endDate | date: 'dd/MM/yyyy') } }}
+                } @else {
+                  {{ 'clinicalAttention.treatments.from' | translate: { start: (t.startDate | date: 'dd/MM/yyyy') } }}
+                }
+              </p>
+            </li>
+          }
+        </ul>
+      }
+
+      @if (canEdit()) {
+        <form id="treatment-form" class="inline-form" [formGroup]="treatmentForm" (ngSubmit)="submitTreatment()">
+          <h3 class="section-label">{{ 'clinicalAttention.treatments.registerTitle' | translate }}</h3>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'clinicalAttention.treatments.description' | translate }}</mat-label>
+            <input id="treatment-description" matInput formControlName="description" [maxlength]="limits.treatmentDescription" />
+            @if (treatmentForm.controls.description.invalid) {
+              <mat-error>{{ 'clinicalAttention.treatments.descriptionRequired' | translate }}</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'clinicalAttention.treatments.instruction' | translate }}</mat-label>
+            <textarea id="treatment-instruction" matInput rows="3" formControlName="instruction" [maxlength]="limits.treatmentInstruction"></textarea>
+            <mat-hint>{{ 'clinicalAttention.treatments.instructionHint' | translate }}</mat-hint>
+            @if (treatmentForm.controls.instruction.invalid) {
+              <mat-error>{{ 'clinicalAttention.treatments.instructionRequired' | translate }}</mat-error>
+            }
+          </mat-form-field>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'clinicalAttention.treatments.startDate' | translate }}</mat-label>
+              <input id="treatment-start" matInput type="date" formControlName="startDate" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'clinicalAttention.treatments.endDate' | translate }}</mat-label>
+              <input id="treatment-end" matInput type="date" formControlName="endDate" [min]="treatmentForm.controls.startDate.value" />
+              <mat-hint>{{ 'clinicalAttention.treatments.endDateHint' | translate }}</mat-hint>
+            </mat-form-field>
+          </div>
+          @if (endBeforeStart) {
+            <p class="error-message" role="alert">{{ 'clinicalAttention.errors.invalidTreatmentDates' | translate }}</p>
+          }
+          <div class="actions">
+            <button id="treatment-submit" mat-flat-button type="submit" [disabled]="saving()">
+              {{ 'clinicalAttention.treatments.submit' | translate }}
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Recetas -->
+  <mat-card id="prescriptions-card" appearance="outlined">
+    <mat-card-header>
+      <span mat-card-avatar class="card-icon"><app-icon name="pill" [size]="20" /></span>
+      <mat-card-title>{{ 'clinicalAttention.prescriptions.title' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'clinicalAttention.prescriptions.subtitle' | translate }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (consultation().prescriptions.length === 0) {
+        <p id="no-prescriptions" class="empty">{{ 'clinicalAttention.prescriptions.empty' | translate }}</p>
+      } @else {
+        @for (p of consultation().prescriptions; track p.id) {
+          <article class="prescription" [id]="'prescription-' + p.id">
+            <div class="record-header">
+              <strong>{{ 'clinicalAttention.prescriptions.issued' | translate: { date: (p.issuedAt | date: 'dd/MM/yyyy HH:mm') } }}</strong>
+              <span class="tag">{{ 'clinicalAttention.prescriptions.count' | translate: { n: p.medications.length } }}</span>
+            </div>
+            <div class="table-wrap">
+              <table class="meds">
+                <thead>
+                  <tr>
+                    <th scope="col">{{ 'clinicalAttention.prescriptions.name' | translate }}</th>
+                    <th scope="col">{{ 'clinicalAttention.prescriptions.dosage' | translate }}</th>
+                    <th scope="col">{{ 'clinicalAttention.prescriptions.frequency' | translate }}</th>
+                    <th scope="col">{{ 'clinicalAttention.prescriptions.duration' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (m of p.medications; track m.id) {
+                    <tr>
+                      <th scope="row">
+                        {{ m.name }}
+                        @if (m.indication) { <small>{{ m.indication }}</small> }
+                      </th>
+                      <td>{{ m.dosage }}</td>
+                      <td>{{ m.frequency }}</td>
+                      <td>{{ m.duration }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            @if (p.generalInstruction) {
+              <p class="general"><strong>{{ 'clinicalAttention.prescriptions.generalInstruction' | translate }}:</strong> {{ p.generalInstruction }}</p>
+            }
+          </article>
+        }
+      }
+
+      @if (canEdit()) {
+        <form id="prescription-form" class="inline-form" [formGroup]="prescriptionForm" (ngSubmit)="submitPrescription()">
+          <h3 class="section-label">{{ 'clinicalAttention.prescriptions.registerTitle' | translate }}</h3>
+          <div formArrayName="medications" class="med-rows">
+            @for (row of medications.controls; track $index; let i = $index) {
+              <fieldset class="med-row" [formGroupName]="i">
+                <legend>{{ 'clinicalAttention.prescriptions.medication' | translate: { n: i + 1 } }}</legend>
+                <mat-form-field appearance="outline" class="name">
+                  <mat-label>{{ 'clinicalAttention.prescriptions.name' | translate }}</mat-label>
+                  <input [id]="'med-name-' + i" matInput formControlName="name" [maxlength]="limits.medicationName" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'clinicalAttention.prescriptions.dosage' | translate }}</mat-label>
+                  <input [id]="'med-dosage-' + i" matInput formControlName="dosage" [maxlength]="limits.medicationDosage"
+                         [placeholder]="'clinicalAttention.prescriptions.dosageExample' | translate" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'clinicalAttention.prescriptions.frequency' | translate }}</mat-label>
+                  <input [id]="'med-frequency-' + i" matInput formControlName="frequency" [maxlength]="limits.medicationFrequency"
+                         [placeholder]="'clinicalAttention.prescriptions.frequencyExample' | translate" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'clinicalAttention.prescriptions.duration' | translate }}</mat-label>
+                  <input [id]="'med-duration-' + i" matInput formControlName="duration" [maxlength]="limits.medicationDuration"
+                         [placeholder]="'clinicalAttention.prescriptions.durationExample' | translate" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="name">
+                  <mat-label>{{ 'clinicalAttention.prescriptions.indication' | translate }}</mat-label>
+                  <input [id]="'med-indication-' + i" matInput formControlName="indication" [maxlength]="limits.medicationIndication" />
+                </mat-form-field>
+                @if (medications.length > 1) {
+                  <button mat-button type="button" class="remove-row" (click)="removeMedication(i)">
+                    <app-icon name="x" [size]="14" />{{ 'clinicalAttention.prescriptions.remove' | translate }}
+                  </button>
+                }
+              </fieldset>
+            }
+          </div>
+          <button id="add-medication" mat-stroked-button type="button" (click)="addMedication()"
+                  [disabled]="medications.length >= limits.maxMedications">
+            <app-icon name="plus" [size]="14" />{{ 'clinicalAttention.prescriptions.add' | translate: { max: limits.maxMedications } }}
+          </button>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'clinicalAttention.prescriptions.generalInstruction' | translate }}</mat-label>
+            <textarea id="prescription-general" matInput rows="2" formControlName="generalInstruction" [maxlength]="limits.prescriptionInstruction"></textarea>
+          </mat-form-field>
+          @if (prescriptionForm.touched && prescriptionForm.invalid) {
+            <p class="error-message" role="alert">{{ 'clinicalAttention.prescriptions.incomplete' | translate }}</p>
+          }
+          <div class="actions">
+            <button id="prescription-submit" mat-flat-button type="submit" [disabled]="saving()">
+              {{ 'clinicalAttention.prescriptions.submit' | translate }}
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

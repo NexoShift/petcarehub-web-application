@@ -12,6 +12,8 @@ import { ReevaluateDiagnosisCommand } from '../../domain/model/reevaluate-diagno
 import { RegisterAnamnesisCommand } from '../../domain/model/register-anamnesis.command';
 import { RegisterDiagnosisCommand } from '../../domain/model/register-diagnosis.command';
 import { RegisterPhysiologicalAssessmentCommand } from '../../domain/model/register-physiological-assessment.command';
+import { RegisterPrescriptionCommand } from '../../domain/model/register-prescription.command';
+import { RegisterTreatmentCommand } from '../../domain/model/register-treatment.command';
 import { ClinicalAttentionRepository } from '../../domain/repositories/clinical-attention.repository';
 import {
   ErrorContext,
@@ -128,6 +130,28 @@ export class HttpClinicalAttentionRepository implements ClinicalAttentionReposit
     return this.read(this.http.post<ClinicalConsultationResponse>(url, body), {
       conflict: ClinicalAttentionErrorCode.DiagnosisConflict,
     });
+  }
+
+  registerTreatment(command: RegisterTreatmentCommand): Promise<ClinicalConsultation> {
+    const body = {
+      description: command.description,
+      instruction: command.instruction,
+      startDate: command.startDate,
+      endDate: command.endDate,
+    };
+    return this.read(
+      this.http.post<ClinicalConsultationResponse>(this.url(command.consultationId, 'treatments'), body),
+    );
+  }
+
+  registerPrescription(command: RegisterPrescriptionCommand): Promise<ClinicalConsultation> {
+    const body = {
+      generalInstruction: command.generalInstruction,
+      medications: command.medications,
+    };
+    return this.read(
+      this.http.post<ClinicalConsultationResponse>(this.url(command.consultationId, 'prescriptions'), body),
+    );
   }
 
   complete(consultationId: number): Promise<ClinicalConsultation> {

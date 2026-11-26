@@ -214,6 +214,12 @@
           </div>
         }
         @case ('completion') {
+          <app-treatment-plan-panel
+            [consultation]="consultation"
+            [saving]="store.isSaving()"
+            (treatmentSubmitted)="registerTreatment(consultation, $event)"
+            (prescriptionSubmitted)="registerPrescription(consultation, $event)"
+          />
           <app-completion-panel
             [consultation]="consultation"
             [saving]="store.isSaving()"
@@ -293,6 +299,9 @@
         <app-findings-panel [consultation]="consultation" />
       </div>
       <app-diagnosis-panel [consultation]="consultation" />
+      @if (consultation.hasTreatmentPlan) {
+        <app-treatment-plan-panel [consultation]="consultation" [editable]="false" />
+      }
       <app-consultation-imaging
         [petId]="consultation.petId"
         [consultationId]="consultation.id"

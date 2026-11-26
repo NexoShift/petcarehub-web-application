@@ -47,3 +47,13 @@ export const OWNER_CONSULTATIONS_ROUTES: Routes = [
       ),
   },
 ];
+
+/** Dueño: tratamientos y recetas de sus mascotas (menú "Tratamientos"). */
+export const OWNER_TREATMENTS_ROUTES: Routes = [
+  {
+    path: '',
+    title: 'Tratamientos',
+    loadComponent: () =>
+      import('./presentation/views/owner-treatments/owner-treatments').then((m) => m.OwnerTreatments),
+  },
+];

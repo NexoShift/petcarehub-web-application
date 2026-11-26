@@ -70,6 +70,11 @@
   gap: 20px;
 }
 
+/* Sin esto, en móvil la tarjeta se estira al ancho de su contenido y se sale de la pantalla */
+.layout > * {
+  min-width: 0;
+}
+
 .card {
   border: 1px solid #e1e8f2;
   border-radius: 17px;
@@ -377,7 +382,7 @@
 
 @media (max-width: 900px) {
   .layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .patients {

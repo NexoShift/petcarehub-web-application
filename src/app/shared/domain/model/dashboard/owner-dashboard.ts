@@ -2,8 +2,8 @@
  * Modelo de lectura del panel del dueño de mascota.
  * Vive en shared porque no es un bounded context: junta datos que ya existen en otros contextos
  * (Profiles: mascotas; Clinical Attention: consultas; Clinical Exams: exámenes y resultados).
- * Lo que todavía no tiene backend (tratamientos, alertas de la historia clínica, cuota de IA)
- * llega en null y la vista muestra "Próximamente".
+ * Lo que no aplica (sin tratamiento vigente, sin alertas, sin plan) llega en null y esa
+ * tarjeta no se muestra.
  */
 
 /** Etiqueta de estado de una mascota. label es una clave de i18n. */
@@ -32,24 +32,33 @@ export interface ClinicalAlert {
   badge: string;
 }
 
-export interface Medication {
+/** Un medicamento de la última receta de la consulta (Clinical Attention). */
+export interface TreatmentMedication {
   name: string;
-  posology: string;
-  note: string;
-  dosesPerDay: number;
+  dosage: string;
+  frequency: string;
+  duration: string;
 }
 
+/**
+ * Tratamiento vigente hoy de una de las mascotas (el que empezó más recientemente).
+ * Sale de las consultas: indicación del vet + medicamentos de la receta de esa consulta.
+ */
 export interface ActiveTreatment {
-  prescriptionCode: string;
-  route: string;
+  petId: number;
+  pet: string;
+  consultationId: number;
   title: string;
+  instruction: string;
+  startDate: string; // yyyy-MM-dd
+  endDate: string | null; // null = sin fecha de fin
+  currentDay: number; // día del tratamiento, desde 1
+  totalDays: number | null; // null si no tiene fecha de fin
   prescribedBy: string;
-  startedAt: string;
-  totalDays: number;
-  currentDay: number;
-  dosesTaken: number;
-  medication: Medication;
-  nextDose: string;
+  clinic: string;
+  generalInstruction: string | null;
+  medications: TreatmentMedication[];
+  otherActive: number; // otros tratamientos vigentes de sus mascotas
 }
 
 /** Algo pendiente de una mascota: una consulta por iniciar o en curso, o un examen sin resultado. */
@@ -98,17 +107,20 @@ export interface AiQuota {
   loadedAt: Date;
 }
 
+/** Veterinario de la última consulta y datos de contacto de su clínica (Profiles). */
 export interface AssignedVet {
   name: string;
   license: string;
   clinic: string;
+  phone: string | null;
+  address: string | null;
 }
 
 export interface OwnerDashboard {
   ownerFirstName: string;
   pets: PetSummary[];
-  alert: ClinicalAlert | null; // Historia clínica: aún no existe
-  treatment: ActiveTreatment | null; // Tratamientos: aún no existe
+  alert: ClinicalAlert | null; // null si no hay nada urgente
+  treatment: ActiveTreatment | null; // null si ninguna mascota tiene un tratamiento vigente
   events: UpcomingEvent[];
   results: ReadyResult[];
   aiQuota: AiQuota | null; // null si la cuenta no tiene suscripción activa

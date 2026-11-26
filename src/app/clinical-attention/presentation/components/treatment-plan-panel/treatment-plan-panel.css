@@ -1,0 +1,23 @@
+:host { display: block; }
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 16px; align-items: start; }
+.plan-grid > * { min-width: 0; }
+.record .meta { display: flex; align-items: center; gap: 6px; }
+
+.prescription { display: flex; flex-direction: column; gap: 8px; padding: 12px 0; border-bottom: 1px solid #EEF1F5; }
+.prescription:last-of-type { border-bottom: 0; }
+.table-wrap { overflow-x: auto; }
+.meds { width: 100%; border-collapse: collapse; font-size: 13px; }
+.meds th, .meds td { padding: 8px 10px; text-align: left; vertical-align: top; border-top: 1px solid #EEF1F5; }
+.meds thead th { border-top: 0; background: #F7F9FB; color: #475467; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
+.meds tbody th { font-weight: 600; color: var(--color-text); }
+.meds tbody th small { display: block; margin-top: 2px; color: var(--color-text-muted); font-weight: 400; }
+.general { margin: 0; font-size: 13px; line-height: 1.5; }
+
+.med-rows { display: flex; flex-direction: column; gap: 12px; }
+.med-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 12px; margin: 0; padding: 12px 12px 0; border: 1px solid #EEF1F5; border-radius: 12px; }
+.med-row legend { padding: 0 6px; color: #475467; font-size: 12px; font-weight: 600; }
+.med-row .name { grid-column: 1 / -1; }
+.med-row mat-form-field { width: 100%; }
+.remove-row { grid-column: 1 / -1; justify-self: end; margin-bottom: 8px; }
+#add-medication { align-self: flex-start; margin: 12px 0; }
+@media (max-width: 560px) { .med-row { grid-template-columns: 1fr; } }

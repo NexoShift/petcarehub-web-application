@@ -3,6 +3,8 @@ import { firstValueFrom } from 'rxjs';
 import { IamStore } from '../../iam';
 import { ConsultationStatus } from '../../clinical-attention/domain/enums/consultation-status.enum';
 import { ClinicalConsultation } from '../../clinical-attention/domain/model/clinical-consultation.entity';
+import { Prescription } from '../../clinical-attention/domain/model/prescription.entity';
+import { Treatment } from '../../clinical-attention/domain/model/treatment.entity';
 import { CLINICAL_ATTENTION_REPOSITORY } from '../../clinical-attention/infrastructure/repositories/clinical-attention.token';
 import { ExamStatus } from '../../clinical-exams/domain/enums/exam-status.enum';
 import { ClinicalExam } from '../../clinical-exams/domain/model/clinical-exam.entity';
@@ -13,6 +15,7 @@ import { ProfileApi } from '../../profiles/infrastructure/profile-api';
 import { AiCredit } from '../../subscriptions/domain/model/ai-credit.entity';
 import { SubscriptionApi } from '../../subscriptions/infrastructure/subscription-api';
 import {
+  ActiveTreatment,
   AiQuota,
   AssignedVet,
   OwnerDashboard,
@@ -28,6 +31,7 @@ import {
   TodayPatient,
   VetDashboard,
 } from '../domain/model/dashboard/vet-dashboard';
+import { daysBetween, todayIso } from '../domain/services/progress';
 
 /**
  * Arma los paneles de inicio con datos reales:
@@ -250,11 +254,13 @@ export class DashboardApi {
       .filter((c) => c.status !== ConsultationStatus.Cancelled)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0];
 
+    const treatment = await this.activeTreatmentOf(data, todayIso());
+
     return {
       ownerFirstName: owner.firstName,
       pets: data.map(({ pet, consultations, exams }) => toPetSummary(pet, consultations, exams)),
       alert: null,
-      treatment: null,
+      treatment,
       events: events.slice(0, 4),
       results: results.slice(0, 3),
       aiQuota: await quota,
@@ -276,6 +282,25 @@ export class DashboardApi {
     }
   }
 
+  /** Completa el tratamiento vigente con el nombre del vet que lo indicó y de la clínica. */
+  private async activeTreatmentOf(
+    data: { pet: Pet; consultations: ClinicalConsultation[] }[],
+    today: string,
+  ): Promise<ActiveTreatment | null> {
+    const picked = pickActiveTreatment(data, today);
+    if (!picked) return null;
+    const { pet, consultation, treatment, prescription, others } = picked;
+    const [vet, clinic] = await Promise.all([
+      safe(firstValueFrom(this.profiles.getVeterinarianById(treatment.prescribedByVeterinarianId)), null),
+      safe(firstValueFrom(this.profiles.getClinicById(consultation.clinicId)), null),
+    ]);
+    return toActiveTreatment(pet, consultation, treatment, prescription, today, {
+      vet: vet ? `${vet.firstName} ${vet.lastName}` : '',
+      clinic: clinic?.name ?? '',
+      others,
+    });
+  }
+
   private async vetOf(consultation: ClinicalConsultation): Promise<AssignedVet | null> {
     const [vet, clinic] = await Promise.all([
       safe(firstValueFrom(this.profiles.getVeterinarianById(consultation.veterinarianId)), null),
@@ -286,6 +311,8 @@ export class DashboardApi {
       name: `${vet.firstName} ${vet.lastName}`,
       license: vet.licenseNumber ?? '',
       clinic: clinic?.name ?? '',
+      phone: clinic?.phoneNumber ?? null,
+      address: clinic?.address ?? null,
     };
   }
 }
@@ -293,6 +320,72 @@ export class DashboardApi {
 // =================================================================
 // Funciones de apoyo
 // =================================================================
+
+/** Lo que hace falta para mostrar un tratamiento vigente. */
+export interface PickedTreatment {
+  pet: Pet;
+  consultation: ClinicalConsultation;
+  treatment: Treatment;
+  prescription: Prescription | null;
+  others: number;
+}
+
+/**
+ * Elige el tratamiento vigente hoy que empezó más recientemente entre todas las mascotas.
+ * Junto a él va la última receta de la misma consulta (sus medicamentos).
+ */
+export function pickActiveTreatment(
+  data: { pet: Pet; consultations: ClinicalConsultation[] }[],
+  today: string,
+): PickedTreatment | null {
+  const current = data.flatMap(({ pet, consultations }) =>
+    consultations.flatMap((consultation) =>
+      consultation.treatments
+        .filter((treatment) => treatment.isCurrentOn(today))
+        .map((treatment) => ({ pet, consultation, treatment })),
+    ),
+  );
+  if (current.length === 0) return null;
+  current.sort((a, b) => b.treatment.startDate.localeCompare(a.treatment.startDate));
+  const { pet, consultation, treatment } = current[0];
+  const prescription =
+    [...consultation.prescriptions].sort((a, b) => b.issuedAt.getTime() - a.issuedAt.getTime())[0] ?? null;
+  return { pet, consultation, treatment, prescription, others: current.length - 1 };
+}
+
+/** Pasa el tratamiento elegido al modelo de la tarjeta del panel. */
+export function toActiveTreatment(
+  pet: Pet,
+  consultation: ClinicalConsultation,
+  treatment: Treatment,
+  prescription: Prescription | null,
+  today: string,
+  names: { vet: string; clinic: string; others: number },
+): ActiveTreatment {
+  const totalDays = treatment.endDate ? daysBetween(treatment.startDate, treatment.endDate) + 1 : null;
+  const elapsed = daysBetween(treatment.startDate, today) + 1;
+  return {
+    petId: pet.id,
+    pet: pet.name,
+    consultationId: consultation.id,
+    title: treatment.description,
+    instruction: treatment.instruction,
+    startDate: treatment.startDate,
+    endDate: treatment.endDate,
+    currentDay: totalDays ? Math.min(elapsed, totalDays) : elapsed,
+    totalDays,
+    prescribedBy: names.vet,
+    clinic: names.clinic,
+    generalInstruction: prescription?.generalInstruction ?? null,
+    medications: (prescription?.medications ?? []).map((m) => ({
+      name: m.name,
+      dosage: m.dosage,
+      frequency: m.frequency,
+      duration: m.duration,
+    })),
+    otherActive: names.others,
+  };
+}
 
 /** "1 consulta" o "2 consultas". */
 function unitOf(count: number): string {

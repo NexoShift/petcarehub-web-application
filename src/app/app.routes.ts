@@ -37,6 +37,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'treatments',
+        canActivate: [roleGuard('ROLE_PET_OWNER')],
+        loadChildren: () =>
+          import('./clinical-attention/clinical-attention.routes').then(
+            (m) => m.OWNER_TREATMENTS_ROUTES,
+          ),
+      },
+      {
         path: 'exams',
         canActivate: [roleGuard('ROLE_PET_OWNER')],
         loadChildren: () =>
