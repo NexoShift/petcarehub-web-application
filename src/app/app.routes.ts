@@ -70,6 +70,8 @@ export const routes: Routes = [
             (m) => m.subscriptionRoutes,
           ),
       },
+      // Stripe Checkout vuelve a /subscription?checkout=success|cancelled (STRIPE_CHECKOUT_*_URL del backend)
+      { path: 'subscription', redirectTo: 'plan' },
       // Cualquier dirección que no existe
       {
         path: '**',
