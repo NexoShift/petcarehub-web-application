@@ -6,6 +6,8 @@ import { ReevaluateDiagnosisCommand } from '../model/reevaluate-diagnosis.comman
 import { RegisterAnamnesisCommand } from '../model/register-anamnesis.command';
 import { RegisterDiagnosisCommand } from '../model/register-diagnosis.command';
 import { RegisterPhysiologicalAssessmentCommand } from '../model/register-physiological-assessment.command';
+import { RegisterPrescriptionCommand } from '../model/register-prescription.command';
+import { RegisterTreatmentCommand } from '../model/register-treatment.command';
 
 /** Every operation answers with the whole consultation, as the API does. */
 export interface ClinicalAttentionRepository {
@@ -20,6 +22,8 @@ export interface ClinicalAttentionRepository {
   addClinicalFinding(command: AddClinicalFindingCommand): Promise<ClinicalConsultation>;
   registerDiagnosis(command: RegisterDiagnosisCommand): Promise<ClinicalConsultation>;
   reevaluateDiagnosis(command: ReevaluateDiagnosisCommand): Promise<ClinicalConsultation>;
+  registerTreatment(command: RegisterTreatmentCommand): Promise<ClinicalConsultation>;
+  registerPrescription(command: RegisterPrescriptionCommand): Promise<ClinicalConsultation>;
   complete(consultationId: number): Promise<ClinicalConsultation>;
   cancel(command: CancelClinicalConsultationCommand): Promise<ClinicalConsultation>;
 }
