@@ -9,6 +9,7 @@ import { SignInRequest } from './resources/sign-in.request';
 import { SignUpRequest } from './resources/sign-up.request';
 import { UserResponse } from './resources/user.response';
 import { CreateMemberUserRequest } from './resources/create-member-user.request';
+import type { GoogleSignInRequest } from './resources/google-sign-in.request';
 import { ChangePasswordRequest } from './resources/change-password.request';
 import { Observable } from 'rxjs';
 
@@ -21,6 +22,15 @@ export class IamApi {
     return this.http.post<AuthenticatedUserResponse>(
       `${this.baseUrl}/authentication/sign-in`,
       body,
+    );
+  }
+
+  /** 200 si el correo ya tenía cuenta; 201 si la crea (por eso se observa la respuesta). */
+  googleSignIn(body: GoogleSignInRequest) {
+    return this.http.post<AuthenticatedUserResponse>(
+      `${this.baseUrl}/authentication/google-sign-in`,
+      body,
+      { observe: 'response' },
     );
   }
 
