@@ -130,7 +130,6 @@
         <section class="reveal" style="--i: 4">
           <div class="section-title">
             <h2>{{ 'dashboard.owner.quickTools' | translate }}</h2>
-            <a class="link" routerLink="/medical-history">{{ 'dashboard.owner.clinicalAccess' | translate }}</a>
           </div>
           <div class="quick-grid">
             @for (action of quickActions; track action.title) {
@@ -210,8 +209,6 @@
             <h2><app-icon name="sparkles" [size]="18" /> {{ 'dashboard.owner.aiQuota' | translate }}</h2>
             @if (d.aiQuota; as quota) {
               <span class="chip success">{{ quota.plan }}</span>
-            } @else {
-              <span class="chip info">{{ 'dashboard.vet.comingSoon' | translate }}</span>
             }
           </div>
           @if (d.aiQuota; as quota) {
@@ -224,7 +221,8 @@
               </div>
             }
           } @else {
-            <p class="muted">{{ 'dashboard.owner.aiQuotaSoon' | translate }}</p>
+            <p class="muted">{{ 'dashboard.owner.aiQuotaNoPlan' | translate }}</p>
+            <a class="link" routerLink="/plan">{{ 'dashboard.owner.choosePlan' | translate }} <app-icon name="arrow-right" [size]="14" /></a>
           }
           <p class="ai-note">{{ 'dashboard.owner.aiNote' | translate }}</p>
         </article>
