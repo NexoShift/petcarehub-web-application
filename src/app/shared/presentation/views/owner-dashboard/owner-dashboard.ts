@@ -22,7 +22,7 @@ interface QuickAction {
 /**
  * MW-04 · Panel del dueño de mascota.
  * Muestra sus mascotas con su estado real, lo pendiente (consultas y exámenes),
- * el tratamiento vigente con su receta, los últimos resultados validados, los créditos de IA
+ * la alerta prioritaria de su historia clínica, el tratamiento vigente con su receta, los últimos resultados validados, los créditos de IA
  * y el veterinario y la clínica de la última consulta.
  */
 @Component({
@@ -44,6 +44,8 @@ export class OwnerDashboard implements OnInit {
   protected readonly usagePercent = usagePercent;
 
   protected readonly quickActions: QuickAction[] = [
+    { icon: 'history', title: 'dashboard.owner.quick.historyTitle', text: 'dashboard.owner.quick.historyText',
+      link: 'dashboard.owner.quick.historyLink', path: '/medical-history' },
     { icon: 'pill', title: 'dashboard.owner.quick.treatmentsTitle', text: 'dashboard.owner.quick.treatmentsText',
       link: 'dashboard.owner.quick.treatmentsLink', path: '/treatments' },
     { icon: 'scan', title: 'dashboard.owner.quick.visualTitle', text: 'dashboard.owner.quick.visualText',

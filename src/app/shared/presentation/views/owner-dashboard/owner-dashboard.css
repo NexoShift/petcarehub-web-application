@@ -57,12 +57,16 @@
   border-left: 4px solid #F04438;
   border-radius: 14px;
   background: #FFF6F5;
+  color: inherit;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease;
 }
 .alert-icon { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 12px; background: #F04438; color: #fff; }
 .alert-title { margin: 0; color: #7A271A; font-size: 14px; font-weight: 600; }
 .alert-title span { color: #D92D20; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
 .alert-detail { margin: 2px 0 0; color: #B42318; font-size: 12px; }
 .alert-badge { margin-left: auto; }
+.alert:hover { box-shadow: 0 4px 14px rgba(240, 68, 56, 0.15); }
 
 /* ---------- Columnas ---------- */
 .columns { display: grid; grid-template-columns: minmax(0, 1fr) clamp(300px, 24vw, 400px); gap: clamp(16px, 1.6vw, 28px); align-items: start; }

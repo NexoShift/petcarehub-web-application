@@ -1,0 +1,48 @@
+<form id="vaccination-form" class="mh-form" [formGroup]="form" (ngSubmit)="submit()">
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>{{ 'medicalHistory.vaccinations.vaccine' | translate }}</mat-label>
+    <input id="vaccine-name" matInput formControlName="vaccineName" [maxlength]="limits.vaccineName"
+           [placeholder]="'medicalHistory.vaccinations.vaccineHint' | translate" />
+    @if (form.controls.vaccineName.invalid) {
+      <mat-error>{{ 'medicalHistory.vaccinations.vaccineRequired' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'medicalHistory.vaccinations.appliedOn' | translate }}</mat-label>
+      <input id="vaccine-applied" matInput type="date" formControlName="appliedOn" [max]="today" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'medicalHistory.vaccinations.dose' | translate }}</mat-label>
+      <input id="vaccine-dose" matInput type="number" min="1" [max]="limits.maxDoseNumber" formControlName="doseNumber" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'medicalHistory.vaccinations.nextDose' | translate }}</mat-label>
+      <input id="vaccine-next" matInput type="date" formControlName="nextDoseOn" />
+    </mat-form-field>
+  </div>
+  @if (appliedInFuture) {
+    <p id="vaccine-date-error" class="field-error">{{ 'medicalHistory.errors.appliedInFuture' | translate }}</p>
+  }
+  @if (nextNotAfterApplied) {
+    <p id="vaccine-next-error" class="field-error">{{ 'medicalHistory.errors.invalidVaccinationDates' | translate }}</p>
+  }
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>{{ 'medicalHistory.vaccinations.batch' | translate }}</mat-label>
+    <input id="vaccine-batch" matInput formControlName="batchNumber" [maxlength]="limits.batchNumber" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>{{ 'medicalHistory.vaccinations.notes' | translate }}</mat-label>
+    <textarea id="vaccine-notes" matInput rows="2" formControlName="notes" [maxlength]="limits.vaccinationNotes"></textarea>
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="cancelled.emit()">{{ 'medicalHistory.cancel' | translate }}</button>
+    <button id="vaccine-submit" mat-flat-button class="btn-accent" type="submit" [disabled]="saving()">
+      {{ 'medicalHistory.vaccinations.save' | translate }}
+    </button>
+  </div>
+</form>

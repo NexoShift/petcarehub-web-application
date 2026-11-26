@@ -9,6 +9,8 @@ import { CLINICAL_ATTENTION_REPOSITORY } from '../../clinical-attention/infrastr
 import { ExamStatus } from '../../clinical-exams/domain/enums/exam-status.enum';
 import { ClinicalExam } from '../../clinical-exams/domain/model/clinical-exam.entity';
 import { CLINICAL_EXAMS_REPOSITORY } from '../../clinical-exams/infrastructure/repositories/clinical-exams.token';
+import { MedicalHistory } from '../../medical-history/domain/model/medical-history.entity';
+import { MEDICAL_HISTORY_REPOSITORY } from '../../medical-history/infrastructure/repositories/medical-history.token';
 import { Pet } from '../../profiles/domain/model/pet.entity';
 import { PetOwner } from '../../profiles/domain/model/pet-owner.entity';
 import { ProfileApi } from '../../profiles/infrastructure/profile-api';
@@ -18,6 +20,7 @@ import {
   ActiveTreatment,
   AiQuota,
   AssignedVet,
+  ClinicalAlert,
   OwnerDashboard,
   PetSummary,
   PetTag,
@@ -35,8 +38,9 @@ import { daysBetween, todayIso } from '../domain/services/progress';
 
 /**
  * Arma los paneles de inicio con datos reales:
- * Profiles (clínica, pacientes, dueños, mascotas), Clinical Attention (consultas)
- * y Clinical Exams (exámenes). Si una llamada falla, esa parte queda vacía y el resto se muestra.
+ * Profiles (clínica, pacientes, dueños, mascotas), Clinical Attention (consultas y tratamientos),
+ * Clinical Exams (exámenes), Medical History (alergias y vacunas) y Subscriptions (créditos de IA).
+ * Si una llamada falla, esa parte queda vacía y el resto se muestra.
  */
 @Injectable({ providedIn: 'root' })
 export class DashboardApi {
@@ -44,6 +48,7 @@ export class DashboardApi {
   private readonly profiles = inject(ProfileApi);
   private readonly consultations = inject(CLINICAL_ATTENTION_REPOSITORY);
   private readonly exams = inject(CLINICAL_EXAMS_REPOSITORY);
+  private readonly histories = inject(MEDICAL_HISTORY_REPOSITORY);
   private readonly subscriptions = inject(SubscriptionApi);
 
   // =================================================================
@@ -254,12 +259,18 @@ export class DashboardApi {
       .filter((c) => c.status !== ConsultationStatus.Cancelled)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0];
 
-    const treatment = await this.activeTreatmentOf(data, todayIso());
+    const today = todayIso();
+    const [treatment, histories] = await Promise.all([
+      this.activeTreatmentOf(data, today),
+      Promise.all(
+        pets.map(async (pet) => ({ pet, history: await safe(this.histories.findByPetId(pet.id), null) })),
+      ),
+    ]);
 
     return {
       ownerFirstName: owner.firstName,
       pets: data.map(({ pet, consultations, exams }) => toPetSummary(pet, consultations, exams)),
-      alert: null,
+      alert: pickClinicalAlert(histories, today),
       treatment,
       events: events.slice(0, 4),
       results: results.slice(0, 3),
@@ -320,6 +331,28 @@ export class DashboardApi {
 // =================================================================
 // Funciones de apoyo
 // =================================================================
+
+/** Alerta prioritaria: vacunas vencidas primero (la más antigua), luego alergias severas. */
+export function pickClinicalAlert(
+  histories: { pet: Pet; history: MedicalHistory | null }[],
+  today: string,
+): ClinicalAlert | null {
+  const alerts: ClinicalAlert[] = [];
+  const overdue = histories
+    .flatMap(({ pet, history }) =>
+      (history?.vaccinations ?? []).filter((v) => v.isOverdueOn(today)).map((v) => ({ pet, v })),
+    )
+    .sort((a, b) => (a.v.nextDoseOn ?? '').localeCompare(b.v.nextDoseOn ?? ''));
+  for (const { pet, v } of overdue) {
+    alerts.push({ kind: 'vaccine', petId: pet.id, pet: pet.name, subject: v.vaccineName, detail: null, dueOn: v.nextDoseOn, others: 0 });
+  }
+  for (const { pet, history } of histories) {
+    for (const a of history?.allergies.filter((x) => x.isSevere) ?? []) {
+      alerts.push({ kind: 'allergy', petId: pet.id, pet: pet.name, subject: a.allergen, detail: a.reaction, dueOn: null, others: 0 });
+    }
+  }
+  return alerts.length ? { ...alerts[0], others: alerts.length - 1 } : null;
+}
 
 /** Lo que hace falta para mostrar un tratamiento vigente. */
 export interface PickedTreatment {

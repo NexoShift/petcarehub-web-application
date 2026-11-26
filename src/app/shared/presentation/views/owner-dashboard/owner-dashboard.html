@@ -65,14 +65,22 @@
 
     <!-- ===== Alerta clínica ===== -->
     @if (d.alert; as alert) {
-      <section class="alert reveal" style="--i: 2" role="alert">
+      <a class="alert reveal" style="--i: 2" role="alert" id="priority-alert"
+         routerLink="/medical-history" [queryParams]="{ petId: alert.petId }">
         <span class="alert-icon"><app-icon name="alert" /></span>
         <div>
-          <p class="alert-title"><span>{{ 'dashboard.owner.priorityAlert' | translate }}</span> · {{ alert.title }}</p>
-          <p class="alert-detail">{{ alert.detail }}</p>
+          <p class="alert-title">
+            <span>{{ 'dashboard.owner.priorityAlert' | translate }}</span> ·
+            {{ ('dashboard.owner.alerts.' + alert.kind + 'Title') | translate: { pet: alert.pet, subject: alert.subject } }}
+          </p>
+          <p class="alert-detail">
+            @if (alert.dueOn) { {{ 'dashboard.owner.alerts.vaccineDetail' | translate: { date: (alert.dueOn | date: 'dd/MM/yyyy' : 'UTC') } }} }
+            @else { {{ alert.detail ?? ('dashboard.owner.alerts.allergyDetail' | translate) }} }
+            @if (alert.others) { · {{ 'dashboard.owner.alerts.others' | translate: { count: alert.others } }} }
+          </p>
         </div>
-        <span class="chip danger alert-badge">{{ alert.badge }}</span>
-      </section>
+        <span class="chip danger alert-badge">{{ ('dashboard.owner.alerts.' + alert.kind + 'Badge') | translate }}</span>
+      </a>
     }
 
     <!-- ===== Dos columnas: principal y lateral ===== -->
@@ -137,6 +145,7 @@
         <section class="reveal" style="--i: 4">
           <div class="section-title">
             <h2>{{ 'dashboard.owner.quickTools' | translate }}</h2>
+            <a class="link" routerLink="/medical-history">{{ 'dashboard.owner.clinicalAccess' | translate }}</a>
           </div>
           <div class="quick-grid">
             @for (action of quickActions; track action.title) {

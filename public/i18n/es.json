@@ -229,7 +229,16 @@
       "otherTreatments": "Y {{count}} tratamiento(s) más en curso",
       "seeTreatments": "Ver tratamientos",
       "clinicTitle": "{{clinic}}",
-      "clinicText": "Clínica de tu última consulta. Llama antes de ir si es una urgencia."
+      "clinicText": "Clínica de tu última consulta. Llama antes de ir si es una urgencia.",
+      "alerts": {
+        "vaccineTitle": "{{pet}}: vacuna {{subject}} vencida",
+        "vaccineDetail": "La siguiente dosis tocaba el {{date}}. Coordina con tu clínica.",
+        "vaccineBadge": "Vacuna vencida",
+        "allergyTitle": "{{pet}}: alergia severa a {{subject}}",
+        "allergyDetail": "Avisa a tu veterinario antes de cualquier medicamento.",
+        "allergyBadge": "Alergia severa",
+        "others": "{{count}} alerta(s) más en su historia clínica"
+      }
     },
     "vet": {
       "morning": "Buenos días",
@@ -1715,5 +1724,92 @@
     "title": "No encontramos esta página",
     "text": "La dirección no existe o cambió. Vuelve al inicio para seguir.",
     "goHome": "Ir al inicio"
+  },
+  "medicalHistory": {
+    "title": "Historia clínica",
+    "subtitleOwner": "Alergias, vacunas y todo lo que pasó en las consultas de tus mascotas.",
+    "subtitleVet": "Antecedentes de tus pacientes: alergias, vacunas y su línea de tiempo clínica.",
+    "pets": "Mis mascotas",
+    "patients": "Pacientes",
+    "search": "Nombre o código",
+    "noPets": "Aún no registras mascotas.",
+    "addPet": "Agregar mascota",
+    "noPatients": "Tu clínica aún no tiene pacientes.",
+    "noMatches": "Ningún paciente coincide.",
+    "pickTitle": "Elige una mascota",
+    "pickText": "Verás sus alergias, vacunas y la línea de tiempo de consultas y exámenes.",
+    "born": "nació el {{date}}",
+    "severeFlag": "Alergia severa",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "stats": {
+      "allergies": "Alergias",
+      "vaccinations": "Vacunas",
+      "events": "Eventos clínicos"
+    },
+    "tabs": {
+      "summary": "Alergias y vacunas",
+      "timeline": "Línea de tiempo"
+    },
+    "severity": {
+      "MILD": "Leve",
+      "MODERATE": "Moderada",
+      "SEVERE": "Severa"
+    },
+    "allergies": {
+      "title": "Alergias",
+      "add": "Registrar alergia",
+      "empty": "No hay alergias registradas.",
+      "allergen": "Alérgeno",
+      "allergenHint": "Ej.: pollo, penicilina, picadura de pulga",
+      "allergenRequired": "Indica a qué es alérgica.",
+      "severity": "Severidad",
+      "severityRequired": "Elige la severidad.",
+      "reaction": "Reacción",
+      "reactionHint": "Ej.: picazón, vómitos, hinchazón",
+      "notes": "Notas",
+      "save": "Guardar alergia",
+      "saved": "Alergia registrada",
+      "reportedBy": {
+        "OWNER": "Reportada por el dueño",
+        "VETERINARIAN": "Registrada por el veterinario"
+      }
+    },
+    "vaccinations": {
+      "title": "Vacunas",
+      "add": "Registrar vacuna",
+      "emptyVet": "No hay vacunas registradas.",
+      "emptyOwner": "Aún no hay vacunas registradas. Las registra el veterinario en la clínica.",
+      "vaccine": "Vacuna",
+      "vaccineHint": "Ej.: Séxtuple, Antirrábica",
+      "vaccineRequired": "Indica la vacuna.",
+      "dose": "Dosis",
+      "appliedOn": "Aplicada",
+      "nextDose": "Próxima dosis",
+      "appliedBy": "Aplicada por",
+      "batch": "Lote",
+      "batchShort": "Lote {{batch}}",
+      "notes": "Notas",
+      "save": "Guardar vacuna",
+      "saved": "Vacuna registrada",
+      "overdue": "El refuerzo de {{vaccine}} venció el {{date}}.",
+      "dueSoon": "Refuerzo de {{vaccine}} el {{date}}."
+    },
+    "timeline": {
+      "consultation": "Consulta completada",
+      "exam": "Resultado validado: {{type}}",
+      "open": "Ver consulta",
+      "empty": "Aún no hay consultas completadas ni resultados validados."
+    },
+    "errors": {
+      "invalidAllergy": "Revisa los datos de la alergia.",
+      "invalidVaccination": "Revisa los datos de la vacuna.",
+      "invalidVaccinationDates": "La próxima dosis debe ser posterior a la fecha de aplicación.",
+      "appliedInFuture": "La fecha de aplicación no puede ser futura.",
+      "petNotFound": "No encontramos esa mascota.",
+      "notAllowed": "No tienes permiso para ver o editar esta historia clínica.",
+      "sessionExpired": "Tu sesión expiró. Vuelve a iniciar sesión.",
+      "unexpected": "No pudimos cargar la historia clínica. Inténtalo de nuevo."
+    }
   }
 }
