@@ -111,6 +111,13 @@
       "samePassword": "The new password must be different from the temporary one",
       "submit": "Save and continue",
       "signOut": "Sign out"
+    },
+    "google": {
+      "chooseTitle": "This is your first time with this Google account. How will you use PetCare Hub?",
+      "invalid": "Google could not confirm your account. Try again.",
+      "notConfigured": "Google sign-in is not available right now.",
+      "failed": "We could not sign you in with Google. Try again.",
+      "termsNote": "By continuing with Google you accept the Terms and the Privacy Policy."
     }
   },
   "shell": {

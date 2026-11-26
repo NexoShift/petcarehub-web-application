@@ -111,6 +111,13 @@
       "samePassword": "La nueva contraseña debe ser distinta a la temporal",
       "submit": "Guardar y continuar",
       "signOut": "Cerrar sesión"
+    },
+    "google": {
+      "chooseTitle": "Es tu primera vez con esta cuenta de Google. ¿Cómo vas a usar PetCare Hub?",
+      "invalid": "Google no pudo confirmar tu cuenta. Inténtalo de nuevo.",
+      "notConfigured": "El acceso con Google no está disponible por ahora.",
+      "failed": "No pudimos entrar con Google. Inténtalo de nuevo.",
+      "termsNote": "Al continuar con Google aceptas los Términos y la Política de privacidad."
     }
   },
   "shell": {
