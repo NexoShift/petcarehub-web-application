@@ -288,8 +288,8 @@
       "toValidate": "To validate",
       "noPendingExams": "No pending exams.",
       "noRecent": "No completed consultations yet.",
-      "aiOngoing": "{{pet}} has consultation #{{id}} in progress. When the assistant is available you will be able to draft the SOAP note there.",
-      "aiIdle": "When you have a consultation in progress, the assistant will help you draft the SOAP note.",
+      "aiOngoing": "{{pet}} has consultation #{{id}} in progress. Generate the SOAP draft with its background.",
+      "aiIdle": "Pick a patient and consultation to generate the SOAP draft with its background.",
       "openConsultation": "Open consultation",
       "patientStatus": {
         "inProgress": "In consultation · #{{id}}",
@@ -306,7 +306,8 @@
         "start": "Start consultation",
         "newConsultation": "New consultation"
       },
-      "noPatientsYet": "No patients registered in the clinic yet."
+      "noPatientsYet": "No patients registered in the clinic yet.",
+      "openAssistant": "Open assistant"
     }
   },
   "enums": {
@@ -720,7 +721,8 @@
       "legal": "AI-generated draft for support. Diagnosis and prescription are the veterinarian's responsibility.",
       "hidePdf": "Hide PDF",
       "pdfTitle": "Visit report PDF",
-      "pdfNewTab": "Open in a new tab"
+      "pdfNewTab": "Open in a new tab",
+      "noActiveConsultation": "This patient has no visit in progress. Start one in Visits."
     },
     "owner": {
       "title": "Explain with AI",
@@ -759,7 +761,9 @@
       "consumed": "{{p}}% used",
       "renews": "Renews in {{days}} days",
       "left": "You have <strong>{{n}} explanations</strong> left this monthly cycle to clear up questions about medical records.",
-      "topUp": "Buy more queries"
+      "topUp": "Buy more queries",
+      "dayOpen": "Day {{day}}",
+      "basedOnNoLicense": "Based on the visit with {{vet}}"
     },
     "errors": {
       "missingConsultation": "Choose the patient and type the current visit number.",
@@ -1409,7 +1413,7 @@
       },
       "assistant": {
         "title": "Assistant",
-        "subtitle": "Clinical suggestions"
+        "subtitle": "Optional · AI SOAP draft"
       },
       "diagnosis": {
         "title": "Diagnosis",
@@ -1662,7 +1666,8 @@
       "primary": "primary",
       "noExams": "No exams were requested in this consultation.",
       "seeExams": "See results and files",
-      "treatmentPlan": "Treatment and prescription"
+      "treatmentPlan": "Treatment and prescription",
+      "explainWithAi": "Explain with AI"
     },
     "treatmentStatus": {
       "ACTIVE": "Active",
