@@ -1,0 +1,388 @@
+<section class="subscription-page">
+  <header class="page-head">
+    <span class="head-icon">
+      <app-icon name="card" [size]="28" />
+    </span>
+
+    <div class="head-text">
+      <h1>{{ 'subscriptions.title' | translate }}</h1>
+      <p>{{ 'subscriptions.subtitle' | translate }}</p>
+    </div>
+
+    <button
+      mat-stroked-button
+      type="button"
+      class="btn-outline"
+      [disabled]="store.loading() || store.checkoutLoading() || store.renewalLoading()"
+      (click)="reload()"
+    >
+      <app-icon name="refresh" [size]="16" />
+      {{ 'subscriptions.refresh' | translate }}
+    </button>
+  </header>
+
+  @if (welcome && !store.hasActiveSubscription()) {
+    <div class="notice info" role="status" data-testid="plan-welcome">
+      <app-icon name="info" [size]="18" />
+      <span>{{ 'subscriptions.onboarding.welcome' | translate }}</span>
+    </div>
+  }
+
+  @if (checkoutResult === 'success') {
+    <div class="notice success-notice" role="status">
+      <app-icon name="info" [size]="20" />
+
+      @if (store.hasActiveSubscription()) {
+        {{ 'subscriptions.checkoutSuccess' | translate }}
+      } @else if (store.activationTimedOut()) {
+        {{ 'subscriptions.checkoutStillPending' | translate }}
+      } @else {
+        {{ 'subscriptions.checkoutSynchronizing' | translate }}
+        @if (store.activationPending()) {
+          <mat-spinner diameter="18" data-testid="activation-pending" />
+        }
+      }
+    </div>
+  }
+
+  @if (checkoutResult === 'cancelled') {
+    <div class="notice">
+      <app-icon name="info" [size]="20" />
+      {{ 'subscriptions.checkoutCancelled' | translate }}
+    </div>
+  }
+
+  @if (store.checkoutError(); as error) {
+    <p class="error-message" role="alert">
+      <app-icon name="alert" [size]="18" />
+      {{ error | translate }}
+    </p>
+  }
+
+  @if (navigationError()) {
+    <p class="error-message" role="alert">
+      {{ 'subscriptions.errors.invalidUrl' | translate }}
+    </p>
+  }
+
+  @if (store.loading()) {
+    <div class="loading">
+      <mat-spinner diameter="40" />
+    </div>
+  } @else if (store.error(); as error) {
+    <div class="card state">
+      <app-icon name="alert" [size]="30" />
+      <p>{{ error | translate }}</p>
+
+      <button
+        mat-flat-button
+        class="btn-accent"
+        type="button"
+        (click)="reload()"
+      >
+        {{ 'subscriptions.retry' | translate }}
+      </button>
+    </div>
+  } @else if (store.subscription(); as subscription) {
+    <!-- Subscription already created -->
+    <article class="card current-subscription">
+      <div class="subscription-head">
+        <div>
+          <p class="eyebrow">
+            {{ 'subscriptions.currentPlan' | translate }}
+          </p>
+
+          <h2>
+            @if (store.currentPlan(); as plan) {
+              {{ ('subscriptions.planType.' + plan.planType) | translate }}
+            } @else {
+              {{ subscription.planCode }}
+            }
+          </h2>
+        </div>
+
+        <span
+          class="status-badge"
+          [class.active]="subscription.isActive"
+          [class.pending]="subscription.isPending"
+        >
+          {{ ('subscriptions.status.' + subscription.status) | translate }}
+        </span>
+      </div>
+
+      @if (store.currentPlan(); as plan) {
+        <div class="price">
+          {{
+            plan.monthlyPrice
+              | currency: plan.currency : 'S/ ' : '1.2-2'
+          }}
+
+          <span>/ {{ 'subscriptions.month' | translate }}</span>
+        </div>
+      }
+
+      @if (subscription.isPending) {
+        <p>
+          {{ 'subscriptions.pendingDescription' | translate }}
+        </p>
+
+        @if (checkoutResult !== 'success') {
+          <button
+            mat-flat-button
+            type="button"
+            class="btn-accent"
+            [disabled]="store.checkoutLoading()"
+            (click)="checkout(subscription.planId)"
+          >
+            <app-icon name="card" [size]="18" />
+            {{ 'subscriptions.continuePayment' | translate }}
+          </button>
+        }
+      }
+
+      @if (
+        subscription.currentPeriodStart &&
+        subscription.currentPeriodEnd
+        ) {
+        <div class="period-grid">
+          <div>
+            <small>
+              {{ 'subscriptions.periodStart' | translate }}
+            </small>
+
+            <strong>
+              {{ subscription.currentPeriodStart | date: 'dd/MM/yyyy' }}
+            </strong>
+          </div>
+
+          <div>
+            <small>
+              {{ 'subscriptions.periodEnd' | translate }}
+            </small>
+
+            <strong>
+              {{ subscription.currentPeriodEnd | date: 'dd/MM/yyyy' }}
+            </strong>
+          </div>
+        </div>
+      }
+
+    @if (
+      subscription.status === 'ACTIVE' ||
+      subscription.status === 'PAST_DUE'
+      ) {
+
+      <div class="renewal-section">
+
+        <div class="renewal-information">
+
+      <span class="renewal-icon">
+        <app-icon
+          [name]="subscription.cancelAtPeriodEnd ? 'clock' : 'check-circle'"
+          [size]="24"
+        />
+      </span>
+
+          <div>
+
+            <h3>
+              {{ 'subscriptions.renewal.title' | translate }}
+            </h3>
+
+            <p>
+              {{
+                (
+                  subscription.cancelAtPeriodEnd
+                    ? 'subscriptions.renewal.disabled'
+                    : 'subscriptions.renewal.enabled'
+                ) | translate
+              }}
+            </p>
+
+          </div>
+
+        </div>
+
+        @if (subscription.cancelAtPeriodEnd) {
+
+          <button
+            mat-flat-button
+            type="button"
+            class="btn-accent"
+            [disabled]="
+          store.renewalLoading() ||
+          store.renewalPending()
+        "
+            (click)="manageRenewal()"
+          >
+            <app-icon name="refresh" [size]="17" />
+
+            {{ 'subscriptions.renewal.resume' | translate }}
+          </button>
+
+        } @else {
+
+          <button
+            mat-stroked-button
+            type="button"
+            class="btn-cancel-renewal"
+            [disabled]="
+          store.renewalLoading() ||
+          store.renewalPending()
+        "
+            (click)="manageRenewal()"
+          >
+            {{ 'subscriptions.renewal.cancel' | translate }}
+          </button>
+
+        }
+
+      </div>
+
+      @if (subscription.cancelAtPeriodEnd) {
+
+        <p class="renewal-notice">
+          <app-icon name="clock" [size]="18" />
+
+          {{ 'subscriptions.cancellationScheduled' | translate }}
+        </p>
+
+      }
+
+    }
+
+    @if (store.renewalLoading()) {
+      <div class="renewal-loading">
+        <mat-spinner diameter="22" />
+
+        {{ 'subscriptions.renewal.processing' | translate }}
+      </div>
+    }
+
+    @if (store.renewalNotice(); as notice) {
+      <div
+        class="notice renewal-feedback"
+        [class.success-notice]="!store.renewalPending()"
+        role="status"
+      >
+        <app-icon name="info" [size]="18" />
+
+        {{ notice | translate }}
+      </div>
+    }
+
+    @if (store.renewalError(); as error) {
+      <p class="error-message" role="alert">
+        <app-icon name="alert" [size]="18" />
+
+        {{ error | translate }}
+      </p>
+    }
+    </article>
+    @if (subscription.isActive) {
+      <app-subscription-benefits
+        [accountId]="subscription.accountId"
+      />
+    }
+    <app-subscription-payment-history
+      [accountId]="subscription.accountId"
+    />
+  } @else {
+    <!-- Plan catalog -->
+    <div class="section-heading">
+      <h2>{{ 'subscriptions.choosePlan' | translate }}</h2>
+      <p>{{ 'subscriptions.choosePlanDescription' | translate }}</p>
+    </div>
+
+    <div class="plans-grid">
+      @for (plan of store.plans(); track plan.id) {
+        <article
+          class="card plan-card"
+          [class.premium]="plan.isPremium"
+        >
+          <div class="plan-heading">
+            <span class="plan-icon">
+              <app-icon
+                [name]="plan.isPremium ? 'sparkles' : 'card'"
+                [size]="25"
+              />
+            </span>
+
+            @if (plan.isPremium) {
+              <span class="premium-label">Premium</span>
+            }
+          </div>
+
+          <h2>
+            {{ ('subscriptions.planType.' + plan.planType) | translate }}
+          </h2>
+
+          <div class="price">
+            {{
+              plan.monthlyPrice
+                | currency: plan.currency : 'S/ ' : '1.2-2'
+            }}
+            <span>/ {{ 'subscriptions.month' | translate }}</span>
+          </div>
+
+          <ul class="benefits">
+            @if (plan.maxPets !== null) {
+              <li>
+                <app-icon name="check-circle" [size]="19" />
+                {{
+                  'subscriptions.benefits.pets'
+                    | translate: { count: plan.maxPets }
+                }}
+              </li>
+            }
+
+            @if (plan.maxVeterinarians !== null) {
+              <li>
+                <app-icon name="check-circle" [size]="19" />
+                {{
+                  'subscriptions.benefits.veterinarians'
+                    | translate: { count: plan.maxVeterinarians }
+                }}
+              </li>
+            }
+
+            <li>
+              <app-icon name="check-circle" [size]="19" />
+              {{
+                'subscriptions.benefits.computerVision'
+                  | translate: {
+                  count: plan.monthlyComputerVisionCredits
+                }
+              }}
+            </li>
+
+            <li>
+              <app-icon name="check-circle" [size]="19" />
+              {{
+                'subscriptions.benefits.llm'
+                  | translate: {
+                  count: plan.monthlyLlmCredits
+                }
+              }}
+            </li>
+          </ul>
+
+          <button
+            mat-flat-button
+            type="button"
+            class="btn-accent plan-button"
+            [disabled]="store.checkoutLoading()"
+            (click)="checkout(plan.id)"
+          >
+            {{ 'subscriptions.subscribe' | translate }}
+            <app-icon name="arrow-right" [size]="17" />
+          </button>
+        </article>
+      } @empty {
+        <div class="card state">
+          {{ 'subscriptions.noPlans' | translate }}
+        </div>
+      }
+    </div>
+  }
+</section>

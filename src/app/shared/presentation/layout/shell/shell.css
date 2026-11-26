@@ -46,35 +46,6 @@
 }
 .crumbs strong { color: var(--color-text); font-weight: 600; }
 
-.search {
-  flex: 0 1 340px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 38px;
-  padding: 0 12px;
-  border: 1px solid #E4E7EC;
-  border-radius: 10px;
-  background: var(--color-surface);
-  color: var(--color-text-muted);
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.search:focus-within { border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(11, 195, 189, 0.15); }
-.search input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font: inherit; font-size: 13px; color: var(--color-text); }
-
-.bell { position: relative; color: var(--color-text-muted); }
-/* El puntito de la campana late suave para indicar que hay novedades */
-.bell-dot {
-  position: absolute;
-  top: 10px;
-  right: 11px;
-  width: 7px;
-  height: 7px;
-  border: 2px solid var(--color-bg);
-  border-radius: 50%;
-  background: #F04438;
-  animation: pulse 2.4s ease-in-out infinite;
-}
 @keyframes pulse { 50% { transform: scale(1.25); } }
 
 .user {
@@ -186,6 +157,7 @@
 }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 0 3px rgba(11, 195, 189, 0.25); }
 .version { margin-left: auto; opacity: 0.6; }
+.status.offline .dot { background: #F79009; box-shadow: 0 0 0 3px rgba(247, 144, 9, 0.25); }
 
 .content {
   width: 100%;
@@ -199,7 +171,6 @@
 
 /* ---------- Tablet y celular ---------- */
 @media (max-width: 1024px) {
-  .search { display: none; }
 }
 @media (max-width: 760px) {
   .crumbs, .brand-text small { display: none; }

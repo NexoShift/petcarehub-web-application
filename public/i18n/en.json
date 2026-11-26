@@ -11,7 +11,6 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "backToSignIn": "Back to sign in",
-    "comingSoon": "Coming soon",
     "years": "{{count}} years",
     "active": "Active",
     "cancel": "Cancel"
@@ -121,9 +120,7 @@
     "roleVet": "Veterinarian",
     "openMenu": "Open or close the menu",
     "mainMenu": "Main menu",
-    "notifications": "Notifications",
     "userMenu": "User menu",
-    "search": "Search patient, record or owner...",
     "signOut": "Sign out",
     "online": "Online",
     "sections": {
@@ -148,12 +145,8 @@
       "planSubscription": "Plan & subscription",
       "myPlan": "My plan",
       "profile": "Profile"
-    }
-  },
-  "comingSoon": {
-    "title": "This section is on its way",
-    "text": "We're building this part of PetCare Hub. Meanwhile, head back to your dashboard.",
-    "goHome": "Go home"
+    },
+    "offline": "Offline"
   },
   "dashboard": {
     "owner": {
@@ -209,7 +202,7 @@
       "cycle": "Current cycle: {{cycle}}",
       "used": "{{used}} / {{limit}} used",
       "buyMore": "Buy an extra pack",
-      "renewsIn": "Renews in {{days}} d",
+      "renewsIn": "renews in {{days}} days",
       "aiNote": "AI suggestion: always requires validation by a licensed vet.",
       "writeVet": "Message the vet",
       "seeConsultations": "See consultations",
@@ -217,7 +210,6 @@
       "seeAll": "See all",
       "noEvents": "You have no pending consultations or exams.",
       "noResults": "No validated results yet.",
-      "aiQuotaSoon": "Your plan and AI quota will appear here once Subscriptions is enabled.",
       "vetRole": "Veterinarian",
       "events": {
         "consultationScheduled": "Scheduled consultation",
@@ -230,7 +222,17 @@
         "pendingExams": "Pending exams: {{count}}",
         "visits": "Consultations: {{count}}",
         "noVisits": "No consultations"
-      }
+      },
+      "aiQuotaNoPlan": "You have no active plan yet. A plan gives you credits for AI explanations and visual analyses.",
+      "choosePlan": "See plans",
+      "usage": {
+        "llm": "AI explanations",
+        "llmHint": "{{n}} left this period.",
+        "vision": "Visual analyses",
+        "visionHint": "{{n}} left this period."
+      },
+      "upgrade": "Upgrade your plan",
+      "noPlan": "No plan"
     },
     "vet": {
       "morning": "Good morning",
@@ -280,7 +282,6 @@
       "toValidate": "To validate",
       "noPendingExams": "No pending exams.",
       "noRecent": "No completed consultations yet.",
-      "comingSoon": "Coming soon",
       "aiOngoing": "{{pet}} has consultation #{{id}} in progress. When the assistant is available you will be able to draft the SOAP note there.",
       "aiIdle": "When you have a consultation in progress, the assistant will help you draft the SOAP note.",
       "openConsultation": "Open consultation",
@@ -599,7 +600,17 @@
       "efusion_pleural": "Pleural effusion",
       "normal": "No abnormalities",
       "neumonia": "Pneumonia",
-      "fractura": "Fracture"
+      "fractura": "Fracture",
+      "cardiomegaly": "Cardiomegaly",
+      "alveolar_pattern": "Alveolar pattern",
+      "bronchial_pattern": "Bronchial pattern",
+      "pleural_effusion": "Pleural effusion",
+      "mass": "Mass",
+      "interstitial_pattern": "Interstitial pattern",
+      "pneumothorax": "Pneumothorax",
+      "pleural_mineralization": "Pleural mineralization",
+      "megaesophagus": "Megaesophagus",
+      "no_finding": "No relevant findings"
     },
     "descriptions": {
       "demodicosis": "Hairless, scaly areas consistent with Demodex mites. A skin scraping is needed to confirm it.",
@@ -633,6 +644,21 @@
       "waitingText": "Choose the image type and upload the file. It will be saved to this consultation.",
       "backgroundText": "Saved to this consultation. The clinical assistant will use it when drafting the SOAP note.",
       "optional": "This step is optional. Use it only when there is a skin lesion or an X-ray to analyze; otherwise go on to Diagnosis."
+    },
+    "xray": {
+      "caption": "Probability of each finding in the X-ray",
+      "colFinding": "Finding",
+      "colProbability": "Probability",
+      "colReading": "Reading",
+      "probable": "Probable",
+      "possible": "Possible",
+      "summaryProbable": "{{probable}} of {{total}} findings at 50% or more. Review them with the patient's clinical signs.",
+      "summaryPossible": "No finding reaches 50%. {{total}} at 20% or more are shown as possible.",
+      "normalTitle": "No relevant findings",
+      "normalText": "The model found no abnormalities in the X-ray ({{value}}% confidence). It does not replace the veterinarian's reading.",
+      "multiLabel": "Each finding has its own percentage: an X-ray can show several at once and they do not add up to 100%. Only findings at 20% or more are shown.",
+      "lowReliability": "Low reliability",
+      "lowReliabilityHint": "Pneumothorax and megaesophagus had very few cases when the model was trained: take them with caution."
     }
   },
   "aiAssistant": {
@@ -790,10 +816,6 @@
       "imageError": "Unable to update your photo.",
       "invalidImage": "Select a JPG, PNG or WebP image.",
       "close": "Close",
-      "preferences": "Communication preferences",
-      "preferencesHint": "Notification settings related to your pets.",
-      "notificationsTitle": "Notifications and reminders",
-      "notificationsPending": "Notification settings will be available soon.",
       "subscription": "Subscription",
       "subscriptionPending": "Your plan information will be available once the subscription module is integrated."
     },
@@ -1190,6 +1212,120 @@
       "retry": "Retry"
     }
   },
+  "subscriptions": {
+    "title": "My subscription",
+    "subtitle": "View and manage your subscription benefits.",
+    "refresh": "Refresh",
+    "retry": "Try again",
+    "choosePlan": "Choose your plan",
+    "choosePlanDescription": "Select the plan that best suits your needs.",
+    "currentPlan": "Current plan",
+    "month": "month",
+    "subscribe": "Subscribe",
+    "continuePayment": "Continue to payment",
+    "pendingDescription": "Complete your payment to activate your subscription benefits.",
+    "periodStart": "Period start",
+    "periodEnd": "Period end",
+    "checkoutSuccess": "Your subscription has been activated successfully.",
+    "checkoutSynchronizing": "We are confirming your payment with Stripe. This takes a few seconds.",
+    "checkoutCancelled": "The payment was not completed. You can continue whenever you are ready.",
+    "cancellationScheduled": "Your subscription will not renew at the end of the current period.",
+    "noPlans": "There are no plans available at the moment.",
+    "planType": {
+      "BASIC": "Basic",
+      "PREMIUM": "Premium"
+    },
+    "status": {
+      "PENDING": "Pending payment",
+      "ACTIVE": "Active",
+      "PAST_DUE": "Past due",
+      "CANCELED": "Canceled",
+      "EXPIRED": "Expired"
+    },
+    "benefits": {
+      "pets": "Up to {{count}} pets",
+      "veterinarians": "Up to {{count}} veterinarians",
+      "computerVision": "{{count}} Computer Vision analyses per month",
+      "llm": "{{count}} AI queries per month"
+    },
+    "errors": {
+      "load": "Unable to load subscription information.",
+      "checkout": "Unable to start the payment process. Please try again.",
+      "conflict": "Unable to start payment. Refresh your subscription status.",
+      "invalidUrl": "Unable to open the payment link.",
+      "entitlements": "Unable to load subscription benefits.",
+      "credits": "Unable to load artificial intelligence credits.",
+      "renewal": "Unable to confirm the update. Refresh your subscription status before trying again.",
+      "payments": "Unable to load payment history. Please try again."
+    },
+    "entitlements": {
+      "title": "Your plan benefits",
+      "subtitle": "Discover the limits included in your subscription.",
+      "petLimit": "Pet limit",
+      "veterinarianLimit": "Veterinarian limit",
+      "pets": "pets",
+      "veterinarians": "veterinarians",
+      "monthlyCredits": "Monthly credits"
+    },
+    "credits": {
+      "title": "Artificial intelligence credits",
+      "subtitle": "Track your AI tool usage during the current billing period.",
+      "computerVision": "Computer Vision",
+      "llm": "LLM Assistant",
+      "period": "Billing period",
+      "available": "Available credits",
+      "consumed": "Consumed",
+      "reserved": "Reserved",
+      "limit": "Limit",
+      "exhausted": "You have no available credits for this tool."
+    },
+    "renewal": {
+      "title": "Automatic renewal",
+      "enabled": "Your subscription will renew automatically.",
+      "disabled": "Automatic renewal is disabled.",
+      "cancel": "Cancel renewal",
+      "resume": "Reactivate renewal",
+      "cancelTitle": "Cancel automatic renewal?",
+      "resumeTitle": "Reactivate automatic renewal?",
+      "cancelDescription": "Your subscription will not renew at the end of the current period. Cancellation does not delete your account or existing records.",
+      "resumeDescription": "Automatic renewal will be restored for the upcoming billing periods.",
+      "accessUntil": "Access to your benefits until",
+      "goBack": "Go back",
+      "confirmCancel": "Confirm cancellation",
+      "confirmResume": "Confirm reactivation",
+      "processing": "Processing request...",
+      "synchronizing": "Synchronizing changes with Stripe...",
+      "syncPending": "Your request was accepted. Refresh the page to check your subscription status.",
+      "updated": "Automatic renewal was updated successfully."
+    },
+    "payments": {
+      "title": "Payment history",
+      "subtitle": "View your payments and billing documents.",
+      "invoice": "Invoice",
+      "paymentDate": "Payment date",
+      "amount": "Amount",
+      "statusLabel": "Status",
+      "documents": "Documents",
+      "status": {
+        "PAID": "Paid"
+      },
+      "viewInvoice": "View invoice",
+      "downloadPdf": "Download PDF",
+      "noDocuments": "Unavailable",
+      "emptyTitle": "You have no recorded payments yet",
+      "emptyDescription": "Your completed payments will appear in this section.",
+      "emptyPageTitle": "There are no payments on this page",
+      "emptyPageDescription": "You can continue browsing previous records.",
+      "errorTitle": "Unable to load payment history",
+      "loadMore": "Load more",
+      "loadingMore": "Loading more payments...",
+      "stripeInformation": "Payments and billing documents are securely managed through Stripe."
+    },
+    "onboarding": {
+      "welcome": "Last step: choose your plan. Without an active plan you cannot register pets or veterinarians or use the AI."
+    },
+    "checkoutStillPending": "Stripe has not confirmed your payment yet. Tap Refresh in a moment; if you paid, the plan will activate by itself."
+  },
   "clinicalAttention": {
     "close": "Close",
     "status": {
@@ -1519,5 +1655,10 @@
       "noExams": "No exams were requested in this consultation.",
       "seeExams": "See results and files"
     }
+  },
+  "notFound": {
+    "title": "We could not find this page",
+    "text": "The address does not exist or has changed. Go back home to continue.",
+    "goHome": "Go home"
   }
 }

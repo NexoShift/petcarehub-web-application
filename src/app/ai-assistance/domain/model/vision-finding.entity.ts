@@ -1,4 +1,5 @@
 import { BoundingBox } from './bounding-box';
+import { isLowReliabilityLabel, isNormalLabel } from './radiograph-classes';
 
 /** Umbral desde el que un hallazgo se considera "probable" (lo mismo que decide el backend). */
 export const PROBABLE_THRESHOLD = 50;
@@ -20,6 +21,16 @@ export class VisionFinding {
 
   get hasLocation(): boolean {
     return this.box !== null;
+  }
+
+  /** "Sin hallazgos" (no_finding): no es una enfermedad. */
+  get isNormal(): boolean {
+    return isNormalLabel(this.label);
+  }
+
+  /** Clase con pocos casos de entrenamiento (neumotórax, megaesófago): tomar con cautela. */
+  get lowReliability(): boolean {
+    return isLowReliabilityLabel(this.label);
   }
 
   /** Nivel de confianza para pintar el chip: alto (80+), medio (50-79) o bajo. */

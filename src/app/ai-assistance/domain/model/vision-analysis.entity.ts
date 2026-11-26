@@ -40,9 +40,20 @@ export class VisionAnalysis {
     return this.sortedFindings.filter(f => f.probable);
   }
 
-  /** Todos los hallazgos, de mayor a menor confianza (el panel de la radiografía los muestra así). */
+  /**
+   * Hallazgos de mayor a menor confianza. En radiografía, "sin hallazgos" (no_finding) se quita
+   * si el modelo encontró algo más, para no mostrar "normal" y "cardiomegalia" a la vez.
+   */
   get sortedFindings(): VisionFinding[] {
-    return [...this.findings].sort((a, b) => b.confidencePercentage - a.confidencePercentage);
+    const sorted = [...this.findings].sort((a, b) => b.confidencePercentage - a.confidencePercentage);
+    if (!this.isRadiograph) return sorted;
+    const lesions = sorted.filter(f => !f.isNormal);
+    return lesions.length ? lesions : sorted;
+  }
+
+  /** Radiografía en la que el modelo solo devolvió "sin hallazgos". */
+  get isNormalRadiograph(): boolean {
+    return this.isRadiograph && this.isCompleted && this.findings.length > 0 && this.findings.every(f => f.isNormal);
   }
 
   /** El hallazgo más probable, o null si no hay ninguno. */

@@ -7,12 +7,28 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/
 
 ## [Unreleased]
 
-### Planned
-- Medical history screens for veterinarians and owners.
-- Treatments and prescriptions inside the consultation.
-- Owner consent before a clinic can see a pet's history from other clinics.
-- Plans and subscriptions.
-- LLM clinical assistant (consultation step 4) and "Explain with AI" for owners.
+## [1.1.0] - 2026-11-26
+
+Subscriptions and payments with Stripe.
+
+### Added
+- **Subscriptions**
+  - After Stripe Checkout, the plan page waits until Stripe confirms the payment and shows the active plan without reloading (up to 60 seconds).
+  - New accounts land on the plan page after completing their profile, with a welcome notice.
+- **Dashboards**
+  - Owner home shows the AI credits of the current period (explanations and visual analyses) with the renewal date.
+- **AI Assistance**
+  - Radiograph results as a percentage table per finding (multi-label model), with a "no relevant findings" notice and low-reliability marks.
+  - Visual analysis shows the remaining vision credits.
+- **Shell**
+  - Not-found page for unknown addresses.
+  - Connection status and app version at the bottom of the menu.
+
+### Changed
+- `/subscription` (the Stripe return URL of the API) redirects to `/plan`.
+
+### Removed
+- Placeholders without a backend: header search, notification bell, disabled Google and Apple buttons, notification preferences, "coming soon" cards and menu links to screens that did not exist yet.
 
 ## [1.0.0] - 2026-11-15
 
@@ -58,5 +74,6 @@ First stable release, delivered at the end of **Sprint 1**.
 ### Changed
 - Upgraded to Angular 22.2.5, Angular Material and CDK 22.2.7, Vitest 5 and jsdom 31.
 
-[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.0.0...develop
+[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.1.0...develop
+[1.1.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/NexoShift/petcarehub-web-application/releases/tag/v1.0.0

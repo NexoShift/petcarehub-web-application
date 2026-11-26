@@ -11,7 +11,6 @@
     "showPassword": "Mostrar contraseña",
     "hidePassword": "Ocultar contraseña",
     "backToSignIn": "Volver a iniciar sesión",
-    "comingSoon": "Próximamente",
     "years": "{{count}} años",
     "active": "Activo",
     "cancel": "Cancelar"
@@ -121,9 +120,7 @@
     "roleVet": "Médico veterinario",
     "openMenu": "Abrir o cerrar el menú",
     "mainMenu": "Menú principal",
-    "notifications": "Notificaciones",
     "userMenu": "Menú de usuario",
-    "search": "Buscar paciente, historia o tutor...",
     "signOut": "Cerrar sesión",
     "online": "En línea",
     "sections": {
@@ -148,12 +145,8 @@
       "planSubscription": "Plan y suscripción",
       "myPlan": "Mi plan",
       "profile": "Perfil"
-    }
-  },
-  "comingSoon": {
-    "title": "Esta sección viene en camino",
-    "text": "Estamos preparando esta parte de PetCare Hub. Mientras tanto, vuelve a tu panel.",
-    "goHome": "Ir al inicio"
+    },
+    "offline": "Sin conexión"
   },
   "dashboard": {
     "owner": {
@@ -209,7 +202,7 @@
       "cycle": "Ciclo actual: {{cycle}}",
       "used": "{{used}} / {{limit}} usadas",
       "buyMore": "Adquirir paquete adicional",
-      "renewsIn": "Renueva en {{days}} d",
+      "renewsIn": "se renueva en {{days}} días",
       "aiNote": "Sugerencia de la IA: siempre requiere validación del veterinario colegiado.",
       "writeVet": "Escribir al veterinario",
       "seeConsultations": "Ver consultas",
@@ -217,7 +210,6 @@
       "seeAll": "Ver todos",
       "noEvents": "No tienes consultas ni exámenes pendientes.",
       "noResults": "Todavía no hay resultados validados.",
-      "aiQuotaSoon": "Tu plan y la cuota de IA aparecerán aquí cuando se active Suscripciones.",
       "vetRole": "Médico veterinario",
       "events": {
         "consultationScheduled": "Consulta programada",
@@ -230,7 +222,17 @@
         "pendingExams": "Exámenes pendientes: {{count}}",
         "visits": "Consultas: {{count}}",
         "noVisits": "Sin consultas"
-      }
+      },
+      "aiQuotaNoPlan": "Aún no tienes un plan activo. Con un plan tienes créditos para explicaciones y análisis visuales con IA.",
+      "choosePlan": "Ver planes",
+      "usage": {
+        "llm": "Explicaciones con IA",
+        "llmHint": "Te quedan {{n}} este periodo.",
+        "vision": "Análisis visuales",
+        "visionHint": "Te quedan {{n}} este periodo."
+      },
+      "upgrade": "Mejora tu plan",
+      "noPlan": "Sin plan"
     },
     "vet": {
       "morning": "Buenos días",
@@ -280,7 +282,6 @@
       "toValidate": "Por validar",
       "noPendingExams": "No hay exámenes pendientes.",
       "noRecent": "Todavía no hay consultas completadas.",
-      "comingSoon": "Próximamente",
       "aiOngoing": "{{pet}} tiene la consulta N.° {{id}} en curso. Cuando el asistente esté disponible, podrás generar ahí el borrador SOAP.",
       "aiIdle": "Cuando tengas una consulta en curso, el asistente te ayudará a redactar el borrador SOAP.",
       "openConsultation": "Abrir consulta",
@@ -352,10 +353,6 @@
       "imageError": "No se pudo actualizar la fotografía.",
       "invalidImage": "Selecciona una imagen JPG, PNG o WebP.",
       "close": "Cerrar",
-      "preferences": "Preferencias de comunicación",
-      "preferencesHint": "Configuración de avisos relacionados con tus mascotas.",
-      "notificationsTitle": "Notificaciones y recordatorios",
-      "notificationsPending": "La configuración de notificaciones estará disponible próximamente.",
       "subscription": "Suscripción",
       "subscriptionPending": "La información de tu plan estará disponible cuando se integre el módulo de suscripciones."
     },
@@ -752,6 +749,120 @@
       "retry": "Reintentar"
     }
   },
+  "subscriptions": {
+    "title": "Mi suscripción",
+    "subtitle": "Consulta y administra los beneficios de tu plan.",
+    "refresh": "Actualizar",
+    "retry": "Reintentar",
+    "choosePlan": "Elige tu plan",
+    "choosePlanDescription": "Selecciona el plan que mejor se adapte a tus necesidades.",
+    "currentPlan": "Plan actual",
+    "month": "mes",
+    "subscribe": "Contratar plan",
+    "continuePayment": "Continuar al pago",
+    "pendingDescription": "Completa el pago para activar los beneficios de tu suscripción.",
+    "periodStart": "Inicio del periodo",
+    "periodEnd": "Fin del periodo",
+    "checkoutSuccess": "Tu suscripción se ha activado correctamente.",
+    "checkoutSynchronizing": "Estamos confirmando tu pago con Stripe. Esto tarda unos segundos.",
+    "checkoutCancelled": "El proceso de pago no se completó. Puedes continuarlo cuando desees.",
+    "cancellationScheduled": "Tu suscripción no se renovará al finalizar el periodo actual.",
+    "noPlans": "No hay planes disponibles en este momento.",
+    "planType": {
+      "BASIC": "Básico",
+      "PREMIUM": "Premium"
+    },
+    "status": {
+      "PENDING": "Pago pendiente",
+      "ACTIVE": "Activa",
+      "PAST_DUE": "Pago vencido",
+      "CANCELED": "Cancelada",
+      "EXPIRED": "Expirada"
+    },
+    "benefits": {
+      "pets": "Hasta {{count}} mascotas",
+      "veterinarians": "Hasta {{count}} veterinarios",
+      "computerVision": "{{count}} análisis de Computer Vision al mes",
+      "llm": "{{count}} consultas de IA al mes"
+    },
+    "errors": {
+      "load": "No se pudo cargar la información de la suscripción.",
+      "checkout": "No se pudo iniciar el proceso de pago. Inténtalo nuevamente.",
+      "conflict": "No se pudo iniciar el pago. Actualiza el estado de tu suscripción.",
+      "invalidUrl": "No se pudo abrir el enlace de pago.",
+      "entitlements": "No se pudieron cargar los beneficios de la suscripción.",
+      "credits": "No se pudieron cargar los créditos de inteligencia artificial.",
+      "renewal": "No se pudo confirmar la actualización. Actualiza el estado de tu suscripción antes de intentarlo nuevamente.",
+      "payments": "No se pudo cargar el historial de pagos. Inténtalo nuevamente."
+    },
+    "entitlements": {
+      "title": "Beneficios de tu plan",
+      "subtitle": "Conoce los límites incluidos en tu suscripción.",
+      "petLimit": "Límite de mascotas",
+      "veterinarianLimit": "Límite de veterinarios",
+      "pets": "mascotas",
+      "veterinarians": "veterinarios",
+      "monthlyCredits": "Créditos mensuales"
+    },
+    "credits": {
+      "title": "Créditos de inteligencia artificial",
+      "subtitle": "Consulta el consumo de las herramientas de IA durante el periodo actual.",
+      "computerVision": "Computer Vision",
+      "llm": "LLM Assistant",
+      "period": "Periodo de facturación",
+      "available": "Créditos disponibles",
+      "consumed": "Consumidos",
+      "reserved": "Reservados",
+      "limit": "Límite",
+      "exhausted": "No tienes créditos disponibles para esta herramienta."
+    },
+    "renewal": {
+      "title": "Renovación automática",
+      "enabled": "Tu suscripción se renovará automáticamente.",
+      "disabled": "La renovación automática está deshabilitada.",
+      "cancel": "Cancelar renovación",
+      "resume": "Reactivar renovación",
+      "cancelTitle": "¿Cancelar renovación automática?",
+      "resumeTitle": "¿Reactivar renovación automática?",
+      "cancelDescription": "Tu suscripción no se renovará al finalizar el periodo actual. La cancelación no elimina tu cuenta ni tus registros existentes.",
+      "resumeDescription": "Se restablecerá la renovación automática de tu suscripción para los siguientes periodos de facturación.",
+      "accessUntil": "Acceso a tus beneficios hasta",
+      "goBack": "Volver",
+      "confirmCancel": "Confirmar cancelación",
+      "confirmResume": "Confirmar reactivación",
+      "processing": "Procesando solicitud...",
+      "synchronizing": "Sincronizando los cambios con Stripe...",
+      "syncPending": "La solicitud fue aceptada. Actualiza la pantalla para comprobar el estado de tu suscripción.",
+      "updated": "La renovación automática se actualizó correctamente."
+    },
+    "payments": {
+      "title": "Historial de pagos",
+      "subtitle": "Consulta tus pagos y documentos de facturación.",
+      "invoice": "Factura",
+      "paymentDate": "Fecha de pago",
+      "amount": "Importe",
+      "statusLabel": "Estado",
+      "documents": "Documentos",
+      "status": {
+        "PAID": "Pagado"
+      },
+      "viewInvoice": "Ver factura",
+      "downloadPdf": "Descargar PDF",
+      "noDocuments": "No disponible",
+      "emptyTitle": "Aún no tienes pagos registrados",
+      "emptyDescription": "Los pagos realizados aparecerán en este apartado.",
+      "emptyPageTitle": "No hay pagos en esta página",
+      "emptyPageDescription": "Puedes continuar consultando los registros anteriores.",
+      "errorTitle": "No se pudo cargar el historial",
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando más pagos...",
+      "stripeInformation": "Los pagos y documentos de facturación son gestionados de forma segura mediante Stripe."
+    },
+    "onboarding": {
+      "welcome": "Último paso: elige tu plan. Sin un plan activo no puedes registrar mascotas, veterinarios ni usar la IA."
+    },
+    "checkoutStillPending": "Stripe todavía no confirma tu pago. Toca Actualizar en un momento; si pagaste, el plan se activará solo."
+  },
   "clinicalExams": {
     "close": "Cerrar",
     "status": {
@@ -1042,7 +1153,17 @@
       "efusion_pleural": "Efusión pleural",
       "normal": "Sin alteraciones",
       "neumonia": "Neumonía",
-      "fractura": "Fractura"
+      "fractura": "Fractura",
+      "cardiomegaly": "Cardiomegalia",
+      "alveolar_pattern": "Patrón alveolar",
+      "bronchial_pattern": "Patrón bronquial",
+      "pleural_effusion": "Efusión pleural",
+      "mass": "Masa",
+      "interstitial_pattern": "Patrón intersticial",
+      "pneumothorax": "Neumotórax",
+      "pleural_mineralization": "Mineralización pleural",
+      "megaesophagus": "Megaesófago",
+      "no_finding": "Sin hallazgos relevantes"
     },
     "descriptions": {
       "demodicosis": "Zonas sin pelo con descamación compatibles con ácaros Demodex. Requiere un raspado de piel para confirmarlo.",
@@ -1076,6 +1197,21 @@
       "waitingText": "Elige el tipo de imagen y sube el archivo. Se guardará en esta consulta.",
       "backgroundText": "Quedó guardado en esta consulta. El Asistente clínico lo usará al generar el borrador SOAP.",
       "optional": "Este paso es opcional. Úsalo solo si hay una lesión de piel o una radiografía que analizar; si no, pasa a Diagnóstico."
+    },
+    "xray": {
+      "caption": "Probabilidad de cada hallazgo en la radiografía",
+      "colFinding": "Hallazgo",
+      "colProbability": "Probabilidad",
+      "colReading": "Lectura",
+      "probable": "Probable",
+      "possible": "Posible",
+      "summaryProbable": "{{probable}} de {{total}} hallazgos con 50 % o más. Revísalos junto con la clínica del paciente.",
+      "summaryPossible": "Ningún hallazgo llega al 50 %. Se muestran {{total}} con 20 % o más como posibles.",
+      "normalTitle": "Sin hallazgos relevantes",
+      "normalText": "El modelo no encontró alteraciones en la radiografía ({{value}} % de confianza). No reemplaza la lectura del veterinario.",
+      "multiLabel": "Cada hallazgo tiene su propio porcentaje: una radiografía puede tener varios a la vez y no suman 100 %. Solo se muestran los de 20 % o más.",
+      "lowReliability": "Poca fiabilidad",
+      "lowReliabilityHint": "Neumotórax y megaesófago tuvieron muy pocos casos al entrenar el modelo: tómalos con cautela."
     }
   },
   "aiAssistant": {
@@ -1519,5 +1655,10 @@
       "noExams": "En esta consulta no se pidieron exámenes.",
       "seeExams": "Ver resultados y archivos"
     }
+  },
+  "notFound": {
+    "title": "No encontramos esta página",
+    "text": "La dirección no existe o cambió. Vuelve al inicio para seguir.",
+    "goHome": "Ir al inicio"
   }
 }

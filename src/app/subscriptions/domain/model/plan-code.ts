@@ -1,0 +1,1 @@
+export type PlanCode = 'PET_OWNER_BASIC' | 'PET_OWNER_PREMIUM' | 'CLINIC_BASIC' | 'CLINIC_PREMIUM';

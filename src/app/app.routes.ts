@@ -63,11 +63,20 @@ export const routes: Routes = [
           import('./ai-assistance/ai-assistance.routes').then((m) => m.VET_IMAGING_ROUTES),
       },
       { path: '', pathMatch: 'full', redirectTo: 'home' },
-      // Enlaces del menú que aún no tienen pantalla
+      {
+        path: 'plan',
+        loadChildren: () =>
+          import('./subscriptions/presentation/subscriptions.routes').then(
+            (m) => m.subscriptionRoutes,
+          ),
+      },
+      // Stripe Checkout vuelve a /subscription?checkout=success|cancelled (STRIPE_CHECKOUT_*_URL del backend)
+      { path: 'subscription', redirectTo: 'plan' },
+      // Cualquier dirección que no existe
       {
         path: '**',
         loadComponent: () =>
-          import('./shared/presentation/views/coming-soon/coming-soon').then((m) => m.ComingSoon),
+          import('./shared/presentation/views/not-found/not-found').then((m) => m.NotFound),
       },
     ],
   },

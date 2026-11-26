@@ -1,0 +1,303 @@
+<section class="payment-history">
+
+  <div class="section-header">
+
+    <div class="section-heading">
+
+      <span class="section-icon">
+        <app-icon name="history" [size]="26" />
+      </span>
+
+      <div>
+        <h2>
+          {{ 'subscriptions.payments.title' | translate }}
+        </h2>
+
+        <p>
+          {{ 'subscriptions.payments.subtitle' | translate }}
+        </p>
+      </div>
+
+    </div>
+
+    <button
+      mat-stroked-button
+      type="button"
+      class="btn-outline"
+      [disabled]="store.loading()"
+      (click)="reload()"
+    >
+      <app-icon name="refresh" [size]="16" />
+
+      {{ 'subscriptions.refresh' | translate }}
+    </button>
+
+  </div>
+
+  <div class="card history-card">
+
+    @if (store.loading() && !store.loaded()) {
+
+      <div class="loading">
+        <mat-spinner diameter="36" />
+      </div>
+
+    } @else if (store.error() && !store.loaded()) {
+
+      <div class="state-container">
+
+        <span class="state-icon error-icon">
+          <app-icon name="alert" [size]="30" />
+        </span>
+
+        <h3>
+          {{ 'subscriptions.payments.errorTitle' | translate }}
+        </h3>
+
+        <p>
+          {{ 'subscriptions.errors.payments' | translate }}
+        </p>
+
+        <button
+          mat-stroked-button
+          type="button"
+          class="btn-outline"
+          (click)="reload()"
+        >
+          {{ 'subscriptions.retry' | translate }}
+        </button>
+
+      </div>
+
+    } @else if (store.loaded()) {
+
+      @if (store.payments().length === 0) {
+
+        <div class="state-container">
+
+          <span class="state-icon">
+            <app-icon name="card" [size]="30" />
+          </span>
+
+          <h3>
+            {{
+              (
+                store.hasMore()
+                  ? 'subscriptions.payments.emptyPageTitle'
+                  : 'subscriptions.payments.emptyTitle'
+              ) | translate
+            }}
+          </h3>
+
+          <p>
+            {{
+              (
+                store.hasMore()
+                  ? 'subscriptions.payments.emptyPageDescription'
+                  : 'subscriptions.payments.emptyDescription'
+              ) | translate
+            }}
+          </p>
+
+        </div>
+
+      } @else {
+
+        <div class="table-container">
+
+          <table class="payments-table">
+
+            <thead>
+            <tr>
+              <th scope="col">
+                {{ 'subscriptions.payments.invoice' | translate }}
+              </th>
+
+              <th scope="col">
+                {{ 'subscriptions.payments.paymentDate' | translate }}
+              </th>
+
+              <th scope="col">
+                {{ 'subscriptions.payments.amount' | translate }}
+              </th>
+
+              <th scope="col">
+                {{ 'subscriptions.payments.statusLabel' | translate }}
+              </th>
+
+              <th scope="col" class="actions-header">
+                {{ 'subscriptions.payments.documents' | translate }}
+              </th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+              @for (payment of store.payments(); track payment.invoiceId) {
+
+                <tr>
+
+                  <td>
+                    <div class="invoice-information">
+
+                      <span class="invoice-icon">
+                        <app-icon name="history" [size]="19" />
+                      </span>
+
+                      <span class="invoice-number">
+                        {{ payment.invoiceNumber ?? payment.invoiceId }}
+                      </span>
+
+                    </div>
+                  </td>
+
+                  <td>
+                    {{
+                      payment.paidAt
+                        ? (payment.paidAt | date: 'dd/MM/yyyy')
+                        : '—'
+                    }}
+                  </td>
+
+                  <td class="payment-amount">
+                    {{
+                      payment.amountPaid
+                        | currency
+                        : payment.currency
+                          : (payment.currency === 'PEN' ? 'S/ ' : 'symbol')
+                          : '1.2-2'
+                    }}
+                  </td>
+
+                  <td>
+                    <span class="payment-status">
+                      <app-icon name="check-circle" [size]="15" />
+
+                      {{
+                        ('subscriptions.payments.status.' + payment.status)
+                          | translate
+                      }}
+                    </span>
+                  </td>
+
+                  <td>
+
+                    <div class="payment-actions">
+
+                      @if (stripeLink(payment.invoiceUrl); as invoiceUrl) {
+
+                        <a
+                          mat-stroked-button
+                          class="btn-outline"
+                          [href]="invoiceUrl"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <app-icon name="eye" [size]="15" />
+
+                          {{ 'subscriptions.payments.viewInvoice' | translate }}
+                        </a>
+
+                      }
+
+                      @if (stripeLink(payment.invoicePdfUrl); as invoicePdfUrl) {
+
+                        <a
+                          mat-stroked-button
+                          class="btn-outline"
+                          [href]="invoicePdfUrl"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <app-icon name="history" [size]="15" />
+
+                          {{ 'subscriptions.payments.downloadPdf' | translate }}
+                        </a>
+
+                      }
+
+                      @if (
+                        !stripeLink(payment.invoiceUrl) &&
+                        !stripeLink(payment.invoicePdfUrl)
+                        ) {
+                        <span class="document-unavailable">
+                          {{ 'subscriptions.payments.noDocuments' | translate }}
+                        </span>
+                      }
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+      @if (store.error()) {
+        <div class="pagination-error" role="alert">
+
+          <app-icon name="alert" [size]="18" />
+
+          {{ 'subscriptions.errors.payments' | translate }}
+
+        </div>
+      }
+
+      @if (store.hasMore()) {
+
+        <div class="pagination-footer">
+
+          @if (store.loading()) {
+
+            <div class="pagination-loading">
+              <mat-spinner diameter="24" />
+
+              {{ 'subscriptions.payments.loadingMore' | translate }}
+            </div>
+
+          } @else {
+
+            <button
+              mat-stroked-button
+              type="button"
+              class="btn-outline"
+              (click)="loadMore()"
+            >
+              {{
+                (
+                  store.error()
+                    ? 'subscriptions.retry'
+                    : 'subscriptions.payments.loadMore'
+                ) | translate
+              }}
+            </button>
+
+          }
+
+        </div>
+
+      }
+
+    }
+
+  </div>
+
+  <div class="stripe-information">
+
+    <app-icon name="shield" [size]="18" />
+
+    <span>
+      {{ 'subscriptions.payments.stripeInformation' | translate }}
+    </span>
+
+  </div>
+
+</section>

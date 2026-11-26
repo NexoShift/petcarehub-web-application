@@ -49,3 +49,32 @@ describe('Visión: dominio', () => {
     expect(() => RequestVisionAnalysisCommand.create({ file: null, imageType: ImageType.Skin, petId: 1 })).toThrow(VisionError.MissingData);
   });
 });
+
+describe('Visión: radiografía (multietiqueta)', () => {
+  const xray = (labels: [string, number][]) =>
+    analysis(labels.map(([label, pct], i) => new VisionFinding(i + 1, label, pct, pct >= 50, null)), AnalysisStatus.Completed, ImageType.Radiograph);
+
+  it('quita "sin hallazgos" cuando hay otros hallazgos', () => {
+    const a = xray([['no_finding', 55], ['cardiomegaly', 78], ['pleural_effusion', 41]]);
+    expect(a.sortedFindings.map(f => f.label)).toEqual(['cardiomegaly', 'pleural_effusion']);
+    expect(a.topFinding?.label).toBe('cardiomegaly');
+    expect(a.isNormalRadiograph).toBe(false);
+  });
+
+  it('si solo vino "sin hallazgos" la radiografía es normal', () => {
+    const a = xray([['no_finding', 91]]);
+    expect(a.isNormalRadiograph).toBe(true);
+    expect(a.sortedFindings).toHaveLength(1);
+    expect(xray([['normal', 70]]).isNormalRadiograph).toBe(true);
+  });
+
+  it('marca neumotórax y megaesófago como poco fiables', () => {
+    const a = xray([['pneumothorax', 30], ['megaesophagus', 25], ['mass', 22]]);
+    expect(a.sortedFindings.map(f => f.lowReliability)).toEqual([true, true, false]);
+  });
+
+  it('en piel no se quita nada', () => {
+    const skin = analysis([new VisionFinding(1, 'normal', 60, true, null), finding(2, 70)]);
+    expect(skin.sortedFindings).toHaveLength(2);
+  });
+});

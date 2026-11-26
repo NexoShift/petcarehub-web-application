@@ -303,21 +303,12 @@
   color: #052e37;
 }
 
-.future-feature,
 .info-panel {
   border-radius: 12px;
   background: #f2f6fb;
   padding: 17px;
 }
 
-.future-feature {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  color: #143c67;
-}
-
-.future-feature p,
 .section-note,
 .muted {
   margin: 8px 0 0;

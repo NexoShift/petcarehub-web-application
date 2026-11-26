@@ -8,10 +8,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { filter, map } from 'rxjs';
+import { filter, fromEvent, map, merge } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
 import { IamStore } from '../../../../iam';
 import { Icon, IconName } from '../../components/icon/icon';
 import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
@@ -34,8 +34,8 @@ interface NavSection {
 }
 
 /*
- * Menús por rol. Cada pantalla nueva (Mis mascotas, Pacientes...) solo necesita su ruta:
- * el enlace ya está aquí. Mientras no exista, la ruta ** del Shell abre "Próximamente".
+ * Menús por rol. Cada release agrega aquí el enlace de su pantalla nueva junto con su ruta,
+ * así el menú nunca muestra una opción sin pantalla.
  */
 const OWNER_MENU: NavSection[] = [
   {
@@ -43,11 +43,8 @@ const OWNER_MENU: NavSection[] = [
       { label: 'shell.menu.home', path: '/home', icon: 'home' },
       { label: 'shell.menu.pets', path: '/profiles/pets', icon: 'paw' },
       { label: 'shell.menu.consultations', path: '/my-consultations', icon: 'stethoscope' },
-      { label: 'shell.menu.medicalHistory', path: '/medical-history', icon: 'history' },
-      { label: 'shell.menu.treatments', path: '/treatments', icon: 'pill' },
       { label: 'shell.menu.exams', path: '/exams', icon: 'flask' },
       { label: 'shell.menu.visualAnalysis', path: '/visual-analysis', icon: 'scan' },
-      { label: 'shell.menu.aiExplain', path: '/ai-explain', icon: 'sparkles' },
     ],
   },
 ];
@@ -63,10 +60,8 @@ const VET_MENU: NavSection[] = [
       { label: 'shell.menu.home', path: '/home', icon: 'home' },
       { label: 'shell.menu.patients', path: '/profiles/clinic/patients', icon: 'paw' },
       { label: 'shell.menu.consultations', path: '/consultations', icon: 'stethoscope' },
-      { label: 'shell.menu.medicalHistory', path: '/medical-history', icon: 'history' },
       { label: 'shell.menu.laboratory', path: '/clinical-exams', icon: 'microscope' },
       { label: 'shell.menu.imaging', path: '/imaging', icon: 'image' },
-      { label: 'shell.menu.aiAssistant', path: '/ai-assistant', icon: 'sparkles' },
     ],
   },
 ];
@@ -123,7 +118,7 @@ const MOBILE = '(max-width: 1024px)';
 
 /**
  * Marco de la app con sesión, hecho con Angular Material (igual que el Layout de QualiTrack):
- * - mat-toolbar fija arriba: ☰, marca, miga de pan, buscador (vet), idioma, campana y menú de usuario.
+ * - mat-toolbar fija arriba: ☰, marca, miga de pan, idioma y menú de usuario.
  * - mat-sidenav a la izquierda: menú por rol. En escritorio queda fijo (mode="side");
  *   en tablet/celular flota encima del contenido (mode="over") y se cierra al navegar.
  */
@@ -140,7 +135,6 @@ const MOBILE = '(max-width: 1024px)';
     MatMenuModule,
     MatExpansionModule,
     MatDividerModule,
-    MatTooltipModule,
     MatRippleModule,
     Icon,
     LanguageSwitcher,
@@ -166,6 +160,15 @@ export class Shell {
   /**
    * Whether the authenticated user has veterinarian permissions.
    */
+  /** Versión publicada (environment.appVersion se actualiza en cada release). */
+  protected readonly version = environment.appVersion;
+
+  /** Conexión real del navegador: cambia a "Sin conexión" si se cae internet. */
+  protected readonly online = toSignal(
+    merge(fromEvent(window, 'online'), fromEvent(window, 'offline')).pipe(map(() => navigator.onLine)),
+    { initialValue: navigator.onLine },
+  );
+
   protected readonly isVet = computed(() => this.iam.currentUser()?.isVeterinarian ?? false);
 
   /**

@@ -1,7 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageSwitcher } from '../../../../shared/presentation/components/language-switcher/language-switcher';
-import { NgOptimizedImage } from '@angular/common';
 
 /**
  * Marco de las pantallas de acceso: foto a la izquierda y formulario a la derecha.
@@ -10,7 +9,7 @@ import { NgOptimizedImage } from '@angular/common';
  */
 @Component({
   selector: 'app-auth-layout',
-  imports: [TranslatePipe, LanguageSwitcher, NgOptimizedImage],
+  imports: [TranslatePipe, LanguageSwitcher],
   templateUrl: './auth-layout.html',
   styleUrl: './auth-layout.css',
 })

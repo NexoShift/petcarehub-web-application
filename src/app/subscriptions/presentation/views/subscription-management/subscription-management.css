@@ -1,0 +1,377 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.subscription-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 26px;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-bottom: 26px;
+}
+
+.head-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: #d6f9f5;
+  color: #027c80;
+}
+
+.head-text {
+  flex: 1;
+}
+
+.page-head h1 {
+  margin: 0 0 6px;
+  color: #10254b;
+  font-size: 28px;
+}
+
+.page-head p,
+.section-heading p {
+  margin: 0;
+  color: #65758d;
+}
+
+.section-heading {
+  margin-bottom: 24px;
+}
+
+.section-heading h2 {
+  margin: 0 0 8px;
+  color: var(--color-primary);
+  font-size: 24px;
+}
+
+.card {
+  border: 1px solid #e1e8f2;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(18, 40, 80, 0.06);
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.plan-card {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+}
+
+.plan-card.premium {
+  border: 2px solid var(--color-accent);
+}
+
+.plan-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.plan-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #e5f7f6;
+  color: #027c80;
+}
+
+.premium-label {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #d6f9f5;
+  color: #027c80;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.plan-card h2 {
+  margin: 20px 0 14px;
+  color: var(--color-primary);
+  font-size: 24px;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--color-primary);
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.price span {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.benefits {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 18px;
+  list-style: none;
+  padding: 24px 0;
+  margin: 24px 0;
+  border-top: 1px solid #e1e8f2;
+}
+
+.benefits li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text);
+  font-size: 15px;
+}
+
+.benefits app-icon {
+  flex: none;
+  color: #027c80;
+}
+
+.btn-accent {
+  border-radius: 999px !important;
+  background: #0bc3bd !important;
+  color: #062b55 !important;
+  font-weight: 600;
+}
+
+.btn-accent:disabled {
+  opacity: 0.5;
+}
+
+.btn-outline {
+  border-radius: 999px !important;
+}
+
+.plan-button {
+  width: 100%;
+}
+
+.current-subscription {
+  padding: 28px;
+}
+
+.subscription-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.subscription-head h2 {
+  margin: 8px 0 18px;
+  color: var(--color-primary);
+  font-size: 26px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.status-badge {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #f1f3f6;
+  color: #475467;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #dcfae6;
+  color: #067647;
+}
+
+.status-badge.pending {
+  background: #fef0c7;
+  color: #93370d;
+}
+
+.period-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid #e1e8f2;
+}
+
+.period-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.period-grid small {
+  color: var(--color-text-muted);
+}
+
+.period-grid strong {
+  color: var(--color-primary);
+}
+
+.notice,
+.renewal-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background: #fef0c7;
+  color: #93370d;
+  font-size: 14px;
+}
+
+.renewal-notice {
+  margin: 24px 0 0;
+}
+
+.success-notice {
+  background: #e5f7f6;
+  color: #027c80;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-error);
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 36px;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .subscription-page {
+    padding: 16px;
+  }
+
+  .page-head {
+    flex-wrap: wrap;
+  }
+
+  .plans-grid,
+  .period-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-card,
+  .current-subscription {
+    padding: 20px;
+  }
+
+  .price {
+    font-size: 30px;
+  }
+}
+
+.renewal-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid #e1e8f2;
+}
+
+.renewal-information {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.renewal-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  color: #027c80;
+  background: #d6f9f5;
+}
+
+.renewal-information h3 {
+  margin: 0 0 6px;
+  color: var(--color-primary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.renewal-information p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.btn-cancel-renewal {
+  flex: none;
+  border-radius: 999px !important;
+  border-color: var(--color-error) !important;
+  color: var(--color-error) !important;
+  font-weight: 600;
+}
+
+.btn-cancel-renewal:disabled {
+  opacity: 0.5;
+}
+
+.renewal-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.renewal-feedback {
+  margin: 20px 0 0;
+}
+
+@media (max-width: 700px) {
+  .renewal-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Aviso de bienvenida: la cuenta todavía no tiene plan */
+.notice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 14px; font-size: 14px; line-height: 1.5; }
+.notice span { flex: 1 1 240px; min-width: 0; }
+.notice.info { background: #EEF4FA; color: var(--color-primary); }
