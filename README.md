@@ -61,7 +61,7 @@ src/app/
 ├── clinical-attention/  Consultation workspace and owner consultations
 ├── clinical-exams/      Lab worklist, exam request, exam detail and owner exams
 ├── medical-history/     Allergies, vaccinations and clinical timeline of each pet
-├── ai-assistance/       Computer vision for owners and veterinarians
+├── ai-assistance/       Computer vision and LLM assistant for owners and veterinarians
 ├── subscriptions/       Plans, Stripe Checkout, payments and AI credits
 └── shared/              Shell (menu by role), dashboards, icons and common components
 ```
