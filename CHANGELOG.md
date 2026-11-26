@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-26
+
+Treatments and prescriptions.
+
+### Added
+- **Clinical Attention**
+  - Treatment and prescription step in the consultation workspace (up to 15 medications per prescription).
+  - Owner treatments page (`/treatments`) with current and finished treatments per pet.
+  - Owner consultation detail shows the treatments and the prescription.
+- **Dashboards**
+  - Owner home: active treatment card with the prescription medications and day progress.
+  - Owner home: contact card of the clinic of the last consultation (phone and address).
+
+### Removed
+- Simulated dose tracking and the 24-hour emergency card on the owner home.
+
 ## [1.1.0] - 2026-11-26
 
 Subscriptions and payments with Stripe.
@@ -74,6 +90,7 @@ First stable release, delivered at the end of **Sprint 1**.
 ### Changed
 - Upgraded to Angular 22.2.5, Angular Material and CDK 22.2.7, Vitest 5 and jsdom 31.
 
-[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.1.0...develop
+[Unreleased]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.2.0...develop
+[1.2.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/NexoShift/petcarehub-web-application/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/NexoShift/petcarehub-web-application/releases/tag/v1.0.0
