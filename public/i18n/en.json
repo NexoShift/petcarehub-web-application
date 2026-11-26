@@ -202,7 +202,7 @@
       "cycle": "Current cycle: {{cycle}}",
       "used": "{{used}} / {{limit}} used",
       "buyMore": "Buy an extra pack",
-      "renewsIn": "Renews in {{days}} d",
+      "renewsIn": "renews in {{days}} days",
       "aiNote": "AI suggestion: always requires validation by a licensed vet.",
       "writeVet": "Message the vet",
       "seeConsultations": "See consultations",
@@ -223,8 +223,16 @@
         "visits": "Consultations: {{count}}",
         "noVisits": "No consultations"
       },
-      "aiQuotaNoPlan": "Activate a plan to see your AI credits for the month.",
-      "choosePlan": "Choose a plan"
+      "aiQuotaNoPlan": "You have no active plan yet. A plan gives you credits for AI explanations and visual analyses.",
+      "choosePlan": "See plans",
+      "usage": {
+        "llm": "AI explanations",
+        "llmHint": "{{n}} left this period.",
+        "vision": "Visual analyses",
+        "visionHint": "{{n}} left this period."
+      },
+      "upgrade": "Upgrade your plan",
+      "noPlan": "No plan"
     },
     "vet": {
       "morning": "Good morning",
@@ -1219,7 +1227,7 @@
     "periodStart": "Period start",
     "periodEnd": "Period end",
     "checkoutSuccess": "Your subscription has been activated successfully.",
-    "checkoutSynchronizing": "We are verifying your payment. Refresh your subscription status in a few seconds.",
+    "checkoutSynchronizing": "We are confirming your payment with Stripe. This takes a few seconds.",
     "checkoutCancelled": "The payment was not completed. You can continue whenever you are ready.",
     "cancellationScheduled": "Your subscription will not renew at the end of the current period.",
     "noPlans": "There are no plans available at the moment.",
@@ -1312,7 +1320,11 @@
       "loadMore": "Load more",
       "loadingMore": "Loading more payments...",
       "stripeInformation": "Payments and billing documents are securely managed through Stripe."
-    }
+    },
+    "onboarding": {
+      "welcome": "Last step: choose your plan. Without an active plan you cannot register pets or veterinarians or use the AI."
+    },
+    "checkoutStillPending": "Stripe has not confirmed your payment yet. Tap Refresh in a moment; if you paid, the plan will activate by itself."
   },
   "clinicalAttention": {
     "close": "Close",
