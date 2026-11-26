@@ -1816,5 +1816,14 @@
       "sessionExpired": "Tu sesión expiró. Vuelve a iniciar sesión.",
       "unexpected": "No pudimos cargar la historia clínica. Inténtalo de nuevo."
     }
+  },
+  "plan": {
+    "notice": {
+      "noPlan": "Necesitas un plan activo para hacer esto.",
+      "notIncluded": "Tu plan actual no incluye este registro. Cambia a un plan que lo incluya.",
+      "limit": "Llegaste al límite de tu plan. Mejora tu plan para agregar más.",
+      "credits": "Se acabaron tus créditos de IA de este mes. Mejora tu plan o espera al siguiente periodo.",
+      "action": "Ver planes"
+    }
   }
 }
