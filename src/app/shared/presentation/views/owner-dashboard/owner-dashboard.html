@@ -79,50 +79,57 @@
     <div class="columns">
       <div class="col-main">
         @if (d.treatment; as t) {
-          <article class="card treatment reveal" style="--i: 3">
+          <article class="card treatment reveal" style="--i: 3" id="active-treatment">
             <div class="treatment-meta">
               <span class="chip success"><span class="live"></span> {{ 'dashboard.owner.inProgress' | translate }}</span>
-              <span>{{ 'dashboard.owner.prescription' | translate: { code: t.prescriptionCode } }}</span>
-              <span class="link-like">{{ t.route }}</span>
-              <span class="started">{{ 'dashboard.owner.startedAt' | translate: { date: t.startedAt } }}</span>
+              <span>{{ 'dashboard.owner.treatmentFor' | translate: { pet: t.pet } }}</span>
+              <span class="started">{{ 'dashboard.owner.startedAt' | translate: { date: (t.startDate | date: 'dd/MM/yyyy' : 'UTC') } }}</span>
             </div>
 
             <div class="treatment-head">
               <div>
                 <h2>{{ 'dashboard.owner.treatment' | translate: { title: t.title } }}</h2>
-                <p>{{ 'dashboard.owner.prescribedBy' | translate: { vet: t.prescribedBy } }}</p>
+                @if (t.prescribedBy) { <p>{{ 'dashboard.owner.prescribedBy' | translate: { vet: t.prescribedBy, clinic: t.clinic } }}</p> }
               </div>
-              <span class="duration">{{ 'dashboard.owner.totalDuration' | translate }} <strong>{{ 'dashboard.owner.days' | translate: { count: t.totalDays } }}</strong></span>
+              @if (t.totalDays) {
+                <span class="duration">{{ 'dashboard.owner.totalDuration' | translate }} <strong>{{ 'dashboard.owner.days' | translate: { count: t.totalDays } }}</strong></span>
+              }
             </div>
 
-            <div class="medication">
-              <span class="med-icon"><app-icon name="pill" /></span>
-              <div class="med-text">
-                <strong>{{ t.medication.name }}</strong>
-                <span>{{ t.medication.posology }}</span>
-                <small>{{ t.medication.note }}</small>
-              </div>
-              <div class="med-dose">
-                <small>{{ 'dashboard.owner.dailyDose' | translate }}</small>
-                <strong>{{ 'dashboard.owner.dosesPerDay' | translate: { count: t.medication.dosesPerDay } }}</strong>
-              </div>
-            </div>
+            <p class="instruction">{{ t.instruction }}</p>
 
-            <div class="progress-row">
-              <span><strong>{{ 'dashboard.owner.dayOf' | translate: { current: t.currentDay, total: t.totalDays } }}</strong> · {{ 'dashboard.owner.dosesDone' | translate: { taken: t.dosesTaken, total: totalDoses() } }}</span>
-              <span class="percent">{{ 'dashboard.owner.percentDone' | translate: { percent: progress() } }}</span>
-            </div>
-            <app-progress-bar [value]="progress()" />
+            @for (m of t.medications; track $index) {
+              <div class="medication">
+                <span class="med-icon"><app-icon name="pill" /></span>
+                <div class="med-text">
+                  <strong>{{ m.name }}</strong>
+                  <span>{{ m.dosage }} · {{ m.frequency }}</span>
+                </div>
+                <div class="med-dose">
+                  <small>{{ 'dashboard.owner.medDuration' | translate }}</small>
+                  <strong>{{ m.duration }}</strong>
+                </div>
+              </div>
+            }
+            @if (t.generalInstruction) { <p class="general-note"><app-icon name="info" [size]="14" /> {{ t.generalInstruction }}</p> }
+
+            @if (t.totalDays) {
+              <div class="progress-row">
+                <strong>{{ 'dashboard.owner.dayOf' | translate: { current: t.currentDay, total: t.totalDays } }}</strong>
+                <span class="percent">{{ 'dashboard.owner.percentDone' | translate: { percent: progress() } }}</span>
+              </div>
+              <app-progress-bar [value]="progress()" />
+            } @else {
+              <p class="progress-row"><strong>{{ 'dashboard.owner.dayCount' | translate: { current: t.currentDay } }}</strong> · {{ 'dashboard.owner.noEndDate' | translate }}</p>
+            }
 
             <div class="treatment-footer">
-              <span class="next-dose">
-                <app-icon name="clock" [size]="18" />
-                <span><small>{{ 'dashboard.owner.nextDose' | translate }}</small><strong>{{ t.nextDose }}</strong></span>
+              <span class="muted">
+                @if (t.otherActive) { {{ 'dashboard.owner.otherTreatments' | translate: { count: t.otherActive } }} }
               </span>
-              <div class="actions">
-                <button class="btn btn-outline btn-sm" type="button"><app-icon name="history" [size]="16" /> {{ 'dashboard.owner.viewLog' | translate }}</button>
-                <button class="btn btn-accent btn-sm" type="button"><app-icon name="check-circle" [size]="16" /> {{ 'dashboard.owner.registerDose' | translate }}</button>
-              </div>
+              <a class="btn btn-outline btn-sm" routerLink="/treatments" [queryParams]="{ petId: t.petId }">
+                <app-icon name="pill" [size]="16" /> {{ 'dashboard.owner.seeTreatments' | translate }}
+              </a>
             </div>
           </article>
         }
@@ -145,17 +152,23 @@
           </div>
         </section>
 
-        <section class="emergency reveal" style="--i: 5">
-          <span class="emergency-icon"><app-icon name="asterisk" [size]="22" /></span>
-          <div>
-            <h2>{{ 'dashboard.owner.emergencyTitle' | translate }} <span class="live"></span></h2>
-            <p>{{ 'dashboard.owner.emergencyText' | translate }}</p>
-          </div>
-          <div class="actions">
-            <button class="btn btn-sm btn-glass" type="button"><app-icon name="map-pin" [size]="16" /> {{ 'dashboard.owner.emergencyRoute' | translate }}</button>
-            <button class="btn btn-sm btn-accent" type="button"><app-icon name="phone" [size]="16" /> {{ 'dashboard.owner.emergencyCall' | translate }}</button>
-          </div>
-        </section>
+        @if (d.assignedVet; as vet) {
+          @if (vet.phone || vet.address) {
+            <section class="clinic-contact reveal" style="--i: 5" id="clinic-contact">
+              <span class="clinic-icon"><app-icon name="stethoscope" [size]="22" /></span>
+              <div>
+                <h2>{{ 'dashboard.owner.clinicTitle' | translate: { clinic: vet.clinic } }}</h2>
+                <p>{{ 'dashboard.owner.clinicText' | translate }}</p>
+                @if (vet.address) { <p class="clinic-line"><app-icon name="map-pin" [size]="14" /> {{ vet.address }}</p> }
+              </div>
+              @if (vet.phone) {
+                <div class="actions">
+                  <a class="btn btn-sm btn-accent" [href]="'tel:' + vet.phone"><app-icon name="phone" [size]="16" /> {{ vet.phone }}</a>
+                </div>
+              }
+            </section>
+          }
+        }
       </div>
 
       <aside class="col-side">

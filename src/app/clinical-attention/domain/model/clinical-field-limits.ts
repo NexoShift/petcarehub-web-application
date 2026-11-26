@@ -17,6 +17,15 @@ export const CLINICAL_FIELD_LIMITS = {
   maxDifferentialDiagnoses: 10,
   rationale: 2000,
   cancellationReason: 500,
+  treatmentDescription: 500,
+  treatmentInstruction: 500,
+  prescriptionInstruction: 500,
+  maxMedications: 15,
+  medicationName: 100,
+  medicationDosage: 50,
+  medicationFrequency: 50,
+  medicationDuration: 150,
+  medicationIndication: 500,
 } as const;
 
 /** Ranges accepted for the vital signs of a physiological assessment. */

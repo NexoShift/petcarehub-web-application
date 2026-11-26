@@ -2,6 +2,8 @@ export enum ClinicalAttentionErrorCode {
   InvalidRequest = 'clinicalAttention.errors.invalidRequest',
   InvalidVitalSigns = 'clinicalAttention.errors.invalidVitalSigns',
   InvalidCancellation = 'clinicalAttention.errors.invalidCancellation',
+  InvalidTreatmentDates = 'clinicalAttention.errors.invalidTreatmentDates',
+  InvalidPrescription = 'clinicalAttention.errors.invalidPrescription',
   PetNotFound = 'clinicalAttention.errors.petNotFound',
   ConsultationNotFound = 'clinicalAttention.errors.consultationNotFound',
   InvalidConsultationState = 'clinicalAttention.errors.invalidConsultationState',

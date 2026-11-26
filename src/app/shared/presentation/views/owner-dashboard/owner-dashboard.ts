@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Icon, IconName } from '../../components/icon/icon';
 import { DashboardStore } from '../../../application/dashboard.store';
-import { totalDoses, treatmentProgress, usagePercent } from '../../../domain/services/progress';
+import { treatmentProgress, usagePercent } from '../../../domain/services/progress';
 import { PetAvatar } from '../../components/pet-avatar/pet-avatar';
 import { ProgressBar } from '../../components/progress-bar/progress-bar';
 
@@ -22,8 +22,8 @@ interface QuickAction {
 /**
  * MW-04 · Panel del dueño de mascota.
  * Muestra sus mascotas con su estado real, lo pendiente (consultas y exámenes),
- * los últimos resultados validados y el veterinario de la última consulta.
- * Tratamiento, alerta clínica y cuota de IA aparecen cuando existan sus módulos.
+ * el tratamiento vigente con su receta, los últimos resultados validados, los créditos de IA
+ * y el veterinario y la clínica de la última consulta.
  */
 @Component({
   selector: 'app-owner-dashboard',
@@ -40,14 +40,12 @@ export class OwnerDashboard implements OnInit {
     const t = this.data()?.treatment;
     return t ? treatmentProgress(t) : 0;
   });
-  protected readonly totalDoses = computed(() => {
-    const t = this.data()?.treatment;
-    return t ? totalDoses(t) : 0;
-  });
 
   protected readonly usagePercent = usagePercent;
 
   protected readonly quickActions: QuickAction[] = [
+    { icon: 'pill', title: 'dashboard.owner.quick.treatmentsTitle', text: 'dashboard.owner.quick.treatmentsText',
+      link: 'dashboard.owner.quick.treatmentsLink', path: '/treatments' },
     { icon: 'scan', title: 'dashboard.owner.quick.visualTitle', text: 'dashboard.owner.quick.visualText',
       link: 'dashboard.owner.quick.visualLink', path: '/visual-analysis', badge: 'dashboard.owner.quick.visualBadge' },
   ];

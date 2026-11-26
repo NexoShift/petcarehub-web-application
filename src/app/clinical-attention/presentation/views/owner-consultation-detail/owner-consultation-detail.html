@@ -130,6 +130,47 @@
       }
     </div>
 
+    @if (c.hasTreatmentPlan) {
+      <section class="card" id="owner-treatment-plan">
+        <div class="section-head">
+          <span class="section-icon"><app-icon name="pill" [size]="20" /></span>
+          <h2>{{ 'clinicalAttention.owner.treatmentPlan' | translate }}</h2>
+        </div>
+        @if (c.treatments.length) {
+          <ul class="items" id="owner-treatments">
+            @for (t of c.treatments; track t.id) {
+              <li>
+                <strong>{{ t.description }}</strong>
+                <span>{{ t.instruction }}</span>
+                <em class="tag" [class.strong]="t.isCurrentOn(today)">
+                  @if (t.endDate) {
+                    {{ 'clinicalAttention.treatments.range' | translate: { start: (t.startDate | date: 'dd/MM/yyyy'), end: (t.endDate | date: 'dd/MM/yyyy') } }}
+                  } @else {
+                    {{ 'clinicalAttention.treatments.from' | translate: { start: (t.startDate | date: 'dd/MM/yyyy') } }}
+                  }
+                </em>
+              </li>
+            }
+          </ul>
+        }
+        @for (p of c.prescriptions; track p.id) {
+          <div class="owner-prescription" [id]="'owner-prescription-' + p.id">
+            <p class="rx-title">{{ 'clinicalAttention.prescriptions.issued' | translate: { date: (p.issuedAt | date: 'dd/MM/yyyy') } }}</p>
+            <ul class="items">
+              @for (m of p.medications; track m.id) {
+                <li>
+                  <strong>{{ m.name }} · {{ m.dosage }}</strong>
+                  <span>{{ m.frequency }} · {{ m.duration }}</span>
+                  @if (m.indication) { <span>{{ m.indication }}</span> }
+                </li>
+              }
+            </ul>
+            @if (p.generalInstruction) { <p class="rx-note">{{ p.generalInstruction }}</p> }
+          </div>
+        }
+      </section>
+    }
+
     <section class="card" id="owner-consultation-exams">
       <div class="section-head">
         <span class="section-icon"><app-icon name="flask" [size]="20" /></span>

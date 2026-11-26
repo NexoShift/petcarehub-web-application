@@ -31,6 +31,9 @@ import { ReevaluateDiagnosisCommand } from '../../../domain/model/reevaluate-dia
 import { RegisterAnamnesisCommand } from '../../../domain/model/register-anamnesis.command';
 import { RegisterDiagnosisCommand } from '../../../domain/model/register-diagnosis.command';
 import { RegisterPhysiologicalAssessmentCommand } from '../../../domain/model/register-physiological-assessment.command';
+import { PrescriptionInput, RegisterPrescriptionCommand } from '../../../domain/model/register-prescription.command';
+import { RegisterTreatmentCommand, TreatmentInput } from '../../../domain/model/register-treatment.command';
+import { TreatmentPlanPanel } from '../../components/treatment-plan-panel/treatment-plan-panel';
 import {
   AnamnesisFormValue,
   AnamnesisPanel,
@@ -92,6 +95,7 @@ interface ConsultationNames {
     FindingsPanel,
     Icon,
     PetAvatar,
+    TreatmentPlanPanel,
   ],
   templateUrl: './consultation-workspace.html',
   styleUrls: ['../../clinical-attention.css', './consultation-workspace.css'],
@@ -295,6 +299,27 @@ export class ConsultationWorkspace {
     await this.notify(
       this.store.reevaluateDiagnosis(command),
       'clinicalAttention.diagnosis.reevaluated',
+    );
+  }
+
+  protected async registerTreatment(
+    consultation: ClinicalConsultation,
+    value: TreatmentInput,
+  ): Promise<void> {
+    const command = this.build(() => new RegisterTreatmentCommand(consultation.id, value));
+    if (!command) return;
+    await this.notify(this.store.registerTreatment(command), 'clinicalAttention.treatments.registered');
+  }
+
+  protected async registerPrescription(
+    consultation: ClinicalConsultation,
+    value: PrescriptionInput,
+  ): Promise<void> {
+    const command = this.build(() => new RegisterPrescriptionCommand(consultation.id, value));
+    if (!command) return;
+    await this.notify(
+      this.store.registerPrescription(command),
+      'clinicalAttention.prescriptions.registered',
     );
   }
 

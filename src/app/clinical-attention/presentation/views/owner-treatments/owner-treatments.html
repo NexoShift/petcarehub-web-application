@@ -1,0 +1,141 @@
+<section class="list-page">
+  <header class="page-head">
+    <span class="head-icon"><app-icon name="pill" [size]="28" /></span>
+    <div class="head-text">
+      <h1>{{ 'clinicalAttention.ownerTreatments.title' | translate }}</h1>
+      <p>{{ 'clinicalAttention.ownerTreatments.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="card patients-card">
+      <div class="card-title">
+        <h2><app-icon name="paw" [size]="18" /> {{ 'clinicalAttention.owner.pets' | translate }}</h2>
+        <span class="count">{{ pets().length }}</span>
+      </div>
+      @if (petsLoading()) {
+        <div class="loading"><mat-spinner diameter="32" /></div>
+      } @else {
+        <ul class="patients">
+          @for (pet of pets(); track pet.id) {
+            <li>
+              <button type="button" class="patient" [id]="'pet-' + pet.id"
+                      [class.active]="shownPetId() === pet.id" (click)="select(pet.id)">
+                <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="40" />
+                <span class="patient-text">
+                  <strong>{{ pet.name }}</strong>
+                  <small>{{ 'enums.species.' + pet.species | translate }}@if (pet.breed) { · {{ pet.breed }} }</small>
+                </span>
+                <app-icon name="chevron-right" [size]="16" />
+              </button>
+            </li>
+          } @empty {
+            <li class="empty-patients">
+              <p>{{ 'clinicalAttention.owner.noPets' | translate }}</p>
+              <a routerLink="/profiles/pets/new">
+                <app-icon name="plus" [size]="15" /> {{ 'clinicalAttention.owner.addPet' | translate }}
+              </a>
+            </li>
+          }
+        </ul>
+      }
+    </aside>
+
+    <div class="card consultations-card">
+      @if (shownPetId() === null) {
+        <div class="placeholder">
+          <span class="placeholder-icon"><app-icon name="pill" [size]="30" /></span>
+          <h2>{{ 'clinicalAttention.owner.pickTitle' | translate }}</h2>
+        </div>
+      } @else {
+        <div class="pet-head">
+          @if (selectedPet(); as pet) {
+            <app-pet-avatar [name]="pet.name" [photoUrl]="pet.profileImageUrl ?? undefined" [size]="52" />
+            <div>
+              <h2>{{ pet.name }}</h2>
+              <span class="code">{{ pet.petCode }}</span>
+            </div>
+          }
+        </div>
+
+        @if (store.error(); as error) {
+          <p class="error-message" role="alert"><app-icon name="alert" [size]="16" /> {{ error | translate }}</p>
+        }
+
+        @if (store.isLoading()) {
+          <div class="loading"><mat-spinner diameter="40" /></div>
+        } @else {
+          <h3 class="block-title">{{ 'clinicalAttention.ownerTreatments.current' | translate }}</h3>
+          @if (current().length) {
+            <ul id="current-treatments" class="tx-list">
+              @for (x of current(); track x.treatment.id) {
+                <li class="tx current">
+                  <div class="tx-head">
+                    <strong>{{ x.treatment.description }}</strong>
+                    <span class="pill strong">{{ 'clinicalAttention.ownerTreatments.inProgress' | translate }}</span>
+                  </div>
+                  <p>{{ x.treatment.instruction }}</p>
+                  <p class="tx-meta">
+                    <app-icon name="calendar" [size]="13" />
+                    @if (x.treatment.endDate) {
+                      {{ 'clinicalAttention.treatments.range' | translate: { start: (x.treatment.startDate | date: 'dd/MM/yyyy'), end: (x.treatment.endDate | date: 'dd/MM/yyyy') } }}
+                    } @else {
+                      {{ 'clinicalAttention.treatments.from' | translate: { start: (x.treatment.startDate | date: 'dd/MM/yyyy') } }}
+                    }
+                    · <a [routerLink]="['/my-consultations', x.consultation.id]">{{ 'clinicalAttention.ownerTreatments.fromConsultation' | translate: { date: (x.consultation.createdAt | date: 'dd/MM/yyyy') } }}</a>
+                  </p>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p id="no-current-treatments" class="empty-block">{{ 'clinicalAttention.ownerTreatments.noCurrent' | translate }}</p>
+          }
+
+          <h3 class="block-title">{{ 'clinicalAttention.prescriptions.title' | translate }}</h3>
+          @if (prescriptions().length) {
+            <ul id="owner-prescriptions" class="tx-list">
+              @for (x of prescriptions(); track x.prescription.id) {
+                <li class="tx">
+                  <div class="tx-head">
+                    <strong>{{ 'clinicalAttention.prescriptions.issued' | translate: { date: (x.prescription.issuedAt | date: 'dd/MM/yyyy') } }}</strong>
+                    <a [routerLink]="['/my-consultations', x.consultation.id]" class="tx-link">{{ 'clinicalAttention.list.open' | translate }}</a>
+                  </div>
+                  <ul class="meds">
+                    @for (m of x.prescription.medications; track m.id) {
+                      <li><strong>{{ m.name }}</strong> {{ m.dosage }} · {{ m.frequency }} · {{ m.duration }}
+                        @if (m.indication) { <small>{{ m.indication }}</small> }</li>
+                    }
+                  </ul>
+                  @if (x.prescription.generalInstruction) { <p class="tx-meta">{{ x.prescription.generalInstruction }}</p> }
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="empty-block">{{ 'clinicalAttention.prescriptions.empty' | translate }}</p>
+          }
+
+          @if (past().length) {
+            <h3 class="block-title">{{ 'clinicalAttention.ownerTreatments.past' | translate }}</h3>
+            <ul id="past-treatments" class="tx-list">
+              @for (x of past(); track x.treatment.id) {
+                <li class="tx past">
+                  <div class="tx-head">
+                    <strong>{{ x.treatment.description }}</strong>
+                    <span class="pill">{{ 'clinicalAttention.treatmentStatus.' + x.treatment.status | translate }}</span>
+                  </div>
+                  <p class="tx-meta">
+                    @if (x.treatment.endDate) {
+                      {{ 'clinicalAttention.treatments.range' | translate: { start: (x.treatment.startDate | date: 'dd/MM/yyyy'), end: (x.treatment.endDate | date: 'dd/MM/yyyy') } }}
+                    } @else {
+                      {{ 'clinicalAttention.treatments.from' | translate: { start: (x.treatment.startDate | date: 'dd/MM/yyyy') } }}
+                    }
+                  </p>
+                </li>
+              }
+            </ul>
+          }
+        }
+      }
+    </div>
+  </div>
+</section>

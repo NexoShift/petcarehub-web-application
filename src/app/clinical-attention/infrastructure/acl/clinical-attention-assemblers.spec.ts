@@ -86,6 +86,22 @@ describe('toClinicalConsultation', () => {
     expect(consultation.anamnesis).toBeNull();
   });
 
+  it('maps treatments and prescriptions', () => {
+    const consultation = toClinicalConsultation(
+      consultationResponse({
+        treatments: [{ id: 1, description: 'Antibiótico', instruction: 'Con comida', startDate: '2026-11-25', endDate: null, status: 'ACTIVE', prescribedByVeterinarianId: 5, createdAt: '2026-11-25T15:00:00Z' }],
+        prescriptions: [{ id: 2, issuedAt: '2026-11-25T15:00:00Z', generalInstruction: null, prescribedByVeterinarianId: 5,
+          medications: [{ id: 3, name: 'Amoxicilina', dosage: '250 mg', frequency: 'cada 12 h', duration: '7 días', indication: null }] }],
+      }),
+    );
+
+    expect(consultation.treatments[0].startDate).toBe('2026-11-25');
+    expect(consultation.treatments[0].endDate).toBeNull();
+    expect(consultation.prescriptions[0].medications[0].name).toBe('Amoxicilina');
+    expect(consultation.hasTreatmentPlan).toBe(true);
+    expect(toClinicalConsultation(consultationResponse()).treatments).toEqual([]);
+  });
+
   it('maps the cancellation of a cancelled consultation', () => {
     const consultation = toClinicalConsultation(
       consultationResponse({

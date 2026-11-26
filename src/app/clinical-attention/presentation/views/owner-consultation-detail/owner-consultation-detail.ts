@@ -36,6 +36,8 @@ export class OwnerConsultationDetail {
   protected readonly exams = inject(ClinicalExamsStore);
   private readonly profiles = inject(ProfileApi);
   protected readonly names = signal<Names>({});
+  /** Hoy en formato YYYY-MM-DD, para marcar los tratamientos vigentes. */
+  protected readonly today = new Date().toLocaleDateString('en-CA');
 
   constructor() {
     effect(() => {
