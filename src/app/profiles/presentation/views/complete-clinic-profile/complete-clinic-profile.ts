@@ -65,7 +65,8 @@ export class CompleteClinicProfile {
     this.clinicStore.create(command, value.image).subscribe({
       next: () => {
         this.notify('profiles.clinic.created');
-        void this.router.navigate(['/profiles/clinic']);
+        // Sin plan activo no se pueden crear vets (ni el perfil vet del titular): primero el plan.
+        void this.router.navigate(['/plan'], { queryParams: { welcome: 1 } });
       },
       error: () => {
         this.notify('profiles.clinic.createError');

@@ -105,7 +105,8 @@ export class CompletePetOwnerProfile {
     this.errorKey.set(null);
     this.petOwnerStore.create(command, this.selectedImage()).subscribe({
       next: () => {
-        this.router.navigate(['/profile/pet-owner']);
+        // Sin plan activo no se pueden registrar mascotas: primero el plan.
+        this.router.navigate(['/plan'], { queryParams: { welcome: 1 } });
       },
       error: (error: unknown) => {
         this.errorKey.set(
