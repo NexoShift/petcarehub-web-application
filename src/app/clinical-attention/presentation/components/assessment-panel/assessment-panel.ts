@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Icon } from '../../../../shared/presentation/components/icon/icon';
 import { TranslatePipe } from '@ngx-translate/core';
 import { HydrationStatus } from '../../../domain/enums/hydration-status.enum';
+import { MucousMembrane } from '../../../domain/enums/mucous-membrane.enum';
 import { ClinicalConsultation } from '../../../domain/model/clinical-consultation.entity';
 import {
   CLINICAL_FIELD_LIMITS,
@@ -30,7 +31,7 @@ export interface AssessmentFormValue {
   respiratoryRateBpm: number | null;
   bodyConditionScore: number | null;
   hydrationStatus: HydrationStatus | null;
-  mucousMembranes: string;
+  mucousMembranes: MucousMembrane | null;
   capillaryRefillTimeSeconds: number | null;
   observations: string;
 }
@@ -62,6 +63,9 @@ export class AssessmentPanel {
   protected readonly vitals = VITAL_SIGN_LIMITS;
   protected readonly hydrationStatuses = Object.values(HydrationStatus);
   protected readonly bodyConditionScores = Array.from({ length: 9 }, (_, index) => index + 1);
+  protected readonly mucousMembraneOptions = Object.entries(MucousMembrane).map(
+    ([key, value]) => ({ key, value }),
+  );
 
   protected readonly form = inject(NonNullableFormBuilder).group({
     weightKg: [
@@ -96,7 +100,7 @@ export class AssessmentPanel {
     ],
     bodyConditionScore: [null as number | null],
     hydrationStatus: [null as HydrationStatus | null],
-    mucousMembranes: ['', Validators.maxLength(CLINICAL_FIELD_LIMITS.mucousMembranes)],
+    mucousMembranes: [null as MucousMembrane | null],
     capillaryRefillTimeSeconds: [null as number | null, Validators.min(0.1)],
     observations: ['', Validators.maxLength(CLINICAL_FIELD_LIMITS.assessmentObservations)],
   });
@@ -107,6 +111,11 @@ export class AssessmentPanel {
       this.consultation().physiologicalAssessments.length;
       untracked(() => this.form.reset());
     });
+  }
+
+  /** Translation key suffix of a listed value; null for free text saved before the selector. */
+  protected mucousMembraneKey(value: string): string | null {
+    return this.mucousMembraneOptions.find((option) => option.value === value)?.key ?? null;
   }
 
   /** Newest first. */

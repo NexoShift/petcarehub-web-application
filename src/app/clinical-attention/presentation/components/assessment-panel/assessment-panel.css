@@ -7,3 +7,8 @@
 .form-row mat-form-field {
   flex: 1 1 240px;
 }
+
+/* A floating label rises above its field: keep it off the hint or error of the row above */
+.form-row + .form-row {
+  margin-top: 12px;
+}

@@ -107,12 +107,16 @@
         <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>{{ 'clinicalAttention.assessment.mucousMembranes' | translate }}</mat-label>
-            <input
-              id="mucous-membranes"
-              matInput
-              formControlName="mucousMembranes"
-              [maxlength]="limits.mucousMembranes"
-            />
+            <mat-select id="mucous-membranes" formControlName="mucousMembranes">
+              <mat-option [value]="null">{{
+                'clinicalAttention.assessment.notRecorded' | translate
+              }}</mat-option>
+              @for (option of mucousMembraneOptions; track option.key) {
+                <mat-option [id]="'mucous-membranes-' + option.key" [value]="option.value">
+                  {{ 'clinicalAttention.mucousMembrane.' + option.key | translate }}
+                </mat-option>
+              }
+            </mat-select>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>{{ 'clinicalAttention.assessment.capillaryRefill' | translate }}</mat-label>
@@ -187,7 +191,14 @@
                 </span>
               }
               @if (assessment.mucousMembranes) {
-                <span class="tag">{{ assessment.mucousMembranes }}</span>
+                <span class="tag">
+                  {{ 'clinicalAttention.assessment.mucousMembranes' | translate }}:
+                  @if (mucousMembraneKey(assessment.mucousMembranes); as key) {
+                    {{ 'clinicalAttention.mucousMembrane.' + key | translate }}
+                  } @else {
+                    {{ assessment.mucousMembranes }}
+                  }
+                </span>
               }
               @if (assessment.capillaryRefillTimeSeconds !== null) {
                 <span class="tag">
